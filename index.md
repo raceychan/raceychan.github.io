@@ -1,5 +1,7 @@
 # lihil
 
+lihil and its families.
+
 ## lihil
 
 Unbelievably fast async webframework offering high-level development, low-level performance, proudly written in python. Multiplying 0.1x engineers by a factor of 100.
@@ -14,7 +16,7 @@ async def hello():
     return {"hello": "world!"}
 ```
 
-### Source: 
+### Source
 https://github.com/raceychan/lihil
 
 ### Docs
@@ -47,6 +49,14 @@ async def main(command: CreateUser, uow: UnitOfWork):
 await main(CreateUser(name='user'))
 ```
 
+### Source
+https://github.com/raceychan/ididi
+
+### Docs
+Docs: https://lihil.cc/ididi
+
+
+
 ## anywise
 (anywise is used as message system internally by lihil)
 
@@ -63,3 +73,34 @@ async def signup(command: CreateUser, bus: EventBus) -> User:
     return await bus.publish(command)
 ```
 
+
+### Source
+https://github.com/raceychan/anywise
+
+### Docs
+Docs: https://lihil.cc/anywise
+
+
+## premier
+
+An intuitive throttler that supports various backends and throttling algorihms, it can be used in distributed application for throttling web-api and any regular function.
+
+
+```python
+import httpx
+from premier import limits, throttler, ThrottleAlgo, RedisHandler
+
+@throttler.fixed_window(quota=3, duration=5)
+def request(url: str) -> str:
+    r = httpx.get(url)
+    return r.text
+
+@throttler.token_bucket(quota=3, duration=5)
+async def async_request(client: httpx.AsyncClient, url: str) -> str:
+  r = await client.get('https://www.example.com/')
+  return r.text
+```
+
+
+### Source
+https://github.com/raceychan/premier
