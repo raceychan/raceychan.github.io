@@ -4,6 +4,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
+
 const config: Config = {
   title: 'Lihil Official',
   tagline: 'The Offical site of python webframework lihil',
