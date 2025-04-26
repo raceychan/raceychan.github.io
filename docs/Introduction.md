@@ -132,7 +132,6 @@ when such exception is raised from endpoint, client would receive a response lik
 Declare exceptions using route decorator and they will be displayed as route response at openapi schemas & problem page
 
 
-
 ### **Auth Builtin**:
 
 - Lihil comes with authentification & authorization plugins out of the box.
@@ -340,7 +339,7 @@ Thecnically, **v1.0.0 will be the first stable major version. However, breaking 
 
 ## Tutorials
 
-check detailed tutorials at https://lihil.cc/lihil/tutorials/, covering
+check detailed tutorials at https://lihil.cc, covering
 
 - Core concepts, create endpoint, route, middlewares, etc.
 - Configuring your app via `pyproject.toml`, or via command line arguments.

@@ -6,7 +6,7 @@ sidebar_position: 6
 
 An `endpoint` is the most atomic ASGI component in `lihil`, registered under `Route` with `Route.{http method}`, such as `Route.get`. It defines how clients interact with the resource exposed by the `Route`.
 
-In the [ASGI callchain](./minicourse.md) the `endpoint` is typically at the end.
+<!-- In the [ASGI callchain](./minicourse.md) the `endpoint` is typically at the end. -->
 
 Let's start with a function that creates a `User` in database.
 
