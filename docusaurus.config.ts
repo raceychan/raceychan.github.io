@@ -71,11 +71,11 @@ const config: Config = {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
-      title: 'My Site',
-      logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
-      },
+      title: 'Lihil',
+      // logo: {
+      //   alt: 'My Site Logo',
+      //   src: 'img/logo.svg',
+      // },
       items: [
         {
           type: 'docSidebar',
@@ -85,8 +85,8 @@ const config: Config = {
         },
         { to: '/blog', label: 'Blog', position: 'left' },
         {
-          href: 'https://github.com/facebook/docusaurus',
-          label: 'GitHub',
+          href: 'https://github.com/raceychan/lihil',
+          label: 'Lihil-GitHub',
           position: 'right',
         },
       ],
@@ -99,7 +99,7 @@ const config: Config = {
           items: [
             {
               label: 'Tutorial',
-              to: '/docs/Introduction',
+              to: '/docs/tutorial',
             },
           ],
         },
@@ -108,15 +108,15 @@ const config: Config = {
           items: [
             {
               label: 'Stack Overflow',
-              href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+              href: 'https://stackoverflow.com/questions/tagged/lihil',
             },
             {
               label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              href: 'https://discordapp.com/invite/lihil',
             },
             {
               label: 'X',
-              href: 'https://x.com/docusaurus',
+              href: 'https://x.com/lihil',
             },
           ],
         },
@@ -129,12 +129,12 @@ const config: Config = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/raceychan/lihil',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} lihil, Inc.`,
     },
     prism: {
       theme: prismThemes.github,

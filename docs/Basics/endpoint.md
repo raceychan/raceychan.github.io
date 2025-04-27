@@ -1,8 +1,9 @@
 ---
-sidebar_position: 6
+sidebar_position: 1
+title: create an endpoint
 ---
 
-### Enpoint
+# Create an endpoint
 
 An `endpoint` is the most atomic ASGI component in `lihil`, registered under `Route` with `Route.{http method}`, such as `Route.get`. It defines how clients interact with the resource exposed by the `Route`.
 
@@ -10,13 +11,11 @@ An `endpoint` is the most atomic ASGI component in `lihil`, registered under `Ro
 
 Let's start with a function that creates a `User` in database.
 
-#### Quick Start:
+## Quick Start:
 
 Expose a random function as an endpoint
 
-**`app/users/api.py`**
-
-```python
+```python title="app/users/api.py"
 from msgspec import Struct
 from sqlalchemy.ext.asyncio import AsyncEngine
 from .users.db import user_sql
@@ -62,7 +61,7 @@ users_route = Route("/users")
 async def create_user(): ...
 ```
 
-#### Param Parsing
+### Param Parsing
 
 ```python
 from lihil import use, Ignore
@@ -96,7 +95,7 @@ Here,
 2. `conn` will be created by `get_conn` and return an instance of `AsyncConnection`, where the the connection will be returned to engine after request.
 3. `UserDB` will be json-serialized, and return a response with content-type being `application/json`, status code being `201`.
 
-##### Param Marks
+### Param Marks
 
 Explicitly declaring a parameter with a param mark tells Lihil to treat it as-is, without further analysis.
 
@@ -121,7 +120,7 @@ async def login(cred: Header[str, Literal["User-Credentials"]], x_access_token: 
 - If key not provided, The kebab case of param name is used, for example, here `x_access_token` expects a header with key `x-access-token`
 
 
-##### Param Analysis Rules
+#### Param Analysis Rules
 
 If a param is not declared with any param mark, the following rule would apply to parse it:
 
@@ -160,11 +159,11 @@ Only `user_id` needs to be provided by the client request, rest will be resolved
 
 Since return param is not declared, `"ok"` will be serialized as json `'"ok"'`, status code will be `200`.
 
-#### Data validation
+### Data validation
 
 lihil provide you data validation functionalities out of the box using msgspec.
 
-#### Constraints
+### Constraints
 
 - You might combine `typing.Annotated` and `msgspec.Meta` to put constraints on params,
 
@@ -207,7 +206,7 @@ Here `create_user` expects a body param `user`, a structual data where each fiel
 Checkout [msgspec constraints](https://jcristharif.com/msgspec/constraints.html) for more details on specific constraints that you can set on different types.
 
 
-#### Return Marks
+### Return Marks
 
 Often you would like to change the status code, or content type of your endpoint,  to do so, you can use one or a combination of several `return marks`. for example, to change stauts code:
 
@@ -242,7 +241,7 @@ async def demo() -> Json[list[int]]: ...
 return marks have no runtime/typing effect outside of lihil, your type checker would treat `Json[T]` as `T`.
 
 
-##### Response with status code
+#### Response with status code
 
 - `Resp[T, 200]` for response with status code `200`. where `T` can be anything json serializable, or another return mark.
 
@@ -256,7 +255,7 @@ async def hello() -> HTML:
     return "<p>hello, world!</p>"
 ```
 
-##### Return Union
+#### Return Union
 
 it is valid to return union of multiple types, they will be shown as `anyOf` schemas in the open api specification.
 
@@ -264,7 +263,7 @@ it is valid to return union of multiple types, they will be shown as `anyOf` sch
 async def create_user() -> User | TemporaryUser: ...
 ```
 
-##### Custom Encoder/Decoder
+#### Custom Encoder/Decoder
 
 You can also use your own customized encoder/decoder for request params and function return.
 To use them, annotate your param type with `CustomDecoder` and your return type with `CustomEncoder`
@@ -272,8 +271,9 @@ To use them, annotate your param type with `CustomDecoder` and your return type 
 ```python
 from lihil.di import CustomEncoder, CustomDecoder
 
-user_route = @Route(/users/{user_id})
+user_route = Route(/users/{user_id})
 
+@user_route
 async def get_user(
     user_id: Annotated[str, CustomDecoder(decode_user_id)]
 ) -> Annotated[str, CustomEncoder(encode_user_id)]:
@@ -293,7 +293,7 @@ def encoder[T](param: T) -> bytes: ...
 - `encoder` should expect a single param with any type that the endpoint function returns, in the `encode_user_id` case, it is `str`, and returns bytes.
 
 
-#### EndPoint properties
+### Properties
 
 - Provide extra meta data of endpoint through route decorator.
 
