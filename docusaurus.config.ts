@@ -1,6 +1,7 @@
 import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
+import { PluginOptions } from '@easyops-cn/docusaurus-search-local';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -66,10 +67,24 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
-
+  plugins: [
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        hashed: true,
+        indexDocs: true,
+        indexBlog: true,
+        indexPages: true,
+        language: ['en'],
+      } satisfies PluginOptions,
+    ],
+  ],
   themeConfig: {
     // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
+    metadata: [
+      { name: 'keywords', content: 'python, api, fast, webframework, web' },
+    ],
     navbar: {
       title: 'Lihil',
       // logo: {
@@ -89,6 +104,7 @@ const config: Config = {
           label: 'GitHub',
           position: 'right',
         },
+
       ],
     },
     footer: {
