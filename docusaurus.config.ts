@@ -86,7 +86,7 @@ const config: Config = {
         { to: '/blog', label: 'Blog', position: 'left' },
         {
           href: 'https://github.com/raceychan/lihil',
-          label: 'Lihil-GitHub',
+          label: 'GitHub',
           position: 'right',
         },
       ],

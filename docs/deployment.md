@@ -3,13 +3,13 @@
 
 ## Dockerize your project
 
-Place Holder
 
+Coming Soon ...
 
 ## Small-Scale Deployment: Single Server with Docker Compose
 
-*Placeholder for content*
+*Coming Soon ...*
 
 ## Large-Scale Deployment: Kubernetes (K8s)
 
-*Placeholder for content*
+*Coming Soon ...*
