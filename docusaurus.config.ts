@@ -11,7 +11,7 @@ import { nordTheme } from './src/theme/Prism/NordTheme';
 
 const config: Config = {
   title: 'Lihil Official',
-  tagline: 'The Offical site of python webframework lihil',
+  tagline: 'The Official website of python webframework lihil',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here

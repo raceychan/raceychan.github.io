@@ -1,4 +1,7 @@
-# Deployment
+---
+title: Deployment
+sidebar_position: 4
+---
 
 
 ## Dockerize your project

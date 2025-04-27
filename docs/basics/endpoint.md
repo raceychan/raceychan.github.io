@@ -1,9 +1,9 @@
 ---
 sidebar_position: 1
-title: create an endpoint
+title: endpoint
 ---
 
-# Create an endpoint
+# endpoint
 
 An `endpoint` is the most atomic ASGI component in `lihil`, registered under `Route` with `Route.{http method}`, such as `Route.get`. It defines how clients interact with the resource exposed by the `Route`.
 

@@ -1,6 +1,6 @@
 ---
-# sidebar_position: 7
 title: Testing
+sidebar_position: 3
 ---
 
 # Testing

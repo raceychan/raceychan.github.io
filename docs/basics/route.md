@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-title: create a route
+title: route
 ---
 
 When you define a route, you expose a resource through a specific **path** that clients can request. you then add an `Endpoint` on the route to determin what clients can do with the resource.

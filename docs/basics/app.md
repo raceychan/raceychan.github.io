@@ -1,6 +1,6 @@
 ---
 sidebar_position: 3
-title: create the app
+title: application
 ---
 
 

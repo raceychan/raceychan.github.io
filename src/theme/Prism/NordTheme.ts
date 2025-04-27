@@ -51,9 +51,22 @@ export const nordTheme: PrismTheme = {
         },
 
         {
-            types: ['entity', 'url', 'statement', 'regex', 'at-rule', 'control', 'directive', 'unit', 'punctuation', 'delimiter'],
+            types: ['entity', 'url', 'statement', 'regex', 'at-rule', 'control', 'directive', 'unit'],
             style: {
                 color: '#B48EAD', // Nord aurora purple
+            },
+        },
+        {
+            types: ['punctuation'],
+            style: {
+                color: '#8FBCBB', // Nord frost teal for brackets and parentheses
+            },
+        },
+
+        {
+            types: ['delimiter'],
+            style: {
+                color: '#88C0D0', // Nord frost teal for brackets and parentheses
             },
         },
         {
@@ -62,7 +75,6 @@ export const nordTheme: PrismTheme = {
                 color: '#D08770', // Nord aurora orange
             },
         },
-
         {
             types: ['imports'],
             style: {
