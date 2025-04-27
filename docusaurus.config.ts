@@ -2,6 +2,9 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import { PluginOptions } from '@easyops-cn/docusaurus-search-local';
+import { nordTheme } from './src/theme/Prism/NordTheme';
+
+
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -43,8 +46,8 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          // editUrl:
+          //   'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         blog: {
           showReadingTime: true,
@@ -54,8 +57,8 @@ const config: Config = {
           },
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+          // editUrl:
+          //   'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -81,16 +84,16 @@ const config: Config = {
   ],
   themeConfig: {
     // Replace with your project's social card
-    image: 'img/docusaurus-social-card.jpg',
+    // image: 'img/docusaurus-social-card.jpg',
     metadata: [
       { name: 'keywords', content: 'python, api, fast, webframework, web' },
     ],
     navbar: {
       title: 'Lihil',
-      // logo: {
-      //   alt: 'My Site Logo',
-      //   src: 'img/logo.svg',
-      // },
+      logo: {
+        alt: 'My Site Logo',
+        src: 'img/lhl_logo_ts.png',
+      },
       items: [
         {
           type: 'docSidebar',
@@ -153,8 +156,8 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} lihil, Inc.`,
     },
     prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      theme: nordTheme,
+      darkTheme: nordTheme,
     },
   } satisfies Preset.ThemeConfig,
 };
