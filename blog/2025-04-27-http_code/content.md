@@ -1,5 +1,5 @@
 ---
-slug: What-to-Do-When-HTTP-Status-Codes-Don’t-Fit-Your-Business-Error
+slug: what-to-do-when-http-status-codes-dont-fit-your-business-error
 title: What to Do When HTTP Status Codes Don’t Fit Your Business Error
 authors: [raceychan]
 tags: [WebDevelopment]

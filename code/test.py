@@ -1,6 +1,5 @@
-from lihil import Empty, Lihil, Resp, Route, status, Meta
+from lihil import Empty, Lihil, Resp, Route, status
 from lihil.interface import Base
-from typing import Annotated
 from lihil.problems import HTTPException
 
 

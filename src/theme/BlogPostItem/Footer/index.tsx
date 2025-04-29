@@ -6,6 +6,9 @@ import EditMetaRow from '@theme/EditMetaRow';
 import TagsListInline from '@theme/TagsListInline';
 import ReadMoreLink from '@theme/BlogPostItem/Footer/ReadMoreLink';
 import SocialShare from '@site/src/components/social_share';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+
+
 
 export default function BlogPostItemFooter(): ReactNode {
   const {metadata, isBlogPostPage} = useBlogPost();
@@ -18,6 +21,7 @@ export default function BlogPostItemFooter(): ReactNode {
     lastUpdatedBy,
     lastUpdatedAt,
   } = metadata;
+  const { siteConfig } = useDocusaurusContext();
 
   // A post is truncated if it's in the "list view" and it has a truncate marker
   const truncatedPost = !isBlogPostPage && hasTruncateMarker;
@@ -33,6 +37,7 @@ export default function BlogPostItemFooter(): ReactNode {
   // BlogPost footer - details view
   if (isBlogPostPage) {
     const canDisplayEditMetaRow = !!(editUrl || lastUpdatedAt || lastUpdatedBy);
+    const fullUrl = `${siteConfig.url}${permalink}`;
 
     return (
       <footer className="docusaurus-mt-lg">
@@ -46,7 +51,7 @@ export default function BlogPostItemFooter(): ReactNode {
             <div className="col">
               <TagsListInline tags={tags} />
             </div>
-            <SocialShare url={permalink} title={title}></SocialShare>
+            <SocialShare url={fullUrl} title={title}></SocialShare>
           </div>
         )}
         {canDisplayEditMetaRow && (

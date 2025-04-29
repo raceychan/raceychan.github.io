@@ -1,6 +1,5 @@
 import React from 'react';
-import { FacebookShareButton, TwitterShareButton, LinkedinShareButton } from 'react-share';
-import { FacebookIcon, TwitterIcon, LinkedinIcon } from 'react-share';
+import {  TwitterShareButton, XIcon, LinkedinShareButton, LinkedinIcon, RedditShareButton, RedditIcon, BlueskyShareButton, BlueskyIcon } from 'react-share';
 
 interface SocialShareProps {
   url: string;
@@ -8,17 +7,23 @@ interface SocialShareProps {
 }
 
 const SocialShare: React.FC<SocialShareProps> = ({ url, title }) => {
+  const icon_size = 32
+  const source = "lihil"
+
   return (
     <div className="social-share-buttons">
-      <FacebookShareButton url={url}>
-        <FacebookIcon size={32} round />
-      </FacebookShareButton>
       <TwitterShareButton url={url} title={title}>
-        <TwitterIcon size={32} round />
+        <XIcon size={icon_size} round />
       </TwitterShareButton>
-      <LinkedinShareButton url={url}>
-        <LinkedinIcon size={32} round />
+      <LinkedinShareButton url={url} title={title} source={source}>
+        <LinkedinIcon size={icon_size} round />
       </LinkedinShareButton>
+      <RedditShareButton url={url} title={title}>
+        <RedditIcon size={icon_size} round />
+      </RedditShareButton>
+      <BlueskyShareButton url={url} title={title}>
+        <BlueskyIcon size={icon_size} round />
+      </BlueskyShareButton>
     </div>
   );
 };
