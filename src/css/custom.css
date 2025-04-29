@@ -5,6 +5,19 @@
  */
 
 /* You can override the default Infima variables here. */
+
+/* Reduce title size in blog list */
+.blog-list-page h2[class*="title"]
+{
+  font-size: 2.0rem;
+}
+
+/* Reduce title size in blog page */
+.blog-post-page h1[class*="title"]
+{
+  font-size: 2.0rem;
+}
+
 :root {
   --ifm-color-primary:rgb(80, 159, 255); /* Nord Frost lighter blue */
   --ifm-color-primary-dark: #81A1C1; /* Nord Frost mid blue */

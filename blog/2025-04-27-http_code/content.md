@@ -1,15 +1,21 @@
 ---
-slug: What to Do When HTTP Status Codes Don’t Fit Your Business Error
+slug: What-to-Do-When-HTTP-Status-Codes-Don’t-Fit-Your-Business-Error
 title: What to Do When HTTP Status Codes Don’t Fit Your Business Error
 authors: [raceychan]
 tags: [WebDevelopment]
+toc_min_heading_level: 2
+toc_max_heading_level: 5
 ---
 
-The problem: Finite number of status code vs infinite numer of  business errors
+### The problem
+
+**Finite number of status code vs infinite numer of  business errors**
+
 <!-- truncate -->
+
 HTTP status codes have long been a cornerstone of web application error handling. Defined in RFC 7231, these codes serve as a standardized way for servers to communicate the outcome of a request to the client. The standard defines several categories of status codes, such as `2xx` for success, `4xx` for client errors, and `5xx` for server errors.
 
-Quote from RFC7231
+Quote from [RFC 7231](https://datatracker.ietf.org/doc/html/rfc7231#section-8.2.2):
 
 > HTTP clients are not required to
    understand the meaning of all registered status codes, though such
@@ -70,12 +76,9 @@ According to [RFC 7231](https://datatracker.ietf.org/doc/html/rfc7231#section-8.
 status codes >= 600 are invalid because they fall outside of the defined categories.
 
 
-#### Valid Solutions, But With Drawbacks
+#### Better Solutions, But With Drawbacks
 
-**A 4xx status code + Generic Error Message**  
-A common fallback is to return a `4xx` status code (typically `400 Bad Request`) and include a generic error message such as "Something went wrong" in the response body. This approach hides the real cause of the business logic failure and lumps all client errors into one vague category. While this might suffice for small-scale applications or early prototypes, it quickly becomes inadequate as the complexity of business rules increases.
-
-Some systems go a step further by returning a one-line reason phrase or a slightly extended message, but still fall short of conveying structured, actionable error details to clients.
+1. **A 4xx status code + Generic Error Message**  
 
 ```json
 {
@@ -84,8 +87,12 @@ Some systems go a step further by returning a one-line reason phrase or a slight
 }
 ```
 
-**Pigeonhole Principle: Using the Same Status Code for Multiple Business Logic Issues**  
-As business logic errors grow in number and variety, some teams attempt to fit them into a limited set of existing status codes. For instance, both a payment failure due to insufficient funds and a mismatch in shipping address might be returned as `400 Bad Request`. While this approach simplifies server-side handling, it severely limits the clarity of error messages, making it hard for clients to distinguish between different types of business failures. This also places unnecessary burden on client-side developers to reverse-engineer the true nature of the error from vague responses.
+A common fallback is to return a `4xx` status code (typically `400 Bad Request`) and include a generic error message such as "Something went wrong" in the response body. This approach hides the real cause of the business logic failure and lumps all client errors into one vague category. While this might suffice for small-scale applications or early prototypes, it quickly becomes inadequate as the complexity of business rules increases.
+
+Some systems go a step further by returning a one-line reason phrase or a slightly extended message, but still fall short of conveying structured, actionable error details to clients.
+
+
+2. **Using the Same Status Code for Multiple Business Logic Issues**  
 
 ```json
 {
@@ -98,7 +105,11 @@ As business logic errors grow in number and variety, some teams attempt to fit t
   "message": "Invalid shipping address"
 }
 ```
-#### Example from stripe
+
+As business logic errors grow in number and variety, some teams attempt to fit them into a limited set of existing status codes. For instance, both a payment failure due to insufficient funds and a mismatch in shipping address might be returned as `400 Bad Request`. While this approach simplifies server-side handling, it severely limits the clarity of error messages, making it hard for clients to distinguish between different types of business failures. This also places unnecessary burden on client-side developers to reverse-engineer the true nature of the error from vague responses.
+
+
+#### How stripe handles it
 
 **Structured Error Message + Documentation (With Standards Compliance)**  
 A thoughtful approach to business rule violations is to return an appropriate `4xx` status code—ideally one that aligns semantically with the error (for example, `407 Proxy Authentication Required`, if applicable)—to indicate that the request was unsuccessful due to a business constraint.
@@ -118,7 +129,7 @@ That said, there are a couple of areas where further improvements could enhance 
 
 Still, Stripe's approach represents a strong foundation. By building on this with standards-based structures and automation, error handling can become even more predictable, maintainable, and user-friendly.
 
-#### How lihil solves this problem
+### How lihil solves this problem
 
 Structual error message + auto generated documentation
 
@@ -133,17 +144,36 @@ By default, `lihil` also generates detailed responses for common issues such as 
 Best of all, all this documentation is automatically synced with your code. There's no need to manually update or maintain a separate error code reference. `lihil` keeps your API behavior and documentation in perfect alignment.
 
 ```python
-class AddressOutOfScopeProblem(Record):
-	current_address: float
-	service_radius: float
-	distance: float
-	
-	message: str = ""
-	def __post_init__(self):
-		self.message = f"Your current balance {current_balance} is not enough to make the order that requires {required_balance}"
+from lihil import Empty, Lihil, Resp, Route, status, Meta
+from lihil.interface import Base
+from lihil.problems import HTTPException
+
+class AddressOutOfScopeProblem(Base):
+    current_address: Annotated[str, Meta(examples=["home"])]
+    service_radius: Annotated[float, Meta(examples=[3.5])]
+    distance: Annotated[float, Meta(examples=4)]
+
+    message: str = ""
+
+    def __post_init__(self):
+        self.message = f"Your current address {self.current_address} is {self.distance} miles away and our service radius is {self.service_radius}"
 
 class InvalidOrderError(HTTPException[AddressOutOfScopeProblem]):
-    title: str = "Address out of service zone"
-    instance: str
+    "Address out of service zone"
+    __status__ = 422
+
+    instance: Annotated[str, Meta(examples=["2cd20e0c-9ddc-4fdc-8f61-b32f62ac784d"])]
     detail: AddressOutOfScopeProblem
+
+
+orders = Route("orders")
+
+@orders.post(errors=[InvalidOrderError])
+async def create_orders() -> Resp[Empty, status.CREATED]: ...
+
+lhl = Lihil(routes=[orders])
+
+if __name__ == "__main__":
+    lhl.run(__file__)
 ```
+

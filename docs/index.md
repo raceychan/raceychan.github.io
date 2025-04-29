@@ -4,14 +4,6 @@ sidebar_position: 1
 slug: /
 ---
 
-Lihil is
-
-
-- **Productive**: ergonomic API with strong typing support and built-in solutions for common problems — along with beloved features like openapi docs generation — empowers users to build their apps swiftly without sacrificing extensibility.
-- **Professional**: Lihil comes with middlewares that are essential for enterprise development—such as authentication, authorization, event publishing, etc. Ensure productivity from day zero. Catered to modern development styles and architectures, including TDD and DDD.
-- **Performant**: Blazing fast across tasks and conditions—Lihil ranks among the fastest Python web frameworks, outperforming comparable ASGI frameworks by 50%–100%, see [lihil benchmarks](https://github.com/raceychan/lhl_bench),  [independent benchmarks](https://web-frameworks-benchmark.netlify.app/result?l=python)
-
-
 ## Install
 
 lihil(currently) requires python>=3.12
