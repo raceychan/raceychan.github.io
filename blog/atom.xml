@@ -15,6 +15,7 @@
         <summary type="html"><![CDATA[Question:]]></summary>
         <content type="html"><![CDATA[<h3 class="anchor anchorWithStickyNavbar_LWe7" id="question">Question:<a href="https://lihil.cc/blog/what-to-do-when-http-status-codes-dont-fit-your-business-error#question" class="hash-link" aria-label="Direct link to Question:" title="Direct link to Question:">​</a></h3>
 <p><strong>How would you choose a status code for an order that could not be processed because the customer's shipping address is outside the delivery zone?</strong></p>
+<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>Spoiler</summary><div><div class="collapsibleContent_i85q"><h3 class="anchor anchorWithStickyNavbar_LWe7" id="you-shouldnt-be-looking-for-a-specific-status-code-for-busineess-error">You shouldn't be looking for a specific status code for busineess error.<a href="https://lihil.cc/blog/what-to-do-when-http-status-codes-dont-fit-your-business-error#you-shouldnt-be-looking-for-a-specific-status-code-for-busineess-error" class="hash-link" aria-label="Direct link to You shouldn't be looking for a specific status code for busineess error." title="Direct link to You shouldn't be looking for a specific status code for busineess error.">​</a></h3><p>Instead, use a 4xx status code with a well-defined structural error response and provide detailed documentation of the error response format.</p></div></div></details>
 <p>HTTP status codes have long been a cornerstone of web application error handling. Defined in RFC 7231, these codes serve as a standardized way for servers to communicate the outcome of a request to the client. The standard defines several categories of status codes, such as <code>2xx</code> for success, <code>4xx</code> for client errors, and <code>5xx</code> for server errors.</p>
 <p>Quote from <a href="https://datatracker.ietf.org/doc/html/rfc7231#section-8.2.2" target="_blank" rel="noopener noreferrer">RFC 7231</a>:</p>
 <blockquote>
@@ -75,12 +76,8 @@ defined in <a href="https://datatracker.ietf.org/doc/html/rfc7231#section-6" tar
 <p>Stripe does an excellent job in this area with their <a href="https://docs.stripe.com/error-codes" target="_blank" rel="noopener noreferrer">dedicated error code documentation</a>, which provides detailed explanations for a wide range of business-related errors. Their commitment to transparency and developer experience is evident and commendable.</p>
 <p>That said, there are a couple of areas where further improvements could enhance the experience even more:</p>
 <ul>
-<li>
-<p>Their structured error format, while clear, doesn’t explicitly follow RFC 9457, and omits fields like <code>instance</code> that can be valuable for debugging.</p>
-</li>
-<li>
-<p>It’s not clear whether their documentation is automatically generated or manually maintained. If it’s the latter, this could introduce challenges in keeping it fully up to date with evolving APIs.</p>
-</li>
+<li>Their structured error format, while clear, doesn’t explicitly follow RFC 9457, and omits fields like <code>instance</code> that can be valuable for debugging.</li>
+<li>It’s not clear whether their documentation is automatically generated or manually maintained. If it’s the latter, this could introduce challenges in keeping it fully up to date with evolving APIs.</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="how-lihil-solves-this-problem">How lihil solves this problem<a href="https://lihil.cc/blog/what-to-do-when-http-status-codes-dont-fit-your-business-error#how-lihil-solves-this-problem" class="hash-link" aria-label="Direct link to How lihil solves this problem" title="Direct link to How lihil solves this problem">​</a></h3>
 <p><strong>Structured Error Messages + Auto-Generated Documentation</strong></p>
