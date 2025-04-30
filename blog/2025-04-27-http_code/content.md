@@ -13,6 +13,17 @@ toc_max_heading_level: 5
 
 <!-- truncate -->
 
+<details>
+
+<summary>Spoiler</summary>
+
+### You shouldn't be looking for a specific status code for busineess error.
+
+Instead, use a 4xx status code with a well-defined structural error response and provide detailed documentation of the error response format.
+
+</details>
+
+
 HTTP status codes have long been a cornerstone of web application error handling. Defined in RFC 7231, these codes serve as a standardized way for servers to communicate the outcome of a request to the client. The standard defines several categories of status codes, such as `2xx` for success, `4xx` for client errors, and `5xx` for server errors.
 
 Quote from [RFC 7231](https://datatracker.ietf.org/doc/html/rfc7231#section-8.2.2):
@@ -128,7 +139,6 @@ Stripe does an excellent job in this area with their [dedicated error code docum
 That said, there are a couple of areas where further improvements could enhance the experience even more:
 
 - Their structured error format, while clear, doesn’t explicitly follow RFC 9457, and omits fields like `instance` that can be valuable for debugging.
-    
 - It’s not clear whether their documentation is automatically generated or manually maintained. If it’s the latter, this could introduce challenges in keeping it fully up to date with evolving APIs.
 
 ### How lihil solves this problem
@@ -181,4 +191,5 @@ if __name__ == "__main__":
 You would be able to the example response on OpenAPI at "/docs", asd well as the dedicated problem page at "/problems"
 
 ![Order error diagram](./order_error.png)
+
 
