@@ -1,12 +1,12 @@
 
-Coming Soon ...
-<!-- ---
-sidebar_position: 1
-title: request
----
+# request
 
 
+## http request
 
+a `request` object is a low-level(relatively) abstraction of a http request.
+
+### GET REQuest
 
 ```bash
 GET /path?query=value HTTP/1.1
@@ -15,9 +15,7 @@ User-Agent: Mozilla/5.0
 Accept: text/html,application/xhtml+xml
 ```
 
-
-
-with request body
+### POST Request
 
 ```bash
 POST /submit HTTP/1.1
@@ -28,6 +26,8 @@ Content-Length: 27
 {"key":"value"}
 ```
 
-```python
-b"POST /submit HTTP/1.1\r\nHost: example.com\r\nContent-Type: application/json\r\nContent-Length: 27\r\n\r\n{\"key\":\"value\"}"
-``` -->
+
+## `Lihil.Request`
+
+lihil provides higher level abstractions like `Header`, `Query`, `Body`, etc. to let you directly declare the params you need in your endpoint. lihil is also optimized to only minimize the performance overhead in parsing params from request.
+
