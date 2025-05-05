@@ -7,6 +7,9 @@ toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---
 
+
+![404_mail](./404_mail.jpg)
+
 ### Question:
 
 **How would you choose a status code for an order that could not be processed because the customer's shipping address is outside the delivery zone?**
@@ -28,7 +31,7 @@ Instead, use a 4xx status code with a well-defined structural error response and
 
 #### Status code is popular
 
-Even if you are not a technical guy, as long as you have been interacting with the internet, it is very likley that you have heard these numbers `429`, `500`, `502`. 
+Even if you are not a technical guy, it is very likley that you have heard these numbers `404`, `502`. This is because http status code is so popular that It is literally everywhere on the internet. 
 
 HTTP status codes have long been a cornerstone of web application error handling. Defined in RFC 7231, these codes serve as a standardized way for servers to communicate the outcome of a request to the client. 
 The standard defines several categories of status codes, such as `2xx` for success, `4xx` for client errors, and `5xx` for server errors.
