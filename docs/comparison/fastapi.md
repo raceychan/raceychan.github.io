@@ -1,4 +1,4 @@
-# FastAPI vs lihil
+# FastAPI
 
 I am a long-term fastapi users, I have been using fastapi since Octomber 2020 and have applied it to 10+ projects.
 I was pretty satisifed with what fastapi offers, but it is what it does not offer bothers me,

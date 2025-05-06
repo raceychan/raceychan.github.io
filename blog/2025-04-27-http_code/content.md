@@ -27,6 +27,8 @@ Instead, use a 4xx status code with a well-defined structural error response and
 </details>
 
 
+Whether you are struggling to find an appropiate http status code, or if you have a specific http status code to use, this blog is for you.
+
 ### What is http status code and why you should care
 
 #### Status code is popular

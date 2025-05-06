@@ -39,6 +39,24 @@ const config: Config = {
     locales: ['en'],
   },
 
+  markdown: {
+    mermaid: true,
+  },
+
+  themes: ['@docusaurus/theme-mermaid'],
+  plugins: [
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        hashed: true,
+        indexDocs: true,
+        indexBlog: true,
+        indexPages: true,
+        language: ['en'],
+      } satisfies PluginOptions,
+    ],
+  ],
+
   presets: [
     [
       'classic',
@@ -71,20 +89,12 @@ const config: Config = {
       } satisfies Preset.Options,
     ],
   ],
-  plugins: [
-    [
-      '@easyops-cn/docusaurus-search-local',
-      {
-        hashed: true,
-        indexDocs: true,
-        indexBlog: true,
-        indexPages: true,
-        language: ['en'],
-      } satisfies PluginOptions,
-    ],
-  ],
+
+
   themeConfig: {
+
     // Replace with your project's social card
+
     // image: 'img/docusaurus-social-card.jpg',
     metadata: [
       { name: 'keywords', content: 'python, api, fast, webframework, web' },

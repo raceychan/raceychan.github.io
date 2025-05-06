@@ -99,18 +99,17 @@ Here,
 
 Explicitly declaring a parameter with a param mark tells Lihil to treat it as-is, without further analysis.
 
-- `Header[T, H]` for header param with type `T` and header key `H`
-- `Cookie[T, C]` for cookie param with type `T` and cookie name `C`
-- `Path[T]` for path param with type `T`
-- `Query[T]` for query param with type `T`
-- `Body[T]` for body param with type `T`
-- `Form[T]` for body param with content type `multipart/from-data` and type [T]
-- `Use[T]` for dependency with type `T`
+| Param Mark      | Source                                                | Type Argument(s)                                 | Notes                                  | Example                                      |
+|-----------------|--------------------------------------------------------|--------------------------------------------------|----------------------------------------|----------------------------------------------|
+| `Header[T, H]`  | Header parameter                                       | `T`: value type<br />`H`: header key               | Use `typing.Literal` to provide header name | `Header[str, Literal["x-request-id"]]`       |
+| `Cookie[T, C]`  | Cookie parameter                                       | `T`: value type<br />`C`: cookie name              | Use `typing.Literal` to provide cookie name | `Cookie[str, Literal["refresh-token"]]`      |
+| `Path[T]`       | Path parameter                                         | `T`: value type                                  |                                         | `Path[str]`                                  |
+| `Query[T]`      | Query string parameter                                 | `T`: value type                                  |                                         | `Query[int]`                                 |
+| `Body[T]`       | Request body                                  | `T`: value type                                  |                                         | `Body[UserCreate]`                           |
+| `Form[T]`       | `multipart/form-data` body                    | `T`: value type                                  | For file uploads or form data          | `Form[UploadForm]`                           |
+| `Use[T]`        | Dependency injection                                   | `T`: dependency type                             | For injecting services or resources    | `Use[AuthService]`                           |
 
-`Header` and `Cookie` allows your to provide metadata for param parsing,
-
-Use `typing.Literal` to provide header/cookie name,
-
+**Example**:
 ```python
 async def login(cred: Header[str, Literal["User-Credentials"]], x_access_token: Header[str]) : ...
 ```
@@ -129,6 +128,17 @@ If a param is not declared with any param mark, the following rule would apply t
 - If the param type is registered in the route graph, or is a lihil-primitive type, it will be interpered as a dependency and will be resolved by lihil
 
 - Otherise, it is interpreted as a query param.
+
+```mermaid
+flowchart TD
+    A[Param without param mark] --> B[Is param name in route path?]
+    B -- Yes --> P[Interpret as Path param]
+    B -- No --> C[Is type a subclass of Struct?]
+    C -- Yes --> R[Interpret as Body param]
+    C -- No --> D[Is type registered in route graph or lihil-primitive type?]
+    D -- Yes --> S[Interpret as Dependency]
+    D -- No --> Q[Interpret as Query param]
+```
 
 Example:
 
@@ -219,18 +229,19 @@ async def create_user(user: UserData, engine: Engine) -> Resp[UserDB, status.Cre
 
 Now `create_user` would return a status code `201`, instead of the default `200`.
 
-There are several other return marks you might want to use:
+There are several return marks you might want to use:
 
-- `Json[T]` for response with content-type `application/json`
+| Return Mark       | Purpose                                                             | Type Argument(s)                         | Notes                                                                 | Example                                         |
+|-------------------|---------------------------------------------------------------------|------------------------------------------|-----------------------------------------------------------------------|-------------------------------------------------|
+| `Json[T]`         | Response with `application/json` content type                      | `T`: response body type                  | Default return type if not specified                                  | `Json[list[int]]`                              |
+| `Stream[T]`       | Server-sent events with `text/event-stream` content type           | `T`: event data type                     | For event streaming                                                   | `Stream[str]`                                  |
+| `Text`            | Plain text response with `text/plain` content type                 | None                                     | Use for simple text responses                                         | `Text`                                         |
+| `HTML`            | HTML response with `text/html` content type                        | None                                     | Use for HTML content                                                  | `HTML`                                         |
+| `Empty`           | Empty response (no body)                                            | None                                     | Indicates no content to return                                        | `Empty`                                        |
+| `Resp[T, S]`      | Response with explicit status code                                  | `T`: response body<br />`S`: status code   | `T` can be a type or another return mark (e.g., `Json[T]`)            | `Resp[UserDB, status.Created]`                 |
 
-Endpoints are assumed to return `Json[T]` by default, `async def f() -> str` is the same as  `async def f() -> Json[str]`
 
-- `Stream[T]` for server sent event with content-type `text/event-stream`
-- `Text` for response with content-type `text/plain`
-- `HTML` for response with content-type `text/html`
-- `Empty` for empty response
-
-You can use these return marks just like plain python return type hint
+**Example**:
 
 ```python
 from lihil import Json
