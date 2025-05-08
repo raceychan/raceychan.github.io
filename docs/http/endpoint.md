@@ -5,15 +5,13 @@ title: endpoint
 
 # endpoint
 
-An `endpoint` is the most atomic ASGI component in `lihil`, registered under `Route` with `Route.{http method}`, such as `Route.get`. It defines how clients interact with the resource exposed by the `Route`.
+An `endpoint` is the most atomic ASGI component in `lihil` that defines how clients interact with the resource exposed by the `Route`.
 
 <!-- In the [ASGI callchain](./minicourse.md) the `endpoint` is typically at the end. -->
 
-Let's start with a function that creates a `User` in database.
-
 ## Quick Start:
 
-Expose a random function as an endpoint
+Let's start by defining a function that creates an user in the database.
 
 ```python title="app/users/api.py"
 from msgspec import Struct
@@ -35,7 +33,6 @@ async def create_user(user: UserData, engine: AsyncEngine) -> UserDB:
 ```
 
 To expose this function as an endpoint:
-
 
 ```python
 from lihil import Route
@@ -101,9 +98,9 @@ Explicitly declaring a parameter with a param mark tells Lihil to treat it as-is
 
 | Param Mark      | Source                                                | Type Argument(s)                                 | Notes                                  | Example                                      |
 |-----------------|--------------------------------------------------------|--------------------------------------------------|----------------------------------------|----------------------------------------------|
-| `Header[T, H]`  | Header parameter                                       | `T`: value type<br />`H`: header key               | Use `typing.Literal` to provide header name | `Header[str, Literal["x-request-id"]]`       |
-| `Cookie[T, C]`  | Cookie parameter                                       | `T`: value type<br />`C`: cookie name              | Use `typing.Literal` to provide cookie name | `Cookie[str, Literal["refresh-token"]]`      |
-| `Path[T]`       | Path parameter                                         | `T`: value type                                  |                                         | `Path[str]`                                  |
+| `Header[T, H]`  | Header parameter                                       | `T`: value type<br />`H`: header key               | Use `typing.Literal` to provide header name. <br /> If not provided, use param name in kebab case| `Header[str, Literal["x-request-id"]]`       |
+| `Cookie[T, C]`  | Cookie parameter                                       | `T`: value type<br />`C`: cookie name              | Use `typing.Literal` to provide cookie name. <br /> If not provided, use param name in kebab case | `Cookie[str, Literal["refresh-token"]]`      |
+| `Path[T]`       | Path parameter                                         | `T`: value type                                  |   Default value is not allowed for path param | `Path[str]`                                  |
 | `Query[T]`      | Query string parameter                                 | `T`: value type                                  |                                         | `Query[int]`                                 |
 | `Body[T]`       | Request body                                  | `T`: value type                                  |                                         | `Body[UserCreate]`                           |
 | `Form[T]`       | `multipart/form-data` body                    | `T`: value type                                  | For file uploads or form data          | `Form[UploadForm]`                           |
@@ -306,33 +303,35 @@ def encoder[T](param: T) -> bytes: ...
 
 ### Properties
 
-- Provide extra meta data of endpoint through route decorator.
-
-```python
-@router.get(errors=[UserNotFoundError, UserInactiveError])
-async get_user(user_id: str): ...
-```
-
 - Endpoint can have these properties:
 
 ```python
 errors: Sequence[type[DetailBase[Any]]] | type[DetailBase[Any]]
 "Errors that might be raised from the current `endpoint`. These will be treated as responses and displayed in OpenAPI documentation."
 in_schema: bool
-"Whether to include this endpoint inside openapi docs"
+"Whether to include this endpoint inside openapi docs, default to True"
 to_thread: bool
 "Whether this endpoint should be run wihtin a separate thread, only apply to sync function"
 scoped: Literal[True] | None
-"Whether current endpoint should be scoped"
+"Whether current endpoint should be scoped, default to None"
 auth_scheme: AuthBase | None
-"Auth Scheme for access control"
+"Auth Scheme for access control, default to None"
 tags: Sequence[str] | None
-"OAS tag, endpoints with the same tag will be grouped together"
+"OAS tag, endpoints with the same tag will be grouped together, default to route tag"
 ```
 
     - `scoped`: if an endpoint requires any dependency that is an async context manager, or its factory returns an async generator, the endpoint would be scoped, and setting scoped to None won't change that, however, for an endpoint that is not scoped, setting `scoped=True` would make it scoped.
 
-- Provide a properties for every endpoint in the route:
+### Override endpoint properties
+
+You can alter endpoint properties by changing them in route decorator.
+
+```python
+@router.get(errors=[UserNotFoundError, UserInactiveError])
+async get_user(user_id: str): ...
+```
+
+### Provide a properties for every endpoint in the route:
 
 
 You might provide default properties when intialize a route,
