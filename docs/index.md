@@ -36,9 +36,7 @@ uv add lihil
 
 ### Serve with lihil
 
-#### app.py
-
-```python
+```python title="app.py"
 from lihil import Lihil
 
 # your application code
@@ -51,9 +49,16 @@ if __name__ == "__main__":
 
 then in command line
 
-```python
+```bash
+python -m myproject.app --server.port=8080
+```
+
+if you use uv
+```bash
 uv run python -m myproject.app --server.port=8080
 ```
+
+Here `myproject` is the name of the root folder of your project, whereas `app.py` is the name of your main application file. 
 
 This allows you to override configurations using command-line arguments.
 
@@ -65,3 +70,5 @@ use `--help` to see available configs.
 
 lihil is ASGI compatible, you can run it with an ASGI server, such as uvicorn
 start a server with `app.py`, default to port 8000
+
+

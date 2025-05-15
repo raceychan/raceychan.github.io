@@ -76,7 +76,7 @@ def user_id_factory() -> UserID:
 
 async def create_user(
     user: UserData, user_id: UserID, conn: AsyncConnection
-) -> Resp[UserDB, stauts.Created]:
+) -> Annotated[UserDB, stauts.Created]:
 
     sql = user_sql(user=user, id_=user_id)
     await conn.execute(sql)
@@ -92,23 +92,13 @@ Here,
 2. `conn` will be created by `get_conn` and return an instance of `AsyncConnection`, where the the connection will be returned to engine after request.
 3. `UserDB` will be json-serialized, and return a response with content-type being `application/json`, status code being `201`.
 
-### Param Marks
+### Explicitly declare a Param
 
-Explicitly declaring a parameter with a param mark tells Lihil to treat it as-is, without further analysis.
-
-| Param Mark      | Source                                                | Type Argument(s)                                 | Notes                                  | Example                                      |
-|-----------------|--------------------------------------------------------|--------------------------------------------------|----------------------------------------|----------------------------------------------|
-| `Header[T, H]`  | Header parameter                                       | `T`: value type<br />`H`: header key               | Use `typing.Literal` to provide header name. <br /> If not provided, use param name in kebab case| `Header[str, Literal["x-request-id"]]`       |
-| `Cookie[T, C]`  | Cookie parameter                                       | `T`: value type<br />`C`: cookie name              | Use `typing.Literal` to provide cookie name. <br /> If not provided, use param name in kebab case | `Cookie[str, Literal["refresh-token"]]`      |
-| `Path[T]`       | Path parameter                                         | `T`: value type                                  |   Default value is not allowed for path param | `Path[str]`                                  |
-| `Query[T]`      | Query string parameter                                 | `T`: value type                                  |                                         | `Query[int]`                                 |
-| `Body[T]`       | Request body                                  | `T`: value type                                  |                                         | `Body[UserCreate]`                           |
-| `Form[T]`       | `multipart/form-data` body                    | `T`: value type                                  | For file uploads or form data          | `Form[UploadForm]`                           |
-| `Use[T]`        | Dependency injection                                   | `T`: dependency type                             | For injecting services or resources    | `Use[AuthService]`                           |
+Explicitly declaring a parameter with `Param` tells Lihil to treat it as-is, without further analysis.
 
 **Example**:
 ```python
-async def login(cred: Header[str, Literal["User-Credentials"]], x_access_token: Header[str]) : ...
+async def login(cred: Annotated[str, Param("header", alias="User-Credentials")], x_access_token: Annotated[str, Param("header")]) : ...
 ```
 
 - Here param `cred` expects a header with key `User-Credentials`.
@@ -116,7 +106,7 @@ async def login(cred: Header[str, Literal["User-Credentials"]], x_access_token: 
 - If key not provided, The kebab case of param name is used, for example, here `x_access_token` expects a header with key `x-access-token`
 
 
-#### Param Analysis Rules
+#### Implicitly declare a Param
 
 If a param is not declared with any param mark, the following rule would apply to parse it:
 
@@ -140,7 +130,8 @@ flowchart TD
 Example:
 
 ```python
-from lihil import Route, Payload, Use, EventBus
+from typing import Annotated
+from lihil import Route, Payload, use, EventBus
 
 user_route = Route("/users/{user_id}")
 
@@ -151,7 +142,7 @@ class Cache: ...
 user_route.factory(Cache)
 
 @user_route.put
-async def update_user(user_id: str, engine: Use[Engine], cache: Cache, bus: EventBus):
+async def update_user(user_id: str, engine: Annotated[Engine, use(Engine)], cache: Cache, bus: EventBus):
     return "ok"
 ```
 
@@ -172,13 +163,14 @@ lihil provide you data validation functionalities out of the box using msgspec.
 
 ### Constraints
 
-- You might combine `typing.Annotated` and `msgspec.Meta` to put constraints on params,
+- You might combine `typing.Annotated` and `Param` to put constraints on params,
 
 ```python
+from lihil import Param
 all_users = Route("/users")
 
 @all_users.get
-async def get_users(numers: Annotated[int, msgspec.Meta(gt=0)]):
+async def get_users(numers: Annotated[int, Param(gt=0)]):
     ...
 ```
 
@@ -189,18 +181,17 @@ Here `get_user` expects a query param `numers`, an integer with value greater th
 ```python
 from typing import Annotated
 
-from lihil import Payload
-from msgspec import Meta
+from lihil import Payload, Param
 
 UnixName = Annotated[
-    str, Meta(min_length=1, max_length=32, pattern="^[a-z_][a-z0-9_-]*$")
+    str, Param(min_length=1, max_length=32, pattern="^[a-z_][a-z0-9_-]*$")
 ]
 
 class User(Payload):
     name: UnixName
-    groups: Annotated[set[UnixName], Meta(max_length=16)] = set()
-    cpu_limit: Annotated[float, Meta(ge=0.1, le=8)] = 1
-    mem_limit: Annotated[int, Meta(ge=256, le=8192)] = 1024
+    groups: Annotated[set[UnixName], Param(max_length=16)] = set()
+    cpu_limit: Annotated[float, Param(ge=0.1, le=8)] = 1
+    mem_limit: Annotated[int, Param(ge=256, le=8192)] = 1024
 
 @all_users.post
 async def create_user(user: User): ...
@@ -218,9 +209,9 @@ Checkout [msgspec constraints](https://jcristharif.com/msgspec/constraints.html)
 Often you would like to change the status code, or content type of your endpoint,  to do so, you can use one or a combination of several `return marks`. for example, to change stauts code:
 
 ```python
-from lihil import Resp, status
+from lihil import Annotated, status
 
-async def create_user(user: UserData, engine: Engine) -> Resp[UserDB, status.Created]:
+async def create_user(user: UserData, engine: Engine) -> Annotated[UserDB, status.Created]:
     ...
 ```
 
@@ -235,7 +226,7 @@ There are several return marks you might want to use:
 | `Text`            | Plain text response with `text/plain` content type                 | None                                     | Use for simple text responses                                         | `Text`                                         |
 | `HTML`            | HTML response with `text/html` content type                        | None                                     | Use for HTML content                                                  | `HTML`                                         |
 | `Empty`           | Empty response (no body)                                            | None                                     | Indicates no content to return                                        | `Empty`                                        |
-| `Resp[T, S]`      | Response with explicit status code                                  | `T`: response body<br />`S`: status code   | `T` can be a type or another return mark (e.g., `Json[T]`)            | `Resp[UserDB, status.Created]`                 |
+
 
 
 **Example**:
@@ -251,7 +242,7 @@ return marks have no runtime/typing effect outside of lihil, your type checker w
 
 #### Response with status code
 
-- `Resp[T, 200]` for response with status code `200`. where `T` can be anything json serializable, or another return mark.
+- `Annotated[T, status.OK]` for response with status code `200`. where `T` can be anything json serializable, or another return mark.
 
 For instance, in the `create_user` example, we use `Resp[UserDB, status.Created]` to declare our return type, here `T` is `UserDB`.
 

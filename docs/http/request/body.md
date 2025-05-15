@@ -1,5 +1,5 @@
 ---
 sidebar_position: 4
-title: Body
+title: body
 slug: body-parameter
 ---

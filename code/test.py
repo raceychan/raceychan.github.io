@@ -1,4 +1,4 @@
-from lihil import Empty, Lihil, Resp, Route, status
+from lihil import Annotated, Empty, Lihil, Route, status
 from lihil.interface import Base
 from lihil.problems import HTTPException
 
@@ -37,7 +37,7 @@ orders = Route("orders")
 
 
 @orders.post(errors=[InvalidOrderError])
-async def create_orders() -> Resp[Empty, status.CREATED]: ...
+async def create_orders() -> Annotated[Empty, status.CREATED]: ...
 
 
 lhl = Lihil(routes=[orders])

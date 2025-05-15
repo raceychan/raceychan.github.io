@@ -1,5 +1,132 @@
 ---
 sidebar_position: 2
-title: Query
+title: query
 slug: query-parameter
 ---
+
+# Query Parameters
+
+Query parameters are a flexible way to pass data to your server through the URL—especially for things like filters, pagination, or optional inputs. They appear after a `?` in the URL and are made up of key-value pairs.
+
+## What Do Query Parameters Look Like?
+
+Here’s a simple request with query parameters:
+
+```http
+GET /articles?keyword=book&page=2 HTTP/1.1
+Host: example.com
+```
+
+In this case:
+
+- `keyword` is a query parameter with the value `book`.
+- `page` is another query parameter with the value `2`.
+
+Multiple parameters are joined using `&`. All values are strings in the raw request, though they can often be interpreted as numbers, booleans, lists, etc.
+
+
+
+## Query Parameters in lihil
+
+In lihil, you don’t need to manually extract or convert query parameters from the URL. You simply declare them as arguments to your endpoint, and lihil handles the rest—including parsing and type conversion.
+
+```python
+
+from lihil import Route
+
+articles = Route("/articles")
+
+@articles.get
+async def search(keyword: str, page: int = 1):
+    ...
+```
+
+
+If a request comes in as `/articles?keyword=book&page=2`, lihil will automatically:
+
+- extract keyword and page from the query string,
+
+- convert page to an integer (based on the type hint),
+
+- pass both values to your function.
+
+If page is not provided, the default value 1 will be used.
+
+If a query parameter without default value is missing or has an invalid type that can't be coerced, lihil will respond with an `InvalidRequest` error automatically.
+
+
+## Array-like Query Parameters
+
+Unlike path parameters, query parameters can behave like two-dimensional data. That means you can have multiple values for the same key—perfect for arrays or repeated options:
+
+```http
+GET /filter?tag=python&tag=web&tag=backend HTTP/1.1
+```
+
+In lihil, you can declare this with a list type:
+
+
+```python
+from lihil import Route
+
+@Route("/filter")
+async def filter_by_tags(tag: list[str]):
+    ...
+```
+
+lihil will collect all tag values and give them to you as a list.
+
+For `/filter?tag=web&tag=python`, you'll receive `["web", "python", "backend"]` as the value of tag.
+
+
+## Data Validation
+
+For array-style query parameters, lihil.Param allows you to enforce constraints like max length or item validation.
+
+```python
+
+from lihil import Param
+
+Tags = Param(max_length=5)
+
+@route("/articles")
+async def search_articles(tags: list[str] = Tags) -> JSONResponse:
+    ...
+```
+
+In this case, if a request includes more than 5 tags, lihil will reject it with a 422 error.
+
+You can also validate scalar query parameters the same way—for example, to enforce range limits or regex rules.
+
+```python
+
+Page = Param(ge=1)
+
+@route("/articles")
+async def list_articles(page: int = Page) -> JSONResponse:
+    ...
+```
+
+## Custom Validation
+
+Need more control? You can define a custom decoder for advanced validation logic. This works for both single and list-based query parameters.
+
+```python
+
+from lihil import Param, HTTPException
+
+class BlockedTag(HTTPException[str]):
+    "This tag is not allowed"
+
+def tag_decoder(value: str) -> str:
+    if value in {"banned", "spam"}:
+        raise BlockedTag(f"Tag '{value}' is blocked")
+    return value
+
+@route("/filter")
+async def filter_tags(tags: list[str] = Param(decoder=tag_decoder)) -> JSONResponse:
+    ...
+```
+In this example, if a user tries to filter with a blocked tag like `"banned"` or `"spam"`, lihil will raise a `BlockedTag` error. The request will be rejected with a 422 error, and the message will indicate which tag was blocked.
+
+Query parameters are not just key-value strings—they're a flexible and powerful part of request handling. With lihil, you get type conversion, validation, and structure with minimal effort.
