@@ -12,7 +12,7 @@ from lihil import Lihil, Route
 user_route = Route("users")
 
 
-lhl = Lihil[None](routes=[user_route])
+lhl = Lihil(routes=[user_route])
 ```
 
 ## Include routes

@@ -6,7 +6,7 @@ When responding:
 - Include relevant documentation links when appropriate
 
 For code examples:
-- Backend: Use Python 3.12 with proper type hints following PEP 484/585
+- Backend: Use Python 3.10 with proper type hints following PEP 484/585
 - Frontend: Use TypeScript with modern ES6+ syntax
 - Provide complete, working code snippets rather than pseudocode
 - Follow best practices for both Python and React/Docusaurus ecosystems

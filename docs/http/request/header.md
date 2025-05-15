@@ -80,3 +80,23 @@ request_id: Annotated[str, Param("header", alias="x-request-id")]
 
 
 ## Custom Decoder
+
+for more complex headers, you can define a custom decoder function. This function takes the raw header value and returns the desired type.
+
+```python
+from lihil import Route, Param
+from typing import Annotated
+
+def custom_decoder(value: str) -> str:
+    # Custom decoding logic
+    return value.lower()
+
+route = Route("/greet")
+
+@route
+async def create_user(
+    user_agent: Annotated[str, Param("header")],
+    custom_header: Annotated[str, Param("header", decoder=custom_decoder)],
+):
+    return {"ua": user_agent, "custom": custom_header}
+```

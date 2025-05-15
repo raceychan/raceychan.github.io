@@ -4,24 +4,19 @@
 lihil expects a lifespan with following interface:
 
 ```python
-type LifeSpan[T: Mapping[str, Any] | None] = Callable[
-    ["Lihil[T]"], AsyncContextManager[T] | AsyncGenerator[T, None]
+type LifeSpan = Callable[
+    ["Lihil"], AsyncContextManager[None] | AsyncGenerator[None, None]
 ]
 ```
 
 Example:
 
 ```python showLineNumbers
-from typing import TypedDict
 
-class ExampleState(TypedDict):
-    engine: AsyncEngine
-
-
-async def example_lifespan(app: Lihil[None]):
-    engine = create_async_engine(app.app_congig)
+async def example_lifespan(app: Lihil):
+    engine = app.graph.resolve(create_async_engine)
     await engine.execute(text("SELECT 1"))
-    yield ExampleState(engine=Engine)
+    yield
     await engine.dispose()
 
 lhl = Lihil(lifespan=example_lifespan)
@@ -36,7 +31,7 @@ ASGI lifespan handlers are an excellent way to manage startup and shutdown logic
 ```python
 from sqlalchemy.ext.asyncio import create_async_engine
 
-async def lifespan(app: Lihil[None]):
+async def lifespan(app: Lihil):
     engine = create_async_engine(app.config.database.url)
     await engine.execute(text("SELECT 1"))  
     yield 
@@ -52,7 +47,7 @@ When working with async clients or services, such as Kafka producers or database
 ```python
 from aiokafka import AIOKafkaProducer
 
-async def lifespan(app: Lihil[None]):
+async def lifespan(app: Lihil):
     kafka = AIOKafkaProducer(bootstrap_servers=app.config.kafka.url)
     await kafka.start()
     yield  
@@ -66,7 +61,7 @@ Here, the Kafka producer is created as a singleton object within the lifespan ha
 During shutdown, it’s important to clean up any connections, release resources, or stop services gracefully:
 
 ```python
-async def lifespan(app: Lihil[None]):
+async def lifespan(app: Lihil):
     engine = create_async_engine(...)
     kafka = AIOKafkaProducer(...)
     await kafka.start()

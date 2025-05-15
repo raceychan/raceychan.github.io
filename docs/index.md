@@ -6,7 +6,7 @@ slug: /
 
 ## Install
 
-lihil(currently) requires python>=3.12
+lihil requires python>=3.10
 
 ### pip
 
