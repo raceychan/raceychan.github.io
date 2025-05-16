@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkblogs=self.webpackChunkblogs||[]).push([[7472],{55513:t=>{t.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"What to Do When HTTP Status Codes Don\u2019t Fit Your Business Error","permalink":"/blog/what-to-do-when-http-status-codes-dont-fit-your-business-error","unlisted":false,"date":"2025-04-27T00:00:00.000Z"}]}')}}]);
