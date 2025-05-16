@@ -9,54 +9,6 @@ An `endpoint` is the most atomic ASGI component in `lihil` that defines how clie
 
 <!-- In the [ASGI callchain](./minicourse.md) the `endpoint` is typically at the end. -->
 
-## Quick Start:
-
-Let's start by defining a function that creates an user in the database.
-
-```python title="app/users/api.py"
-from msgspec import Struct
-from sqlalchemy.ext.asyncio import AsyncEngine
-from .users.db import user_sql
-
-class UserDB(UserData):
-    user_id: str
-
-def get_engine() -> AsyncEngine:
-    return AsyncEngine()
-
-async def create_user(user: UserData, engine: AsyncEngine) -> UserDB:
-    user_id = str(uuid4())
-    sql = user_sql(user=user, id_=user_id)
-    async with engine.begin() as conn:
-        await conn.execute(sql)
-    return UserDB.from_user(user, id=user_id)
-```
-
-To expose this function as an endpoint:
-
-```python
-from lihil import Route
-
-users_route = Route("/users")
-users_route.factory(get_engine)
-users_route.post(create_user)
-```
-
-With just three lines, we:
-
-1. Create a Route with the path "/users".
-2. Register `AsyncEngine` as a dependency, using `get_engine` as its factory.
-3. Register create_user as the POST endpoint.
-
-
-You might also use python decorator syntax to register an endpoint
-
-```python
-users_route = Route("/users")
-
-@users_route.post
-async def create_user(): ...
-```
 
 ### Param Parsing
 

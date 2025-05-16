@@ -1,0 +1,42 @@
+.codeBlockContainer {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.codeBlockTitle {
+  background-color: #3b4252;
+  color: #e5e9f0;
+  font-family: monospace;
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #4c566a;
+}
+
+.codeBlock {
+  margin: 0 !important;
+  padding: 1rem !important;
+  background-color: #2e3440 !important; /* Nord dark background */
+  color: #e5e9f0 !important;
+  font-size: 0.875rem !important;
+  overflow-x: auto;
+  font-family: "Fira Code", monospace;
+}
+
+.codeLine {
+  display: flex;
+  line-height: 1.5;
+}
+
+.lineNumber {
+  color: #4c566a;
+  display: inline-block;
+  min-width: 2.5rem;
+  padding-right: 1rem;
+  text-align: right;
+  user-select: none;
+}
+
+.lineContent {
+  flex: 1;
+}

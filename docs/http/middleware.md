@@ -12,6 +12,8 @@ def tracingmw_factory(next_app: ASGIApp) -> ASGIApp:
         scope["trace_id"] = str(uuid.uuid4())
         await next_app(scope, receive, send)
     return trace_mw
+
+lhl = Lihil(middlewares=[lambda app: tracingmw_factory(app)])
 ```
 
 lihil uses starlette internally, you can directly import middlewares from starlette, for example:
@@ -22,4 +24,4 @@ from starlette.middleware.cors import CORSSMiddleware
 lhl = Lihil(middlewares=[lambda app: CORSMiddleware(app, add_methods="*")])
 ```
 
-for complex middleware that require many external dependencies, you might to construct them inside lifespan.
+for complex middleware that require many external dependencies, you might to construct them inside lifespan, so that you can use `lhl.graph` to resolve dependencies.

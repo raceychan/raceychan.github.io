@@ -1,6 +1,6 @@
 .PHONY: run
 run:
-	npm run start
+	npx docusaurus start --port 8888
 
 .PHONY: deploy
 deploy:

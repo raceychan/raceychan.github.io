@@ -100,7 +100,7 @@ const config: Config = {
       { name: 'keywords', content: 'python, api, fast, webframework, web' },
     ],
     navbar: {
-      title: 'Lihil',
+      title: '',
       logo: {
         alt: 'My Site Logo',
         src: 'img/lhl_logo_ts.png',
