@@ -57,10 +57,10 @@ async def ep(req: IRequest):
     data = await req.body()
 ```
 
-Note that param parsing in lihil is optimized. it is unlikely that you would see a siginificant performance boost by using `IRequest` object directly. 
-
+Param parsing in lihil is optimized. It usually won't bring a siginificant performance boost using `IRequest` object directly. 
 
 ## `IRequest` interface
+
 ```python
 class IRequest(Protocol):
     def __init__(self, scope: IScope, receive: IReceive | None = None) -> None: ...
