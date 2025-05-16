@@ -87,7 +87,7 @@ export default function CommunitySection() {
               <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
                 <Button
                   component={Link}
-                  to="https://github.com/raceychan/lihil/blob/master/CHANGELOG.md"
+                  to="https://github.com/raceychan/lihil/releases"
                   variant="contained"
                   sx={{
                     bgcolor: "#0066cc",

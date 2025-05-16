@@ -6,7 +6,7 @@ import React from "react";
 import InstallSection from "@site/src/components/installation";
 
 export default function QuickStart() {
-  const quick_start_code = `# app.py
+  const quick_start_code = `
 from lihil import Lihil, HTTPException, Struct
 
 lhl = Lihil("todo_api")
@@ -29,11 +29,7 @@ async def create_todo(item: TodoItem, todo_repo: TodoRepo):
 if __name__ == "__main__":
     lhl.run()`;
   return (
-    <Box
-      sx={{ bgcolor: "rgba(171, 210, 255, 0.05)", py: 8 }}
-      maxWidth={"lg"}
-      mx={"auto"}
-    >
+    <Box sx={{ bgcolor: "rgba(171, 210, 255, 0.05)", py: 8 }} mx={"auto"}>
       <Grid container spacing={2} alignItems="center">
         <Grid size={6}>
           <InstallSection
@@ -45,26 +41,15 @@ if __name__ == "__main__":
         </Grid>
 
         <Grid size={6}>
-          <Paper
-            elevation={0}
-            sx={{
-              p: 3,
-              bgcolor: "white",
-              borderRadius: 2,
-              border: "1px solid rgba(0, 0, 0, 0.05)",
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
-            }}
+          <Typography
+            component="h3"
+            variant="h6"
+            fontWeight="bold"
+            gutterBottom
           >
-            <Typography
-              component="h3"
-              variant="h6"
-              fontWeight="bold"
-              gutterBottom
-            >
-              Create a REST API in minutes
-            </Typography>
-            <CodeBlock>{quick_start_code}</CodeBlock>
-          </Paper>
+            Create a REST API in minutes
+          </Typography>
+          <CodeBlock title={"app.py"}>{quick_start_code}</CodeBlock>
         </Grid>
       </Grid>
     </Box>

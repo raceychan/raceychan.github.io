@@ -8,7 +8,6 @@ import {
   Grid,
   Paper,
   Chip,
-  useTheme,
 } from "@mui/material";
 import { useColorMode } from "@docusaurus/theme-common";
 // Import from react-code-blocks
@@ -47,7 +46,7 @@ function HeroSection({ title, tagline }: HeroProps) {
     >
       <Container maxWidth="lg">
         <Grid container spacing={8} alignItems="center">
-          <Grid item xs={12} md={7}>
+          <Grid size={7}>
             <Box sx={{ mb: 4 }}>
               <Chip
                 label="Fast. Robust. Simple."
@@ -111,24 +110,11 @@ function HeroSection({ title, tagline }: HeroProps) {
               </Box>
             </Box>
           </Grid>
-          <Paper
-            elevation={0}
-            sx={{
-              p: 2,
-              bgcolor: isDarkTheme
-                ? "rgba(25, 25, 25, 0.8)"
-                : "rgba(226, 232, 240, 1)", // Slightly darker background for better contrast
-              borderRadius: 2,
-              border: isDarkTheme
-                ? "1px solid rgba(100, 100, 100, 0.3)"
-                : "1px solid rgba(171, 210, 255, 0.6)", // More visible border
-              boxShadow: isDarkTheme ? "none" : "0 2px 6px rgba(0, 0, 0, 0.08)", // Light shadow in light mode for depth
-            }}
-          >
+          <Grid size={5}>
             <CodeBlock language="python" title="example.py" showLineNumbers>
               {codeString}
             </CodeBlock>
-          </Paper>
+          </Grid>
         </Grid>
       </Container>
     </Box>

@@ -14,33 +14,33 @@ function MetricsSection() {
     <Box sx={{ bgcolor: "rgba(171, 210, 255, 0.05)", py: 6 }}>
       <Container maxWidth="lg">
         <Grid container spacing={4} justifyContent="center">
-          <Grid item xs={12} sm={4} md={3}>
+          <Grid size={{ xs: 12, sm: 4, md: 3 }}>
             <Box sx={{ textAlign: "center" }}>
               <Typography variant="h3" fontWeight="bold" color="primary">
                 50%+
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                Faster than comparable ASGI frameworks
+                Faster than other ASGI webframeworks
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={4} md={3}>
+          <Grid size={{ xs: 12, sm: 4, md: 3 }}>
             <Box sx={{ textAlign: "center" }}>
               <Typography variant="h3" fontWeight="bold" color="primary">
                 100%
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                Type-safe API
+                Test Covered and strictly typed
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12} sm={4} md={3}>
+          <Grid size={{ xs: 12, sm: 4, md: 3 }}>
             <Box sx={{ textAlign: "center" }}>
               <Typography variant="h3" fontWeight="bold" color="primary">
-                &lt;1ms
+                &gt;40K
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                Response time for simple requests
+                RPS(per cpu)
               </Typography>
             </Box>
           </Grid>
@@ -60,8 +60,8 @@ export default function Home(): React.ReactNode {
         tagline={siteConfig.tagline}
       ></HeroSection>
       <MetricsSection />
-      <FeatureSection />
       <QuickStart />
+      <FeatureSection />
 
       {/* Community Section */}
       <CommunitySection />
