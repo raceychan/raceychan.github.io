@@ -1,4 +1,4 @@
-import { Grid, Box, Typography, Paper } from "@mui/material";
+import { Grid, Box, Typography, Container } from "@mui/material";
 
 import CodeBlock from "@site/src/components/code_block";
 
@@ -29,29 +29,31 @@ async def create_todo(item: TodoItem, todo_repo: TodoRepo):
 if __name__ == "__main__":
     lhl.run()`;
   return (
-    <Box sx={{ bgcolor: "rgba(171, 210, 255, 0.05)", py: 8 }} mx={"auto"}>
-      <Grid container spacing={2} alignItems="center">
-        <Grid size={6}>
-          <InstallSection
-            command={'pip install "lihil[standard]"'}
-            packageName="lihil"
-            totalKB={83.5}
-            primaryColor={"#66bfff"}
-          />
-        </Grid>
+    <Box sx={{ bgcolor: "rgba(255, 255, 255, 0.05)", py: 8 }}>
+      <Container maxWidth="lg">
+        <Grid container spacing={2} alignItems="center">
+          <Grid size={6}>
+            <InstallSection
+              command={'pip install "lihil[standard]"'}
+              packageName="lihil"
+              totalKB={83.5}
+              primaryColor={"#66bfff"}
+            />
+          </Grid>
 
-        <Grid size={6}>
-          <Typography
-            component="h3"
-            variant="h6"
-            fontWeight="bold"
-            gutterBottom
-          >
-            Create a REST API in minutes
-          </Typography>
-          <CodeBlock title={"app.py"}>{quick_start_code}</CodeBlock>
+          <Grid size={6}>
+            <Typography
+              component="h3"
+              variant="h6"
+              fontWeight="bold"
+              gutterBottom
+            >
+              Create a REST API in minutes
+            </Typography>
+            <CodeBlock title={"app.py"}>{quick_start_code}</CodeBlock>
+          </Grid>
         </Grid>
-      </Grid>
+      </Container>
     </Box>
   );
 }

@@ -107,7 +107,7 @@ function Reasoning() {
 
 function FeatureSection() {
   return (
-    <Box sx={{ bgcolor: "white", py: 8 }}>
+    <Box sx={{ bgcolor: "rgba(171, 210, 255, 0.05)", py: 8 }}>
       <Container maxWidth="lg">
         <Reasoning />
 

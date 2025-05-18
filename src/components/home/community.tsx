@@ -1,9 +1,25 @@
 import React from "react";
+import { useState, useEffect } from "react";
 
 import Link from "@docusaurus/Link";
 import { Box, Container, Typography, Button, Grid, Paper } from "@mui/material";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import ForumIcon from "@mui/icons-material/Forum"; // Good for "Discord"
+import VolunteerActivismIcon from "@mui/icons-material/VolunteerActivism"; // Good for "Contribute"
 
 export default function CommunitySection() {
+  const [version, setVersion] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("https://pypi.org/pypi/lihil/json")
+      .then((res) => res.json())
+      .then((data) => setVersion(data.info.version))
+      .catch((err) => {
+        console.error("Failed to fetch version:", err);
+        setVersion("unknown");
+      });
+  }, []);
+
   return (
     <Box sx={{ bgcolor: "white", py: 8 }}>
       <Container maxWidth="lg">
@@ -20,6 +36,7 @@ export default function CommunitySection() {
             <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mt: 3 }}>
               <Button
                 component={Link}
+                startIcon={<GitHubIcon />}
                 to="https://github.com/raceychan/lihil"
                 variant="outlined"
                 sx={{
@@ -31,6 +48,7 @@ export default function CommunitySection() {
               </Button>
               <Button
                 component={Link}
+                startIcon={<ForumIcon />}
                 to="https://discordapp.com/invite/lihil"
                 variant="outlined"
                 sx={{
@@ -42,6 +60,7 @@ export default function CommunitySection() {
               </Button>
               <Button
                 component={Link}
+                startIcon={<VolunteerActivismIcon />}
                 to="https://github.com/raceychan/lihil/blob/master/CONTRIBUTING.md"
                 variant="outlined"
                 sx={{
@@ -82,7 +101,7 @@ export default function CommunitySection() {
                 align="center"
                 gutterBottom
               >
-                v0.2.6
+                {version ?? "Loading..."}
               </Typography>
               <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
                 <Button

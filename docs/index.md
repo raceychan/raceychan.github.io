@@ -6,7 +6,7 @@ slug: /
 
 # Quick Start:
 
-## Simple app
+## Hello World
 
 ```python title="app/main.py"
 from lihil import Lihil
@@ -14,21 +14,20 @@ from lihil import Lihil
 lhl = Lihil()
 
 @lhl.get
-async def add_one(a: int, b: int) -> int:
-    return a + b
+async def hello(world: str = "world") -> int:
+    return f"hello, {world}!"
 ```
 
-### Serve your app 
+### Serve your app using uvicorn
 
 ```bash
-uvicorn app.main:lhl 
+uvicorn app.main:lhl
 ```
-
-
 
 ## Larger app
 
 ### Define a python function
+
 Let's start by defining a function that creates an user in the database.
 
 ```python title="app/users/api.py"
@@ -66,7 +65,6 @@ With just three lines, we:
 2. Register `AsyncEngine` as a dependency, using `get_engine` as its factory.
 3. Register create_user as the POST endpoint.
 
-
 ### Include the route into app
 
 ```python title="app/main.py"
@@ -75,9 +73,12 @@ from app.users.api import user_route
 
 
 lihil = Lihil(routes=[user_route])
+
+if __name__ == "__main__":
+    lihil.run(__file__)
 ```
 
-### Serve your app
+### Serve your app using lihil
 
 ```bash
 python -m app.main

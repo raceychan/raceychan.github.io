@@ -2,7 +2,14 @@ import React from "react";
 import Layout from "@theme/Layout";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Link from "@docusaurus/Link";
-import { Box, Container, Typography, Button, Grid } from "@mui/material";
+import {
+  Box,
+  Container,
+  Typography,
+  Button,
+  Grid,
+  Divider,
+} from "@mui/material";
 
 import FeatureSection from "../components/home/feature_section";
 import HeroSection from "../components/home/hero";
@@ -50,60 +57,63 @@ function MetricsSection() {
   );
 }
 
+function InviteSection() {
+  return (
+    <Box
+      sx={{
+        bgcolor: "rgba(171, 210, 255, 0.2)",
+        py: 8,
+        textAlign: "center",
+      }}
+    >
+      <Container maxWidth="md">
+        <Typography variant="h4" fontWeight="bold" gutterBottom>
+          Ready to build something amazing?
+        </Typography>
+        <Typography
+          variant="body1"
+          sx={{ mb: 4, maxWidth: "600px", mx: "auto" }}
+        >
+          Join the growing community of developers using Lihil to build fast,
+          robust, and scalable web applications.
+        </Typography>
+        <Button
+          component={Link}
+          to="/docs/installation"
+          variant="contained"
+          size="large"
+          sx={{
+            bgcolor: "#0066cc",
+            fontWeight: "medium",
+            px: 4,
+            "&:hover": {
+              bgcolor: "#004999",
+            },
+          }}
+        >
+          Get Started Now
+        </Button>
+      </Container>
+    </Box>
+  );
+}
+
 export default function Home(): React.ReactNode {
   const { siteConfig } = useDocusaurusContext();
 
   return (
     <Layout title={siteConfig.title} description={siteConfig.tagline}>
-      <HeroSection
-        title={siteConfig.title}
-        tagline={siteConfig.tagline}
-      ></HeroSection>
+      <HeroSection title={siteConfig.title} tagline={siteConfig.tagline} />
+      <Divider/>
       <MetricsSection />
+      <Divider/>
       <QuickStart />
+      <Divider/>
       <FeatureSection />
-
-      {/* Community Section */}
+      <Divider/>
       <CommunitySection />
-
-      {/* Footer CTA */}
-      <Box
-        sx={{
-          bgcolor: "rgba(171, 210, 255, 0.2)",
-          py: 8,
-          textAlign: "center",
-        }}
-      >
-        <Container maxWidth="md">
-          <Typography variant="h4" fontWeight="bold" gutterBottom>
-            Ready to build something amazing?
-          </Typography>
-          <Typography
-            variant="body1"
-            paragraph
-            sx={{ mb: 4, maxWidth: "600px", mx: "auto" }}
-          >
-            Join the growing community of developers using Lihil to build fast,
-            robust, and scalable web applications.
-          </Typography>
-          <Button
-            component={Link}
-            to="/docs/installation"
-            variant="contained"
-            size="large"
-            sx={{
-              bgcolor: "#0066cc",
-              fontWeight: "medium",
-              px: 4,
-              "&:hover": {
-                bgcolor: "#004999",
-              },
-            }}
-          >
-            Get Started Now
-          </Button>
-        </Container>
-      </Box>
+      <Divider/>
+      <InviteSection />
     </Layout>
   );
 }
