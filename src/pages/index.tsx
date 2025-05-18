@@ -24,10 +24,10 @@ function MetricsSection() {
           <Grid size={{ xs: 12, sm: 4, md: 3 }}>
             <Box sx={{ textAlign: "center" }}>
               <Typography variant="h3" fontWeight="bold" color="primary">
-                50%+
+                50%-100%
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                Faster than other ASGI webframeworks
+                Faster than other ASGI frameworks, more for larger app
               </Typography>
             </Box>
           </Grid>
@@ -47,7 +47,7 @@ function MetricsSection() {
                 &gt;40K
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                RPS(per cpu)
+                RPS(per CPU thread)
               </Typography>
             </Box>
           </Grid>
@@ -104,15 +104,15 @@ export default function Home(): React.ReactNode {
   return (
     <Layout title={siteConfig.title} description={siteConfig.tagline}>
       <HeroSection title={siteConfig.title} tagline={siteConfig.tagline} />
-      <Divider/>
+      <Divider />
       <MetricsSection />
-      <Divider/>
+      <Divider />
       <QuickStart />
-      <Divider/>
+      <Divider />
       <FeatureSection />
-      <Divider/>
+      <Divider />
       <CommunitySection />
-      <Divider/>
+      <Divider />
       <InviteSection />
     </Layout>
   );

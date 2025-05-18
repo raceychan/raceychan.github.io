@@ -1,139 +1,146 @@
-import React from "react";
-import { Box, Typography, Container } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Divider,
+  Grid,
+  Typography,
+  Container,
+} from "@mui/material";
 
-type FeatureItem = {
-  image: string;
-  description: React.ReactNode;
-};
+import RuleIcon from "@mui/icons-material/Rule";
+import SettingsEthernetIcon from "@mui/icons-material/SettingsEthernet";
+import WifiIcon from "@mui/icons-material/Wifi";
+import DescriptionIcon from "@mui/icons-material/Description";
+import LockPersonIcon from "@mui/icons-material/LockPerson";
+import SendIcon from "@mui/icons-material/Send";
+import ScienceIcon from "@mui/icons-material/Science";
+import MemoryIcon from "@mui/icons-material/Memory";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
 
-const FeatureList: FeatureItem[] = [
+const features = [
   {
-    image: require("@site/static/img/performant_pic.png").default,
-    description: (
-      <>
-        Blazing fast across tasks and conditions. Lihil ranks among the fastest
-        Python web frameworks, outperforming comparable ASGI frameworks by
-        50%–100%.
-      </>
-    ),
+    title: "Param Parsing & Validation",
+    icon: <RuleIcon fontSize="large" color="primary" />, // import RuleIcon from @mui/icons-material
+    description:
+      "Automatically parse & validate request data from path, query, headers, and body with msgspec – 12x faster and 25x more memory efficient than Pydantic.",
   },
   {
-    image: require("@site/static/img/professional_pic.png").default,
-    description: (
-      <>
-        Designed for productivity from day one. Lihil comes with middlewares
-        essential for enterprise development—authentication, authorization,
-        event publishing, etc.
-      </>
-    ),
+    title: "Powerful Dependency Injection",
+    icon: <SettingsEthernetIcon fontSize="large" color="primary" />, // import SettingsEthernetIcon
+    description:
+      "Inject dependencies based on type hints. Supports factories, async, scopes, and singletons – all lightning fast.",
   },
   {
-    image: require("@site/static/img/productive_pic.png").default,
-    description: (
-      <>
-        Battery-Included to get started fast—without giving up flexibility.
-        Ergonomic API with strong typing and built-in solutions for common
-        problems. Lihil born to save your time
-        <br />
-      </>
-    ),
+    title: "WebSocket",
+    icon: <WifiIcon fontSize="large" color="primary" />, // import WifiIcon
+    description:
+      "Handle WebSocket connections with clean, type-safe APIs. Easily test using the built-in WebSocket test client.",
+  },
+  {
+    title: "OpenAPI & Error Docs",
+    icon: <DescriptionIcon fontSize="large" color="primary" />, // import DescriptionIcon
+    description:
+      "Auto-generate OpenAPI docs and problem details. Custom exceptions are turned into clear API responses.",
+  },
+  {
+    title: "Authentication & Authorization",
+    icon: <LockPersonIcon fontSize="large" color="primary" />, // import LockPersonIcon
+    description:
+      "Built-in support for JWT and OAuth2. Auth objects are type-safe and serializable.",
+  },
+  {
+    title: "Message System",
+    icon: <SendIcon fontSize="large" color="primary" />, // import SendIcon
+    description:
+      "Built-in event system to publish and handle events, both in-process and out-of-process, efficiently.",
+  },
+  {
+    title: "Great Testability",
+    icon: <ScienceIcon fontSize="large" color="primary" />, // import ScienceIcon
+    description:
+      "Built-in test client for endpoints, routes, and middlewares – no extra setup required.",
+  },
+  {
+    title: "Low Memory Footprint",
+    icon: <MemoryIcon fontSize="large" color="primary" />, // import MemoryIcon
+    description:
+      "Optimized for minimal memory usage. GC overhead is reduced, making services more stable under load.",
+  },
+  {
+    title: "AI-Ready",
+    icon: <SmartToyIcon fontSize="large" color="primary" />, // import SmartToyIcon
+    description:
+      "Designed with AI in mind. Built-in support for SSE, MCP, and remote handlers coming soon.",
   },
 ];
 
-function FeatureBox({ image, description }: FeatureItem) {
+export default function FeatureSection() {
   return (
-    <Box
-      sx={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        textAlign: "center",
-        px: 2,
-      }}
-    >
-      <Box
-        sx={{
-          mb: 3,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "relative",
-        }}
-      >
-        <Box
-          component="img"
-          src={image}
-          sx={{
-            width: 240,
-            height: 240,
-            objectFit: "contain",
-          }}
-        />
-      </Box>
-
-      <Typography
-        variant="h5"
-        color="text.secondary"
-        sx={{
-          maxWidth: "90%",
-          mx: "auto",
-          lineHeight: 1.7,
-        }}
-      >
-        {description}
-      </Typography>
-    </Box>
-  );
-}
-
-function Reasoning() {
-  return (
-    <Box sx={{ textAlign: "center", mb: 6 }}>
-      <Typography component="h2" variant="h3" fontWeight="bold" gutterBottom>
-        Why Choose Lihil?
-      </Typography>
-      <Typography
-        variant="h6"
-        component="p"
-        color="text.secondary"
-        sx={{ mb: 2, maxWidth: "800px", mx: "auto" }}
-      >
-        Built for developers who need both performance and productivity
-      </Typography>
-    </Box>
-  );
-}
-
-function FeatureSection() {
-  return (
-    <Box sx={{ bgcolor: "rgba(171, 210, 255, 0.05)", py: 8 }}>
+    <Box sx={{ py: 10, px: 4, backgroundColor: "rgba(171, 210, 255, 0.05)" }}>
       <Container maxWidth="lg">
-        <Reasoning />
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-          }}
-        >
-          {FeatureList.map((feature, idx) => (
-            <Box
-              key={idx}
-              sx={{
-                width: "33.3333%", // 3 items in one row
-                boxSizing: "border-box",
-                px: 2,
-              }}
-            >
-              <FeatureBox {...feature} />
-            </Box>
-          ))}
+        <Box sx={{ maxWidth: 960, mx: "auto", textAlign: "center", mb: 6 }}>
+          <Typography variant="h3" component="h2" gutterBottom>
+            Why Choose <strong>lihil</strong>?
+          </Typography>
+          <Typography variant="h6" color="textSecondary">
+            A clean, powerful Python web framework built for modern apps.
+          </Typography>
         </Box>
+
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 4, sm: 8, md: 12 }}
+          justifyContent="center"
+        >
+          {features.map((feature, index) => (
+            <Grid size={{ xs: 4, sm: 4, md: 4 }} key={index}>
+              <Card
+                elevation={2}
+                sx={{
+                  height: "100%",
+                  textAlign: "center",
+                  p: 2,
+                  transition:
+                    "transform 0.2s, box-shadow 0.2s, background-color 0.2s",
+                  "&:hover": {
+                    transform: "translateY(-4px)",
+                    boxShadow: 6,
+                    backgroundColor: "rgba(171, 210, 255, 0.05)",
+                  },
+                }}
+              >
+                <CardContent>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "center", mb: 2 }}
+                  >
+                    {feature.icon}
+                  </Box>
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    sx={{ fontSize: "1.25rem", fontWeight: 600 }}
+                  >
+                    {feature.title}
+                  </Typography>
+                  <Divider
+                    sx={{
+                      my: 2,
+                      mx: "auto",
+                      width: "40px",
+                      backgroundColor: "primary.main",
+                    }}
+                  />
+                  <Typography variant="body1" color="textSecondary">
+                    {feature.description}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </Container>
     </Box>
   );
 }
-
-export default FeatureSection;

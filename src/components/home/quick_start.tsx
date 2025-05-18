@@ -1,9 +1,11 @@
-import { Grid, Box, Typography, Container } from "@mui/material";
+import { Grid, Box, Typography, Container, Button } from "@mui/material";
 
 import CodeBlock from "@site/src/components/code_block";
 
 import React from "react";
 import InstallSection from "@site/src/components/installation";
+import InventoryIcon from "@mui/icons-material/Inventory2";
+import Link from "@docusaurus/Link";
 
 export default function QuickStart() {
   const quick_start_code = `
@@ -39,6 +41,20 @@ if __name__ == "__main__":
               totalKB={83.5}
               primaryColor={"#66bfff"}
             />
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+              <Button
+                component={Link}
+                startIcon={<InventoryIcon />}
+                to="/docs/installation"
+                variant="contained"
+                sx={{
+                  fontWeight: "medium",
+                  textTransform: "none",
+                }}
+              >
+                Install
+              </Button>
+            </Box>
           </Grid>
 
           <Grid size={6}>

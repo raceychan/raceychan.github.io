@@ -134,19 +134,7 @@ export default function InstallSection({
         )}
       </Box>
 
-      <Button
-        component={Link}
-        to="/docs/installation"
-        variant="outlined"
-        sx={{
-          borderColor: accentColor,
-          color: accentColor,
-          fontWeight: "medium",
-          textTransform: "none",
-        }}
-      >
-        Installation Guide
-      </Button>
+
 
       <style>
         {`
