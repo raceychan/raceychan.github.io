@@ -62,7 +62,7 @@ const features = [
       "Built-in test client for endpoints, routes, and middlewares – no extra setup required.",
   },
   {
-    title: "Low Memory Footprint",
+    title: "Memory efficient",
     icon: <MemoryIcon fontSize="large" color="primary" />, // import MemoryIcon
     description:
       "Optimized for minimal memory usage. GC overhead is reduced, making services more stable under load.",

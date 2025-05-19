@@ -13,7 +13,7 @@ import {
 
 import FeatureSection from "../components/home/feature_section";
 import HeroSection from "../components/home/hero";
-import QuickStart from "@site/src/components/home/quick_start";
+import QuickStartSection from "@site/src/components/home/quick_start";
 import CommunitySection from "../components/home/community";
 
 function MetricsSection() {
@@ -107,7 +107,7 @@ export default function Home(): React.ReactNode {
       <Divider />
       <MetricsSection />
       <Divider />
-      <QuickStart />
+      <QuickStartSection />
       <Divider />
       <FeatureSection />
       <Divider />

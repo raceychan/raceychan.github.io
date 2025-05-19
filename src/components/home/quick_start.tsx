@@ -7,7 +7,7 @@ import InstallSection from "@site/src/components/installation";
 import InventoryIcon from "@mui/icons-material/Inventory2";
 import Link from "@docusaurus/Link";
 
-export default function QuickStart() {
+export default function QuickStartSection() {
   const quick_start_code = `
 from lihil import Lihil, HTTPException, Struct
 

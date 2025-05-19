@@ -13,7 +13,7 @@ import { nordTheme } from './src/theme/Prism/NordTheme';
 const config: Config = {
   title: 'Lihil Official',
   tagline: 'The Official website of python webframework lihil',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/favicon/favicon.ico',
 
   // Set the production url of your site here
   url: 'https://lihil.cc',
@@ -63,10 +63,6 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          // editUrl:
-          //   'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         blog: {
           showReadingTime: true,
@@ -74,10 +70,6 @@ const config: Config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          // editUrl:
-          //   'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -85,6 +77,22 @@ const config: Config = {
         },
         theme: {
           customCss: './src/css/custom.css',
+        },
+        pages: {
+          path: 'src/pages',
+          routeBasePath: '',
+          include: ['**/*.{js,jsx,ts,tsx,md,mdx}'],
+          exclude: [
+            '**/_*.{js,jsx,ts,tsx,md,mdx}',
+            '**/_*/**',
+            '**/*.test.{js,jsx,ts,tsx}',
+            '**/__tests__/**',
+          ],
+          mdxPageComponent: '@theme/MDXPage',
+          // remarkPlugins: [require('./my-remark-plugin')],
+          rehypePlugins: [],
+          beforeDefaultRemarkPlugins: [],
+          beforeDefaultRehypePlugins: [],
         },
       } satisfies Preset.Options,
     ],
@@ -112,6 +120,7 @@ const config: Config = {
           position: 'left',
           label: 'Tutorial',
         },
+        // { to: '/features', label: 'Features', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },
         {
           href: 'https://github.com/raceychan/lihil',
@@ -122,7 +131,7 @@ const config: Config = {
       ],
     },
     footer: {
-      style: 'dark',
+      // style: 'light',
       links: [
         {
           title: 'Docs',
@@ -144,10 +153,10 @@ const config: Config = {
               label: 'Discord',
               href: 'https://discordapp.com/invite/lihil',
             },
-            {
-              label: 'X',
-              href: 'https://x.com/lihil',
-            },
+            // {
+            //   label: 'X',
+            //   href: 'https://x.com/lihil',
+            // },
           ],
         },
         {

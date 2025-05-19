@@ -196,9 +196,9 @@ return marks have no runtime/typing effect outside of lihil, your type checker w
 
 - `Annotated[T, status.OK]` for response with status code `200`. where `T` can be anything json serializable, or another return mark.
 
-For instance, in the `create_user` example, we use `Resp[UserDB, status.Created]` to declare our return type, here `T` is `UserDB`.
+For instance, in the `create_user` example, we use `Annotated[UserDB, status.Created]` to declare our return type, here `T` is `UserDB`.
 
-- By default, the return convert is json-serialized, so that it is equiavlent to `Resp[Json[UserDB], status.Created]`.
+- By default, the return convert is json-serialized, so that it is equiavlent to `Annotated[Json[UserDB], status.Created]`.
 - If you would like to return a response with content type `text/html`, you might use `HTML`
 
 ```python

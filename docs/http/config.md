@@ -1,3 +1,7 @@
+---
+title: config
+---
+
 # Config
 
 Application configuration is a common yet tricky problem, especially in real-world projects.
@@ -28,16 +32,18 @@ This layered approach reflects real-world needs:
 
 - For temporary overrides, like debugging with a different port or toggling a flag, CLI arguments offer maximum flexibility.
 
+## Read config from different sources
+
 ```python
 config = lhl_read_config("settings.toml", config_type=MyAppConfig)
 ```
 
 This automatically reads from all three sources and merges them into one config instance.
 
-Notice that you can provide multiple files and they will be read in order.
+You can provide multiple files and they will be read in order.
 
 ```python
-config = lhl_read_config("dev.env", "prod.env")
+config = lhl_read_config("settings.toml", "dev.env", "prod.env")
 ```
 
 ## Set Config Manually
@@ -97,18 +103,6 @@ config = lhl_read_config("settings.toml", config_type=MyAppConfig)
 If you extend your config via inheriting from `AppConfig`,
 the extra properties will also be generated as command line arguments and you can pass them to override.
 
-## Using Other Config Schemas (e.g., Pydantic)
-
-If you use a different validation system like Pydantic, you can parse it yourself and inject it manually:
-
-```python
-
-from lihil.config import lhl_set_config, lhl_get_config
-
-app_config = PydanticSettings()
-lhl_set_config(app_config)
-```
-
 ## Example Config File (config.toml)
 
 ```toml
@@ -132,51 +126,61 @@ Any field can be overridden via CLI:
 python app.py --is_prod --server.port 8080
 ```
 
+## Using Other Config Schemas (e.g., Pydantic)
+
+If you use a different validation system like Pydantic, you can parse it yourself and inject it manually:
+
+```python
+
+from lihil.config import lhl_set_config, lhl_get_config
+
+app_config = PydanticSettings()
+lhl_set_config(app_config)
+```
+
+Your config is expected to implement the `IAppConfig` interface.
+
 ## AppConfig Interface
 
 ```python
     class IOASConfig(Protocol):
-    @property
-    def oas_path(self) -> str: ...
-    @property
-    def doc_path(self) -> str: ...
-    @property
-    def title(self) -> str: ...
-    @property
-    def problem_path(self) -> str: ...
-    @property
-    def problem_title(self) -> str: ...
-    @property
-    def version(self) -> str: ...
+        @property
+        def oas_path(self) -> str: ...
+        @property
+        def doc_path(self) -> str: ...
+        @property
+        def title(self) -> str: ...
+        @property
+        def problem_path(self) -> str: ...
+        @property
+        def problem_title(self) -> str: ...
+        @property
+        def version(self) -> str: ...
 
     class IServerConfig(Protocol):
-    @property
-    def host(self) -> str: ...
-    @property
-    def port(self) -> int: ...
-    @property
-    def workers(self) -> int: ...
-    @property
-    def reload(self) -> bool: ...
-    def asdict(self) -> dict[str, Any]: ...
+        @property
+        def host(self) -> str: ...
+        @property
+        def port(self) -> int: ...
+        @property
+        def workers(self) -> int: ...
+        @property
+        def reload(self) -> bool: ...
+        def asdict(self) -> dict[str, Any]: ...
 
     class IAppConfig(Protocol):
-    @property
-    def version(self) -> str: ...
-    @property
-    def server(self) -> IServerConfig: ...
-    @property
-    def oas(self) -> IOASConfig: ...
+        @property
+        def version(self) -> str: ...
+        @property
+        def server(self) -> IServerConfig: ...
+        @property
+        def oas(self) -> IOASConfig: ...
 ```
 
 ## Summary
 
-- Use `AppConfig` + `lhl_read_config` for most use cases.
-
-- Use `lhl_set_config` if you build the config manually (e.g. via Pydantic).
-
+- Inherit `AppConfig` to extend, use `lhl_read_config` to load config, then set config via `lhl_set_config` for most cases
+- If you build the config manually (e.g. via Pydantic), imlement the `IAppConfig` interface.
 - Call `lhl_get_config` to access the config anywhere.
-
 - Sensitive values should go into environment variables.
-
-- Use CLI arguments for fast, local overrides.
+- Use CLI arguments for fast, local overrides, for example, debugging.

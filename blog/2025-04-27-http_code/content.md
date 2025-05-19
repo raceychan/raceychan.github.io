@@ -185,7 +185,7 @@ class InvalidOrderError(HTTPException[AddressOutOfScopeProblem]):
 orders = Route("orders")
 
 @orders.post(errors=[InvalidOrderError])
-async def create_orders() -> Resp[Empty, status.CREATED]: ...
+async def create_orders() -> Annotated[Empty, status.CREATED]: ...
 
 lhl = Lihil(routes=[orders])
 

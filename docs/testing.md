@@ -44,7 +44,7 @@ async def test_query_with_default():
 async def test_endpoint_login_and_validate(testroute: Route, lc: LocalClient):
     from lihil.config import lhl_set_config
 
-    async def get_me(token: JWTAuth[UserProfile]) -> Resp[Text, status.OK]:
+    async def get_me(token: JWTAuth[UserProfile]) -> Annotated[Text, status.OK]:
         assert token.user_id == "1" and token.user_name == "2"
         return "ok"
 

@@ -1,5 +1,6 @@
-import Link from "@docusaurus/Link";
 import { Box, Typography, Button } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useColorMode } from "@docusaurus/theme-common";
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -11,7 +12,7 @@ type InstallSectionProps = {
   primaryColor?: string;
 };
 
-export default function InstallSection({
+function InstallationComponent({
   command,
   packageName,
   totalKB,
@@ -19,11 +20,15 @@ export default function InstallSection({
 }: InstallSectionProps) {
   const { colorMode } = useColorMode();
   const isDark = colorMode === "dark";
-
   const [typed, setTyped] = useState("");
   const fullCommand = command;
-
   const [progress, setProgress] = useState(0);
+  const [copied, setCopied] = useState(false);
+
+  const primaryBg = isDark ? "#1c1c1e" : "#f5f5f7";
+  const textColor = isDark ? "#f0f0f0" : "#000";
+  const accentColor = primaryColor; // Baby blue
+  const progressKB = (progress / 100) * 83.5;
 
   useEffect(() => {
     // Typewriter effect
@@ -52,11 +57,11 @@ export default function InstallSection({
     }
   }, [typed]);
 
-  const primaryBg = isDark ? "#1c1c1e" : "#f5f5f7";
-  const textColor = isDark ? "#f0f0f0" : "#000";
-  const accentColor = primaryColor; // Baby blue
-
-  const progressKB = (progress / 100) * 83.5;
+  const handleCopy = () => {
+    navigator.clipboard.writeText(fullCommand);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  };
 
   return (
     <motion.div
@@ -64,15 +69,6 @@ export default function InstallSection({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <Typography variant="h3" fontWeight="bold" gutterBottom>
-        Get Started in Seconds
-      </Typography>
-
-      <Typography variant="body1" paragraph sx={{ mb: 3 }}>
-        Lihil is designed for simplicity without sacrificing power. Install with
-        pip and start building your next Python web application.
-      </Typography>
-
       <Box
         sx={{
           bgcolor: primaryBg,
@@ -87,12 +83,25 @@ export default function InstallSection({
             ? "0 2px 10px rgba(0,0,0,0.3)"
             : "0 2px 6px rgba(0,0,0,0.05)",
           whiteSpace: "pre-line",
+          position: "relative",
         }}
       >
-        <div>
-          <span style={{ color: accentColor }}>$</span> <span>{typed}</span>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <span style={{ color: accentColor, marginRight: 4 }}>$</span>
+          <span>{typed}</span>
           {typed.length < fullCommand.length && (
             <span className="cursor">|</span>
+          )}
+          {typed === fullCommand && (
+            <Tooltip title={copied ? "Copied!" : "Copy"}>
+              <IconButton
+                size="small"
+                onClick={handleCopy}
+                sx={{ ml: 1, color: accentColor }}
+              >
+                <ContentCopyIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
           )}
         </div>
 
@@ -134,8 +143,6 @@ export default function InstallSection({
         )}
       </Box>
 
-
-
       <style>
         {`
           .cursor {
@@ -150,5 +157,31 @@ export default function InstallSection({
         `}
       </style>
     </motion.div>
+  );
+}
+
+export default function InstallSection({
+  command,
+  packageName,
+  totalKB,
+  primaryColor,
+}: InstallSectionProps) {
+  return (
+    <Box>
+      <Typography variant="h3" fontWeight="bold" gutterBottom>
+        Get Started in Seconds
+      </Typography>
+
+      <Typography variant="body1" sx={{ mb: 3 }}>
+        Lihil is designed for simplicity without sacrificing power. Install with
+        pip and start building your next Python web application.
+      </Typography>
+      <InstallationComponent
+        command={command}
+        packageName={packageName}
+        totalKB={totalKB}
+        primaryColor={primaryColor}
+      />
+    </Box>
   );
 }
