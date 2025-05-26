@@ -1,24 +1,27 @@
+---
+title: jwt
+---
+
 - Lihil comes with authentification & authorization plugins out of the box.
 
 ```python
 from lihil import Payload, Route
-from lihil.plugins.auth.jwt import JWTAuth, JWTPayload
-from lihil.auth.oauth import OAuth2PasswordFlow, OAuthLoginForm
+from lihil.plugins.auth.jwt import JWTAuthParam, JWTAuthPlugin, JWTConfig
+from lihil.plugins.auth.oauth import OAuth2PasswordFlow, OAuthLoginForm
 
-class UserProfile(JWTPayload):
-    # get support from typehints about what are the available claims
-    __jwt_claims__ = {"expires_in": 300}  # jwt expires in 300 seconds.
+jwt_auth_plugin = JWTAuthPlugin(jwt_secret="mysecret", jwt_algorithms="HS256")
 
+class UserProfile(Struct):
     user_id: str = field(name="sub")
     role: Literal["admin", "user"] = "user"
 
-@me.get(auth_scheme=OAuth2PasswordFlow(token_url="token"))
-async def get_user(profile: JWTAuth[UserProfile]) -> User:
+@me.get(auth_scheme=OAuth2PasswordFlow(token_url="token"), plugins=[jwt_auth_plugin.decode_plugin])
+async def get_user(profile: Annotated[UserProfile, JWTAuthParam]) -> User:
     assert profile.role == "user"
     return User(name="user", email="user@email.com")
 
-@token.post
-async def create_token(credentials: OAuthLoginForm) -> JWTAuth[UserProfile]:
+@token.post(plugins=[jwt_auth_plugin.encode_plugin(expires_in_s=3600)])
+async def create_token(credentials: OAuthLoginForm) -> UserProfile:
     return UserProfile(user_id="user123")
 ```
 
@@ -26,7 +29,7 @@ async def create_token(credentials: OAuthLoginForm) -> JWTAuth[UserProfile]:
 
 - JWTConfig
 
-To use `JWTAuth`, you would need to provide jwt secret key and algorithm.
+To use `JWTAuthPlugin`, you would need to provide jwt secret key and algorithm.
 
 you can do this by creating a `JWTConfig` instance and passing it to `Lihil`:
 
@@ -42,16 +45,16 @@ lhl = Lihil(app_config=config)
 where the `.env` file should contain:
 
 ```env
-jwt_secret=your_secret_key
-jwt_algorithm=HS256
+JWT_SECRET=your_secret_key
+JWT_ALGORITHM=HS256
 ```
 
 Alternatively, you can use your own config class and implementing `IJWTConfig` interface:
 
 ```python
 class MyConfig(BaseModel):
-    jwt_secret: str
-    jwt_algorithm: str = "HS256"
+    JWT_SECRET: str
+    JWT_ALGORITHM: str = "HS256"
 ```
 
 then set it as the app config

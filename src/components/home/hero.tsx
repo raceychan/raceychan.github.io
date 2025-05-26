@@ -24,7 +24,7 @@ async def hello(name: str):
     return {"message": f"Hello, {name}!"}
 
 if __name__ == "__main__":
-    app.run(__file__)`;
+    lhl.run(__file__)`;
 
 function Greeting({ title, tagline, isDarkTheme }: GreetingProps) {
   return (

@@ -4,7 +4,7 @@ lihil provides a flexible plugin system that allows you to decorate endpoint fun
 
 This is particularly useful for features like logging, metrics, authentication, or request tracing.
 
-# Why makes it good?
+## Why makes it good?
 
 In similar ASGI frameworks, it is difficult to build composable, third-party plugins due to several limitations:
 
@@ -31,29 +31,31 @@ This happens after the lifespan event, ensuring that plugins can rely on resourc
 ```python
 from typing import Any, Awaitable, Callable, Protocol
 from ididi import Graph
+from lihil.interface import IAsyncFunc, P, R
 from lihil.signature import EndpointSignature
 
-IFunc = Callable[..., Awaitable[Any]]
 
-class IAsyncPlugin(Protocol):
-async def __call__(
-    self,
-    graph: Graph,
-    func: IFunc,
-    sig: EndpointSignature[Any],
-    /,
-) -> IFunc: ...
+class IAsyncPlugin(Protocol, Generic[P, R]):
+    async def __call__(
+        self,
+        graph: Graph,
+        func: IAsyncFunc[P, R],
+        sig: EndpointSignature[Any],
+        /,
+    ) -> IAsyncFunc[P, R]: ...
 
-class ISyncPlugin(Protocol):
-def __call__(
-    self,
-    graph: Graph,
-    func: IFunc,
-    sig: EndpointSignature[Any],
-    /,
-) -> IFunc: ...
 
-IPlugin = IAsyncPlugin | ISyncPlugin
+class ISyncPlugin(Protocol, Generic[P,R]):
+    def __call__(
+        self,
+        graph: Graph,
+        func: IAsyncFunc[P, R],
+        sig: EndpointSignature[Any],
+        /,
+    ) -> IAsyncFunc[P, R]: ...
+
+
+IPlugin = IAsyncPlugin[..., Any] | ISyncPlugin[..., Any]
 ```
 
 ## Registering Plugins
@@ -83,6 +85,24 @@ All endpoints registered under this route will automatically use `MyPlugin`.
 ```
 
 This allows fine-grained control for applying plugins only to specific endpoints.
+
+### plugin factory
+
+Do note that plugins are called after lifespan event, instead of instantiating the plugins at import time like we did with `route.get(plugins=[MyPlugin()])`. 
+You can wrap the plugin in a factory.
+
+```python
+from lihil.config import lhl_get_config
+
+def my_plugin_factory(graph: Graph, func: Callable[P, R], sig: EndpointSignature[R]): # can be either sync or async
+    config = lhl_get_config()
+    engine = Graph.resolve(Engine, url=config.db.URL)
+    return MyPlugin(engine=engine, max_conns=config.db.MAX_CONNS)
+
+@route.get(plugins=[my_plugin_factory])
+async def my_endpoint() -> None:
+    ...
+```
 
 ## Writing a Plugin
 
@@ -136,31 +156,53 @@ This tells lihil to treat `bus` as a plugin-managed dependency rather than a req
 class EndpointSignature(Base, Generic[R]):
     route_path: str
 
-    query_params: dict[str, [QueryParam[Any]]]
-    path_params: dict[str, [PathParam[Any]]]
-    header_params: dict[str, [HeaderParam[Any] | CookieParam[Any]]]
+    query_params: ParamMap[QueryParam[Any]]
+    path_params: ParamMap[PathParam[Any]]
+    header_params: ParamMap[HeaderParam[Any] | CookieParam[Any]]
     body_param: tuple[str, BodyParam[bytes | FormData, Struct]] | None
 
-    dependencies: dict[str, [DependentNode]]
+    dependencies: ParamMap[DependentNode]
     transitive_params: set[str]
     """
     Transitive params are parameters required by dependencies, but not directly required by the endpoint function.
     """
-    plugins: dict[str, [PluginParam]]
+    plugins: ParamMap[PluginParam]
 
     scoped: bool
     form_meta: FormMeta | None
 
-    status_code: int
-    return_encoder: IEncoder[R]
     return_params: dict[int, EndpointReturn[R]]
 
     @property
-    def static(self) -> bool: ...
+    def default_return(self):
+        return next(iter(self.return_params.values()))
 
     @property
-    def media_type(self) -> str: ...
+    def status_code(self):
+        return self.default_return.status
 
+    @property
+    def encoder(self):
+        return self.default_return.encoder
+
+    @property
+    def static(self) -> bool:
+        return not any(
+            (
+                self.path_params,
+                self.query_params,
+                self.header_params,
+                self.body_param,
+                self.dependencies,
+                self.plugins,
+            )
+        )
+
+    @property
+    def media_type(self) -> str:
+        default = "application/json"
+        first_return = next(iter(self.return_params.values()))
+        return first_return.content_type or default
 ```
 
 ## Summary

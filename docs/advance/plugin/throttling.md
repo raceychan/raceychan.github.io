@@ -1,3 +1,7 @@
+---
+title: throttling
+---
+
 # Throttling
 
 lihil uses [`premier`](https://github.com/raceychan/premier/tree/master) for throttling.
@@ -26,3 +30,5 @@ lhl = Lihil(lifespan=lifespan, routes=[root])
 ```
 
 This would create a throttler that allows 1 request per second.
+
+checkout premier documentation for more details on how to configure the throttler, and different throttling strategy & backends.
