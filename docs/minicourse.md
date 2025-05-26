@@ -162,5 +162,5 @@ As we are not dynamically injecting `Repo` into `create_user`, we lose the benif
     3. if we create a new `AdvacnedEngine(Engine)` to cater our business need, we can't let `create_user` use it without modifying the code inside.
 
 - lifetime control:
-    Dependencies have differernt lfietime, for example,
+    Dependencies have differernt lifetime, for example,
     you might want to reuse a same `AsyncEngine` across different requests, but open a new `AsyncConnection` to handle each request.

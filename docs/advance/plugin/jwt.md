@@ -2,7 +2,7 @@
 title: jwt
 ---
 
-- Lihil comes with authentification & authorization plugins out of the box.
+## Lihil comes with authentification & authorization plugins out of the box.
 
 ```python
 from lihil import Payload, Route
@@ -27,7 +27,7 @@ async def create_token(credentials: OAuthLoginForm) -> UserProfile:
 
 > When you return `UserProfile` from `create_token` endpoint, it would automatically be serialized as a json web token.
 
-- JWTConfig
+## JWTConfig
 
 To use `JWTAuthPlugin`, you would need to provide jwt secret key and algorithm.
 
