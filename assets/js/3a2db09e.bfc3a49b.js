@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkblogs=self.webpackChunkblogs||[]).push([[8121],{68070:e=>{e.exports=JSON.parse('{"tags":[{"label":"WebDevelopment","permalink":"/blog/tags/WebDevelopment","description":"Best practices of webdevlopment","count":1}]}')}}]);

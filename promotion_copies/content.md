@@ -166,7 +166,6 @@ emit (in-process, non-blocking)
 sink (integration point for MQ/databases)
 
 ```python
-
 from lihil import Route, status
 from lihil.plugins.bus import Event, EventBus, bus_plugin
 from typing import Annotated
@@ -230,9 +229,9 @@ v0.2.10 MCP server
 
 v0.3.0 +
 
-Schema-based async query builder
-Out-of-process event bus (e.g., RabbitMQ, Kafka)
-Command handlers (HTTP RPC + gRPC)
+- Schema-based async query builder
+- Out-of-process event bus (e.g., RabbitMQ, Kafka)
+- Command handlers (HTTP RPC + gRPC)
 
 👉 GitHub: https://github.com/raceychan/lihil
 📘 Docs: https://lihil.cc
