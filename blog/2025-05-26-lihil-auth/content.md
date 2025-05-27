@@ -7,6 +7,8 @@ toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---
 
+![security](./security.jpg)
+
 As someone who has worked on multiple web projects, I’ve found user authentication to be a recurring pain point. Whether I was integrating a third-party auth provider like Supabase, or worse — rolling my own auth system — I often found myself rewriting the same boilerplate:
 
 - Configuring JWTs
@@ -34,6 +36,10 @@ app.include_routes(
     signup_route_factory(route_path="/signup"),
 )
 ```
+
+Here, `signin_route_factory` and `signup_route_factory` generate the `/login` and `/signup` routes for you, respectively. They handle everything from user registration to login, including password hashing and JWT generation(thanks to supabase).
+
+You can customize credential type by configuring `sign_up_with` parameter, where you might want to use `phone` instead of `email` for signing up users.
 
 These routes immediately become available in your OpenAPI docs (/docs), allowing you to explore, debug, and test them interactively(thanks to swagger-ui):
 

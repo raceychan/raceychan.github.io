@@ -4,9 +4,11 @@ title: cookie
 slug: cookie-parameter
 ---
 
-## Cookie Parameters
+# Cookie
 
 HTTP cookies are small pieces of data stored in the user's browser and automatically sent with every request to the same origin. They are primarily used for session management, user preferences, and tracking.
+
+## What Do Cookie Parameters Look Like?
 
 ```http
 GET /dashboard HTTP/1.1
