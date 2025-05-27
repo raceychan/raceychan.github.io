@@ -2,3 +2,8 @@ WebDevelopment:
   label: WebDevelopment
   permalink: /WebDevelopment
   description: Best practices of webdevlopment
+
+Authentication:
+  label: Authentication
+  permalink: /Authentication
+  description: Authentication and authorization in web applications

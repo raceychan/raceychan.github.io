@@ -12,13 +12,9 @@ While those benchmarks have their place, modern Python (3.10+) has evolved signi
 
 With Lihil, I aim to create a web framework that combines **high performance** with **developer-friendly design**, making Python an attractive choice for those who might otherwise turn to Go or Java.
 
-
 GitHub: [https://github.com/raceychan/lihil](https://github.com/raceychan/lihil)
 
 Docs& tutorials: https://liihl.cc/lihil
-
-
-
 
 ## What My Project Does
 
@@ -26,11 +22,10 @@ Lihil is a performant, productive, and professional web framework with a focus o
 
 Here are some of its core features:
 
-## Performance 
+## Performance
 
 Lihil is very fast, about 50-100% faster than other ASGI frameworks providing similar functionality.
-Check out 
-
+Check out
 
 https://github.com/raceychan/lhl_bench
 
@@ -53,10 +48,10 @@ Lihil provides a sophisticated parameter parsing system that automatically extra
 
 @Route("/users/{user_id}")
 async def create_user(
-    user_id: str,                                  
-    name: Query[str],                            
+    user_id: str,
+    name: Query[str],
     auth_token: Header[str, Literal["x-auth-token"]
-    user_data: UserPayload                 
+    user_data: UserPayload
 ):
     # All parameters are automatically parsed and type-converted
     ...
@@ -64,7 +59,7 @@ async def create_user(
 
 ## Data validation
 
-lihil provide you data validation functionalities out of the box using msgspec, you can also use your own customized encoder/decoder for request params and function return.  
+lihil provide you data validation functionalities out of the box using msgspec, you can also use your own customized encoder/decoder for request params and function return.
 
 To use them, annotate your param type with `CustomDecoder` and your return type with `CustomEncoder`
 
@@ -76,6 +71,7 @@ async def create_user(
 ) -> Annotated[MyUserId, CustomEncoder(encode_user_id)]:
     return user_id
 ```
+
 ## Dependency Injection
 
 Lihil features a powerful dependency injection system:
@@ -121,18 +117,15 @@ when such exception is raised from endpoint, client would receive a response lik
 
 ```json
 {
-    "type_": "out-of-stock-error", 
-    "status": 422,
-    "title": "The order can't be placed because items are out of stock",
-    "detail": "order(id=43, items=[massager], quantity=0) can't be placed, because [massager] is short in quantity",
-    "instance": "/users/ben/orders/43"
+  "type_": "out-of-stock-error",
+  "status": 422,
+  "title": "The order can't be placed because items are out of stock",
+  "detail": "order(id=43, items=[massager], quantity=0) can't be placed, because [massager] is short in quantity",
+  "instance": "/users/ben/orders/43"
 }
 ```
 
-
-
 ## Message System
-
 
 Lihil has built-in support for both in-process message handling (Beta) and out-of-process message handling (implementing)
 
@@ -172,9 +165,10 @@ async def create_todo(name: str, content: str, bus: EventBus) -> Resp[None, stat
 ```
 
 An event can have multiple event handlers, they will be called in sequence, config your `BusTerminal` with `publisher` then inject it to `Lihil`.
+
 - An event handler can have as many dependencies as you want, but it should at least contain two params: a sub type of `Event`, and a sub type of `MessageContext`.
 - if a handler is reigstered with a parent event, it will listen to all of its sub event.
-for example, 
+  for example,
 - a handler that listens to `UserEvent`, will also be called when `UserCreated(UserEvent)`, `UserDeleted(UserEvent)` event is published/emitted.
 - you can also publish event during event handling, to do so, declare one of your dependency as `EventBus`,
 
@@ -189,36 +183,30 @@ async def listen_create(created: TodoCreated, _: Any, bus: EventBus):
 
 Lihil is ASGI compatible and uses starlette as ASGI toolkit, namely, lihil uses starlette ‘Request’, ‘Response’ and their subclasses, so migration from starlette should be exceptionally easy.
 
-
 ## Target Audience
 
 Lihil is for anywise who is looking for a web framework that has high level development experience and low level runtime performance.
 
-
 High traffic without giving up Python's readability and developer happiness.
-OpenAPI dosc that is correct and detailed, covering both the success case and failure case. 
+OpenAPI dosc that is correct and detailed, covering both the success case and failure case.
 Extensibility via plugins, middleware, and typed event systems — without performance hits.
 Complex dependency management, where you can't afford to misuse singletons or create circular dependencies.
 AI features like streaming chat completions, live feeds, etc.
 
-    
 If you’ve ever tried scaling up a FastAPI or Flask app and wished there were better abstractions and less magic, Lihil is for you.
-
-
 
 ## What’s Next
 
 Lihil is currently at v0.1.9, still in its early stages, there will be fast evolution & feature refinements. Please give a star if you are interested.
-lihil currently has a test coverage > 99% and is strictly typed,  you are welcome to try it!
-
+lihil currently has a test coverage > 99% and is strictly typed, you are welcome to try it!
 
 Planned for v0.2.0 and beyond, likely in order:
+
 - Out-of-process event system (RabbitMQ, Kafka, etc.).
 - A highly performant schema-based query builder based on asyncpg.
 - Local command handler (HTTP RPC) and remote command handler (gRPC).
 - More middleware and official plugins (e.g., throttling, caching, auth).
 - Tutorials & videos on Lihil and web dev in general. stay tune to https://lihil.cc/lihil/minicourse/
-
 
 GitHub: [https://github.com/raceychan/lihil](https://github.com/raceychan/lihil)
 

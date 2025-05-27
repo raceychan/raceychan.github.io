@@ -2,7 +2,7 @@ from lihil import Annotated, Empty, Lihil, Route, status
 from lihil.interface import Base
 from lihil.problems import HTTPException
 
-
+from starlette.requests import Request
 class AddressOutOfScopeProblem(Base):
     current_address: str
     service_radius: float

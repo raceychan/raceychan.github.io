@@ -44,7 +44,7 @@ function MetricsSection() {
           <Grid size={{ xs: 12, sm: 4, md: 3 }}>
             <Box sx={{ textAlign: "center" }}>
               <Typography variant="h3" fontWeight="bold" color="primary">
-                &gt;40K
+                &gt; 40K
               </Typography>
               <Typography variant="body1" color="text.secondary">
                 RPS(per CPU thread)
