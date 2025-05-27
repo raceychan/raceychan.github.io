@@ -48,6 +48,11 @@ With just that, you have a ready-to-use login route backed by Supabase.
 
 No problem. The JWT plugin lets you manage users and passwords your own way, while lihil takes care of encoding/decoding JWTs and injecting them as typed objects.
 
+#### Basic JWT Authentication Example
+
+You might want to include public user profile information in your JWT, such as user ID and role.
+so that you don't have to query the database for every request.
+
 ```python
 from lihil import Payload, Route
 from lihil.plugins.auth.jwt import JWTAuthParam, JWTAuthPlugin, JWTConfig
@@ -72,18 +77,58 @@ async def login_get_token(credentials: OAuthLoginForm) -> UserProfile:
     return UserProfile(user_id="user123")
 ```
 
+Here we define a `UserProfile` struct that includes the user ID and role, we then might use the `role` to determine access permissions in our application.
+
+You might wonder if we can trust the `role` field in the JWT. The answer is yes, because the JWT is signed with a secret key, meaning that any information
+encoded in the JWT is `read-only` and cannot be tampered with by the client. If the client tries to modify the JWT, the signature will no longer match, and the server will reject the token.
+
+This also means that you should not include any sensitive information in the JWT, as it can be decoded by anyone who has access to the token.
+
+We then use `jwt_auth_plugin.decode_plugin` to decode the JWT and inject the `UserProfile` into the request handler.
+When you return `UserProfile` from `login_get_token`, it will automatically be serialized as a JSON Web Token.
+
+By default, the JWT would be returned as oauth2 token response, but you can also return it as a simple string if you prefer.
+You can change this behavior by setting `scheme_type` in `encode_plugin`
+
+```python
+class OAuth2Token(Base):
+    access_token: str
+    expires_in: int
+    token_type: Literal["Bearer"] = "Bearer"
+    refresh_token: Unset[str] = UNSET
+    scope: Unset[str] = UNSET
+```
+
+The client can receive the JWT and update its header for subsequent requests:
+
+```python
+token_data = await res.json()
+token_type, token = token_data["token_type"], token_data["access_token"]
+
+headers = {"Authorization": f"{token_type.capitalize()} {token}"} # use this header for subsequent requests
+```
+
 #### Role-Based Authorization Example
+
+You can utilize function dependencies to enforce role-based access control in your application.
 
 ```python
 def is_admin(profile: Annotated[UserProfile, JWTAuthParam]) -> bool:
-    return profile.role == "admin"
+    if profile.role != "admin":
+        raise HTTPException(problem_status=403, detail="Forbidden: Admin access required")
 
 @me.get(auth_scheme=OAuth2PasswordFlow(token_url="token"), plugins=[jwt_auth_plugin.decode_plugin])
 async def get_admin_user(profile: Annotated[UserProfile, JWTAuthParam], _: Annotated[bool, use(is_admin)]) -> User:
     return User(name="user", email="user@email.com")
 ```
 
+Here, for the `get_admin_user` endpoint, we define a function dependency `is_admin` that checks if the user has an admin role. If the user does not have the required role, the request will fail with a 403 Forbidden Error .
+
 #### Returning Simple String Tokens
+
+In some cases, you might always want to query the database for user information, and you don't need to return a structured object like `UserProfile`. Instead, you can return a simple string value that will be encoded as a JWT.
+
+If so, you can simply return a string from the `login_get_token` endpoint, and it will be encoded as a JWT automatically:
 
 ```python
 @token.post(plugins=[jwt_auth_plugin.encode_plugin(expires_in_s=3600)])
