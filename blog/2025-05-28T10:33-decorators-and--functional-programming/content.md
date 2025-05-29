@@ -57,7 +57,8 @@ def dummy(func: Callable[P, R]) -> Callable[P, R]:
     return wrapper
 ```
 
-This is a decorator! In Python, decorators satisfy both criteria: they take a function as input and often return a new function(in our example, `wrapper`) with modified behavior.
+This is a decorator! In Python, decorators satisfy both criteria:
+ they take a function as input and often return a new function(in our example, `wrapper`) with modified behavior.
 
 So, decorators in Python are not just a convenient syntax—they’re a direct, real-world application of higher-order function concepts.
 
@@ -129,7 +130,7 @@ Decorators don't just align with functional programming.
 
 they can enable several important techniques:
 
-1. Function Composition
+### 1. Function Composition
    In functional programming, composition is the idea of building complex behavior by combining simple functions. Decorators can be used to layer transformations or validations around a core function, much like composing small functions into a pipeline.
 
    You can chain multiple decorators to achieve a composition-like behavior, each adding behavior before or after the main function is run.
@@ -143,13 +144,14 @@ they can enable several important techniques:
 
    This pattern is powerful, but it comes with some caveats:
 
-   - Signature incompatibility: If one decorator modifies the function’s signature (e.g., changes the number or type of arguments), it may break compatibility with other decorators in the chain.For decorators that need to inspect the function signature, if one decorator does not preserve it, the others may break.
+   - Signature incompatibility: 
+   If one decorator modifies the function’s signature (e.g., changes the number or type of arguments), it may break compatibility with other decorators in the chain.For decorators that need to inspect the function signature, if one decorator does not preserve it, the others may break.
 
    - Order sensitivity: The order in which decorators are applied matters. For example, using `@abc.abstractmethod` on a method that has already been wrapped by another decorator may lead to incorrect behavior or errors.
 
    - Readability: As the number of decorators grows, it becomes harder to understand what the function actually does at a glance.
 
-   ### Example from lihil
+   #### Example from lihil
 
    In lihil, an endpoint can receive multiple plugins (which are essentially decorators) using a cleaner and more structured syntax:
 
@@ -167,7 +169,8 @@ they can enable several important techniques:
 
    This approach maintains the core idea of composition while improving clarity and control over the decoration process.
 
-2. Currying
+### 2. Currying
+
    Currying is the process of transforming a function that takes multiple arguments into a sequence of functions that each take a single argument. While Python doesn't support automatic currying like Haskell, you can manually simulate currying using decorators—returning nested functions that capture arguments through closure.
 
    This is especially powerful when writing configuration-like decorators, where parameters are fixed upfront and later used to modify a function's behavior.
@@ -197,7 +200,7 @@ they can enable several important techniques:
 
    By pre-binding the second argument `b`, we've effectively turned `sub(a, b)` into a function that only needs `a`. This mirrors the essence of currying in functional programming—progressively transforming a multi-argument function into a chain of single-argument calls.
 
-3. Closures
+### 3. Closures
    A closure occurs when a function "remembers" variables from the scope in which it was created, even after that scope has finished executing. This is how decorators store context—whether it's a permission requirement, a configuration flag, or a runtime condition.
 
    Closures are what make decorators stateful, enabling powerful behaviors like caching, logging, or retry logic without modifying the function’s internal logic. They allow decorators to wrap and extend functions while retaining information across calls.
@@ -298,8 +301,3 @@ add(4, 3) # This would fail too
 
 ```
 
-## Conclusion
-
-Python is not a pure functional language, but it provides all the tools needed to write expressive, modular, and composable code in a functional style. Decorators are one of the clearest examples of this.
-
-By understanding how decorators embody core functional programming principles, we can write more elegant and reusable Python code—and maybe even appreciate the beauty of the functional paradigm along the way.
