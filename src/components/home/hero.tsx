@@ -15,12 +15,12 @@ type GreetingProps = HeroProps & {
   isDarkTheme: boolean;
 };
 
-const codeString = `from lihil import Lihil
+const codeString = `from lihil import Lihil, Text, Annotated
 
 lhl = Lihil()
 
 @lhl.get('/hello/{name}')
-async def hello(name: str):
+def hello(name: str) -> Annotated[Text, 200]:
     return {"message": f"Hello, {name}!"}
 
 if __name__ == "__main__":

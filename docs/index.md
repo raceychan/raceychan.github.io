@@ -9,12 +9,12 @@ slug: /
 ## Hello World
 
 ```python title="app/main.py"
-from lihil import Lihil
+from lihil import Lihil, Text, Annotated
 
 lhl = Lihil()
 
 @lhl.get
-async def hello(world: str = "world") -> int:
+def hello(world: str = "world") -> Annotated[Text, 200]:
     return f"hello, {world}!"
 ```
 
