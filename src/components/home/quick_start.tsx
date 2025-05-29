@@ -9,27 +9,27 @@ import Link from "@docusaurus/Link";
 
 export default function QuickStartSection() {
   const quick_start_code = `
-from lihil import Lihil, HTTPException, Struct
-
-lhl = Lihil("todo_api")
+from lihil import Lihil, HTTPException, Struct, Route
 
 class TodoItem(Struct):
     id: int
     title: str
     completed: bool = False
 
+todo = Route("/todos")
 
-@lhl.get("/todos")
+@todo.get
 async def get_todos():
     return todos
 
-@lhl.post("/todos")
+@todo.post
 async def create_todo(item: TodoItem, todo_repo: TodoRepo):
     todo_repo.add(item)
     return item
 
 if __name__ == "__main__":
-    lhl.run()`;
+    lhl = Lihil(todo)
+    lhl.run(__file__)`;
   return (
     <Box sx={{ bgcolor: "rgba(255, 255, 255, 0.05)", py: 8 }}>
       <Container maxWidth="lg">

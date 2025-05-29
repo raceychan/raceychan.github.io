@@ -1,9 +1,14 @@
-WebDevelopment:
-  label: WebDevelopment
-  permalink: /WebDevelopment
+web-development:
+  label: web development
+  permalink: /web-development
   description: Best practices of webdevlopment
 
-Authentication:
-  label: Authentication
-  permalink: /Authentication
+authentication:
+  label: authentication
+  permalink: /authentication
   description: Authentication and authorization in web applications
+
+python:
+  label: python
+  permalink: /python
+  description: general dicussion about programming in python

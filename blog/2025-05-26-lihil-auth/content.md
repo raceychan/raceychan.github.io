@@ -2,7 +2,7 @@
 slug: lihil-auth
 title: Set Up User Authentication in Minutes — With or Without a Standalone Database Using lihil-auth
 authors: [raceychan]
-tags: [WebDevelopment, Authentication]
+tags: [web-development, authentication]
 toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---
@@ -21,6 +21,8 @@ As someone who has worked on multiple web projects, I’ve found user authentica
 And that’s not even touching error handling, route wiring, or OpenAPI documentation.
 
 So I built lihil-auth, a plugin system that makes user authentication a breeze. It supports both third-party platforms like `Supabase` and self-hosted solutions using JWT — with minimal effort.
+
+<!-- truncate -->
 
 ### Supabase Auth in One Line
 

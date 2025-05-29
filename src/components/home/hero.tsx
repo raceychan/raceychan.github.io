@@ -19,7 +19,7 @@ const codeString = `from lihil import Lihil
 
 lhl = Lihil()
 
-@lhl.route('/hello/{name}')
+@lhl.get('/hello/{name}')
 async def hello(name: str):
     return {"message": f"Hello, {name}!"}
 

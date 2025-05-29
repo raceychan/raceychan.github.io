@@ -26,8 +26,12 @@ function MetricsSection() {
               <Typography variant="h3" fontWeight="bold" color="primary">
                 50%-100%
               </Typography>
+
               <Typography variant="body1" color="text.secondary">
-                Faster than other ASGI frameworks, more for larger app
+                Faster than other ASGI frameworks, more for larger app.
+                <Link href="https://github.com/raceychan/lhl_bench">
+                  {"benchmarks"}
+                </Link>
               </Typography>
             </Box>
           </Grid>
@@ -44,7 +48,7 @@ function MetricsSection() {
           <Grid size={{ xs: 12, sm: 4, md: 3 }}>
             <Box sx={{ textAlign: "center" }}>
               <Typography variant="h3" fontWeight="bold" color="primary">
-                &gt; 40K
+                &gt; 45K
               </Typography>
               <Typography variant="body1" color="text.secondary">
                 RPS(per CPU thread)

@@ -26,7 +26,7 @@ async def lifespan():
     throttler.config(aiohandler=AsyncDefaultHandler())
 
 
-lhl = Lihil(lifespan=lifespan, routes=[root])
+lhl = Lihil(root, lifespan=lifespan)
 ```
 
 This would create a throttler that allows 1 request per second.

@@ -41,17 +41,17 @@ route.add_middleware(HTTPSRedirectMiddleware)
 In previous dicussion, we expose `create_user` as an endpoint for `POST` request of `users_route`.
 we can also declare other http methods with similar syntax, this includes:
 
-| Method   | Idempotent | Purpose                                           | Example                                  |
-|----------|------------|---------------------------------------------------|------------------------------------------|
-| `GET`    | Yes        | Retrieve data without modifying the server state | `@route.get`                             |
-| `POST`   | No         | Submit data to create a resource or trigger action| `@route.post`                            |
-| `HEAD`   | Yes        | Same as GET but returns only headers              | `@route.head`                            |
-| `OPTIONS`| Yes        | Discover allowed methods and CORS info            | `@route.options`                         |
-| `TRACE`  | Yes        | Echo the received request (for debugging)         | `@route.trace`                           |
-| `PUT`    | Yes        | Replace a resource with the provided data         | `@route.put`                             |
-| `DELETE` | Yes        | Remove a resource                                 | `@route.delete`                          |
-| `PATCH`  | No         | Apply partial modifications to a resource         | `@route.patch`                           |
-| `CONNECT`| No         | Establish a tunnel to the server (e.g., HTTPS)    | `@route.connect`     
+| Method    | Idempotent | Purpose                                            | Example          |
+| --------- | ---------- | -------------------------------------------------- | ---------------- |
+| `GET`     | Yes        | Retrieve data without modifying the server state   | `@route.get`     |
+| `POST`    | No         | Submit data to create a resource or trigger action | `@route.post`    |
+| `HEAD`    | Yes        | Same as GET but returns only headers               | `@route.head`    |
+| `OPTIONS` | Yes        | Discover allowed methods and CORS info             | `@route.options` |
+| `TRACE`   | Yes        | Echo the received request (for debugging)          | `@route.trace`   |
+| `PUT`     | Yes        | Replace a resource with the provided data          | `@route.put`     |
+| `DELETE`  | Yes        | Remove a resource                                  | `@route.delete`  |
+| `PATCH`   | No         | Apply partial modifications to a resource          | `@route.patch`   |
+| `CONNECT` | No         | Establish a tunnel to the server (e.g., HTTPS)     | `@route.connect` |
 
 This means that an route can have 0-9 endpoints.
 
@@ -92,10 +92,47 @@ async def update_user(data: UserUpdate): ...
 
 Here, both `get_user` and `update_user` are under the same route.
 
+## include sub routes
+
+For large app, it is common that people would create sub-routes first then include them into parent routes, to do so, use `Route.include_subroutes`
+
+```python
+parent = Route("/parent")
+sub = Route("/sub")
+
+parent.include_subroutes(sub)
+assert parent.subroutes[0].path == "/parent/sub"
+```
+
+The difference between `Route.sub` and `Route.include_subroutes` is that,
+
+- `Route.sub` create a new empty route based on a path of string type
+- `Route.include_subroutes` recursively include existing routes as subroutes, recreate them based on their properties(endpoints, middlewares, etc.)
+
+It is recommended to create a file for each route,
+
+```python title="api/cart/items.py"
+items = Route("/items")
+
+@items.get
+def list_items(): ...
+
+@items.sub("/{item_id}").get
+def get_item(item_id: str) :...
+```
+
+then create a parent route in the folder's `__init__.py` and include sub routes
+
+```python title="api/cart/__init__.py"
+from .items import items
+
+carts = Route("/carts")
+carts.include_subroutes(items)
+```
+
 ## The root route
 
 An route with path `/` is the root route, if not provided, root route is created with `Lihil` by default, anything registered via `Lihil.{http method}` is the under the root route.
-
 
 The following examples are funtionality-wise the same
 
@@ -108,13 +145,13 @@ async def hello():
     return "hello, world:
 ```
 
-
 2. create root route then include it in your `Lihil` instance
 
 ```python
 root = Route()
+
 @root.get
 async def hello():
     return "hello, world:
-lhl = Lihil(routes=[root])
+lhl = Lihil(root)
 ```

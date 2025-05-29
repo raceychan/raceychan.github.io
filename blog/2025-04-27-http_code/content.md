@@ -2,11 +2,10 @@
 slug: what-to-do-when-http-status-codes-dont-fit-your-business-error
 title: What to Do When HTTP Status Codes Don’t Fit Your Business Error
 authors: [raceychan]
-tags: [WebDevelopment]
+tags: [web-development]
 toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---
-
 
 ![404_mail](./404_mail.jpg)
 
@@ -26,25 +25,24 @@ Instead, use a 4xx status code with a well-defined structural error response and
 
 </details>
 
-
 Whether you are struggling to find an appropiate http status code, or if you have a specific http status code to use, this blog is for you.
 
 ### What is http status code and why you should care
 
 #### Status code is popular
 
-Even if you are not a technical guy, it is very likley that you have heard these numbers `404`, `502`. This is because http status code is so popular that It is literally everywhere on the internet. 
+Even if you are not a technical guy, it is very likley that you have heard these numbers `404`, `502`. This is because http status code is so popular that It is literally everywhere on the internet.
 
-HTTP status codes have long been a cornerstone of web application error handling. Defined in RFC 7231, these codes serve as a standardized way for servers to communicate the outcome of a request to the client. 
+HTTP status codes have long been a cornerstone of web application error handling. Defined in RFC 7231, these codes serve as a standardized way for servers to communicate the outcome of a request to the client.
 The standard defines several categories of status codes, such as `2xx` for success, `4xx` for client errors, and `5xx` for server errors.
 Quote from [RFC 7231](https://datatracker.ietf.org/doc/html/rfc7231#section-8.2.2):
 
 > HTTP clients are not required to
-   understand the meaning of all registered status codes, though such
-   understanding is obviously desirable.  However, a client MUST
-   understand the class of any status code, as indicated by the first
-   digit, and treat an unrecognized status code as being equivalent to
-   the x00 status code of that class
+> understand the meaning of all registered status codes, though such
+> understanding is obviously desirable. However, a client MUST
+> understand the class of any status code, as indicated by the first
+> digit, and treat an unrecognized status code as being equivalent to
+> the x00 status code of that class
 
 It has become an industrial consensus to check these status codes as a way to quickly determine whether a request was successful or failed. For example, many libraries and frameworks will raise an exception if a request results in an error status. Here's a simple example using Python's `requests` library:
 
@@ -66,46 +64,46 @@ But as web applications grow in complexity and deal with more nuanced business r
 
 There isn't an easy or clear answer. While we could use `400 Bad Request`, it doesn't quite capture the specific business rule violation that's occurring. Similarly, a `409 Conflict` could work in some cases, but it still doesn’t feel precise enough. As the number of potential issues grows—whether they’re related to payment failures, address mismatches, or resource conflicts—the more apparent it becomes that HTTP status codes are not built to handle the full complexity of modern business logic.
 
-
 ### Don'ts
 
 Currently, there are a few ways the industry deals with the problem of handling business logic errors in web applications. These solutions often involve workarounds or generalizations due to the limitations of HTTP status codes. Here are some of the common approaches:
 
-1. **Embedding Custom Status Inside Request Body**  
+1. **Embedding Custom Status Inside Request Body**
 
-One approach is to always return a `200 OK` status code, even when the request fails, and include a custom status code in the response body. This method involves returning a business-specific error code along with additional details. 
+One approach is to always return a `200 OK` status code, even when the request fails, and include a custom status code in the response body. This method involves returning a business-specific error code along with additional details.
 
-   **Example**:
+**Example**:
+
 ```json
-   {
-       "business_code": "CUSTOMIZED_BUSINESS_ERROR",
-       "detail": "The shipping address is outside the serviceable delivery zone."
-   }
+{
+  "business_code": "CUSTOMIZED_BUSINESS_ERROR",
+  "detail": "The shipping address is outside the serviceable delivery zone."
+}
 ```
 
-   I have personally encountered this solution from my work a several times during my career. when the system contains only a few components, and with detailed documentation, it could work, but as the system grows and additional components (like proxies, API gateways, and logging systems) are added, this keeps creating new problems you wouldn't have to solve otherwise.
+I have personally encountered this solution from my work a several times during my career. when the system contains only a few components, and with detailed documentation, it could work, but as the system grows and additional components (like proxies, API gateways, and logging systems) are added, this keeps creating new problems you wouldn't have to solve otherwise.
 
-2. self-define 3-digits status code, for example, 6xx means some business rules, 700 means others, etc. 
+2. self-define 3-digits status code, for example, 6xx means some business rules, 700 means others, etc.
 
 Some solutions attempt to define their own set of status codes beyond the standard `2xx`, `4xx`, and `5xx` categories. For example, `6xx` might represent business rules, with specific codes for each scenario (e.g., `700` for some other business logic). While this avoids reading the request body to determine failure, it violates the HTTP standards, meaning many tools might throw errors or not support these codes.
-   **Example**: 
+**Example**:
+
 ```python
 600: CONNECTION ERROR - This indicates a general connection error
 601: INCOMPLETE ERROR - This indicates sever sends an incomplete page/object (as indicated by Content-Length header)
 701: ERROR TEXT FOUND - This code is returned if any error text (such as, "Service Unavailable") are found in the main page (frame HTML contents included). Note that the error text must be defined in advance of the test. Error text means if the text is found, this session should be considered a failure.
 ```
 
+According to [RFC 7231](https://datatracker.ietf.org/doc/html/rfc7231#section-8.2.2),
 
-According to [RFC 7231](https://datatracker.ietf.org/doc/html/rfc7231#section-8.2.2), 
 > New status codes are required to fall under one of the categories
-   defined in [Section 6](https://datatracker.ietf.org/doc/html/rfc7231#section-6).
+> defined in [Section 6](https://datatracker.ietf.org/doc/html/rfc7231#section-6).
 
 status codes >= 600 are invalid because they fall outside of the defined categories.
 
-
 #### Dos
 
-1. **A 4xx status code + Generic Error Message**  
+1. **A 4xx status code + Generic Error Message**
 
 ```json
 {
@@ -118,7 +116,7 @@ A common fallback is to return a `4xx` status code (typically `400 Bad Request`)
 
 Some systems go a step further by returning a one-line reason phrase or a slightly extended message, but still fall short of conveying structured, actionable error details to clients.
 
-2. **Using the Same Status Code for Multiple Business Logic Issues**  
+2. **Using the Same Status Code for Multiple Business Logic Issues**
 
 ```json
 {
@@ -134,10 +132,9 @@ Some systems go a step further by returning a one-line reason phrase or a slight
 
 As business logic errors grow in number and variety, some teams attempt to fit them into a limited set of existing status codes. For instance, both a payment failure due to insufficient funds and a mismatch in shipping address might be returned as `400 Bad Request`. While this approach simplifies server-side handling, it severely limits the clarity of error messages, making it hard for clients to distinguish between different types of business failures. This also places unnecessary burden on client-side developers to reverse-engineer the true nature of the error from vague responses.
 
+#### Best Practice
 
-#### Best Practice 
-
-**Structured Error Message + Documentation (With Standards Compliance)**  
+**Structured Error Message + Documentation (With Standards Compliance)**
 
 A thoughtful approach to business rule violations is to return an appropriate `4xx` status code—ideally one that aligns semantically with the error (for example, `407 Proxy Authentication Required`, if applicable)—to indicate that the request was unsuccessful due to a business constraint.
 
@@ -157,7 +154,6 @@ That said, there are a couple of areas where further improvements could enhance 
 **Structured Error Messages + Auto-Generated Documentation**
 
 [`lihil`](https://lihil.cc/) tackles the problem by making structured error handling first-class. You can declare rich, type-safe exceptions by subclassing `HTTPException[T]`, where `T` defines the structure of the error's `detail` field. These exceptions can then be directly attached to endpoints using the `errors=` parameter. This not only ensures consistent error responses but also enables `lihil` to automatically generate OpenAPI documentation for each declared error—including a link to a detailed problem page under the "External documentation" tab.
-
 
 ```python title="How you define a structual exception in lihil"
 from lihil import Empty, Lihil, Resp, Route, status, Meta
@@ -187,7 +183,7 @@ orders = Route("orders")
 @orders.post(errors=[InvalidOrderError])
 async def create_orders() -> Annotated[Empty, status.CREATED]: ...
 
-lhl = Lihil(routes=[orders])
+lhl = Lihil(orders)
 
 if __name__ == "__main__":
     lhl.run(__file__)
@@ -197,7 +193,6 @@ Running the above code and it is automatically documented in your OpenAPI.
 
 ![Order error diagram](./order_error.png)
 
-
 ### What makes it good.
 
 As you might see from the OpenAPI, each of these error response follows the [RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457) format, including fields like `type`, `title`, `status`, `detail`, and `instance`. You can customize how errors are rendered by registering handlers with `@problem_solver`, which maps specific exceptions or status codes to structured responses. Specific exception handlers take precedence over status-code-based ones, giving you fine-grained control.
@@ -205,6 +200,3 @@ As you might see from the OpenAPI, each of these error response follows the [RFC
 By default, `lihil` also generates detailed responses for common issues such as missing parameters, returning structured 422 responses for `InvalidRequestErrors`—complete with field-level information. These responses are not only machine-readable but also fully documented out of the box.
 
 Best of all, all this documentation is automatically synced with your code. There's no need to manually update or maintain a separate error code reference. `lihil` keeps your API behavior and documentation in perfect alignment.
-
-
-

@@ -135,7 +135,7 @@ users_route = Route("/users")
 async def create_user(user: User, repo: Repository):
     await repo.add_user(user)
 
-lhl = Lihil(routes=[user_route])
+lhl = Lihil(user_route)
 ```
 
 Notice here, instead of you actively calling `create_user` from your function, your function is called by lihil upon request arrival, and the dependencies of your `create_user` is managed and injected by lihil.

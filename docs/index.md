@@ -72,7 +72,7 @@ from lihil import Lihil
 from app.users.api import user_route
 
 
-lihil = Lihil(routes=[user_route])
+lihil = Lihil(user_route)
 
 if __name__ == "__main__":
     lihil.run(__file__)

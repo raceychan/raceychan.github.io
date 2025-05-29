@@ -9,7 +9,6 @@ An `endpoint` is the most atomic ASGI component in `lihil` that defines how clie
 
 <!-- In the [ASGI callchain](./minicourse.md) the `endpoint` is typically at the end. -->
 
-
 ### Param Parsing
 
 ```python
@@ -49,6 +48,7 @@ Here,
 Explicitly declaring a parameter with `Param` tells Lihil to treat it as-is, without further analysis.
 
 **Example**:
+
 ```python
 async def login(cred: Annotated[str, Param("header", alias="User-Credentials")], x_access_token: Annotated[str, Param("header")]) : ...
 ```
@@ -56,7 +56,6 @@ async def login(cred: Annotated[str, Param("header", alias="User-Credentials")],
 - Here param `cred` expects a header with key `User-Credentials`.
 
 - If key not provided, The kebab case of param name is used, for example, here `x_access_token` expects a header with key `x-access-token`
-
 
 #### Implicitly declare a Param
 
@@ -155,10 +154,9 @@ Here `create_user` expects a body param `user`, a structual data where each fiel
 
 Checkout [msgspec constraints](https://jcristharif.com/msgspec/constraints.html) for more details on specific constraints that you can set on different types.
 
-
 ### Return Marks
 
-Often you would like to change the status code, or content type of your endpoint,  to do so, you can use one or a combination of several `return marks`. for example, to change stauts code:
+Often you would like to change the status code, or content type of your endpoint, to do so, you can use one or a combination of several `return marks`. for example, to change stauts code:
 
 ```python
 from lihil import Annotated, status
@@ -171,15 +169,13 @@ Now `create_user` would return a status code `201`, instead of the default `200`
 
 There are several return marks you might want to use:
 
-| Return Mark       | Purpose                                                             | Type Argument(s)                         | Notes                                                                 | Example                                         |
-|-------------------|---------------------------------------------------------------------|------------------------------------------|-----------------------------------------------------------------------|-------------------------------------------------|
-| `Json[T]`         | Response with `application/json` content type                      | `T`: response body type                  | Default return type if not specified                                  | `Json[list[int]]`                              |
-| `Stream[T]`       | Server-sent events with `text/event-stream` content type           | `T`: event data type                     | For event streaming                                                   | `Stream[str]`                                  |
-| `Text`            | Plain text response with `text/plain` content type                 | None                                     | Use for simple text responses                                         | `Text`                                         |
-| `HTML`            | HTML response with `text/html` content type                        | None                                     | Use for HTML content                                                  | `HTML`                                         |
-| `Empty`           | Empty response (no body)                                            | None                                     | Indicates no content to return                                        | `Empty`                                        |
-
-
+| Return Mark | Purpose                                                  | Type Argument(s)        | Notes                                | Example           |
+| ----------- | -------------------------------------------------------- | ----------------------- | ------------------------------------ | ----------------- |
+| `Json[T]`   | Response with `application/json` content type            | `T`: response body type | Default return type if not specified | `Json[list[int]]` |
+| `Stream[T]` | Server-sent events with `text/event-stream` content type | `T`: event data type    | For event streaming                  | `Stream[str]`     |
+| `Text`      | Plain text response with `text/plain` content type       | None                    | Use for simple text responses        | `Text`            |
+| `HTML`      | HTML response with `text/html` content type              | None                    | Use for HTML content                 | `HTML`            |
+| `Empty`     | Empty response (no body)                                 | None                    | Indicates no content to return       | `Empty`           |
 
 **Example**:
 
@@ -190,7 +186,6 @@ async def demo() -> Json[list[int]]: ...
 ```
 
 return marks have no runtime/typing effect outside of lihil, your type checker would treat `Json[T]` as `T`.
-
 
 #### Response with status code
 
@@ -243,24 +238,27 @@ def encoder[T](param: T) -> bytes: ...
 
 - `encoder` should expect a single param with any type that the endpoint function returns, in the `encode_user_id` case, it is `str`, and returns bytes.
 
-
 ### Properties
 
 - Endpoint can have these properties:
 
-```python
-errors: Sequence[type[DetailBase[Any]]] | type[DetailBase[Any]]
-"Errors that might be raised from the current `endpoint`. These will be treated as responses and displayed in OpenAPI documentation."
-in_schema: bool
-"Whether to include this endpoint inside openapi docs, default to True"
-to_thread: bool
-"Whether this endpoint should be run wihtin a separate thread, only apply to sync function"
-scoped: Literal[True] | None
-"Whether current endpoint should be scoped, default to None"
-auth_scheme: AuthBase | None
-"Auth Scheme for access control, default to None"
-tags: Sequence[str] | None
-"OAS tag, endpoints with the same tag will be grouped together, default to route tag"
+```python title="lihil.routing"
+
+class IEndpointProps(TypedDict, total=False):
+    errors: Sequence[type[DetailBase[Any]]] | type[DetailBase[Any]]
+    "Errors that might be raised from the current `endpoint`. These will be treated as responses and displayed in OpenAPI documentation."
+    in_schema: bool
+    "Whether to include this endpoint inside openapi docs, default to True"
+    to_thread: bool
+    "Whether this endpoint should be run wihtin a separate thread, only apply to sync function"
+    scoped: Literal[True] | None
+    "Whether current endpoint should be scoped, default to None"
+    auth_scheme: AuthBase | None
+    "Auth Scheme for access control, default to None"
+    tags: Sequence[str] | None
+    "OAS tag, endpoints with the same tag will be grouped together, default to route tag"
+    plugins: list[IPlugin]
+    "Decorators to decorate the endpoint function"
 ```
 
     - `scoped`: if an endpoint requires any dependency that is an async context manager, or its factory returns an async generator, the endpoint would be scoped, and setting scoped to None won't change that, however, for an endpoint that is not scoped, setting `scoped=True` would make it scoped.
@@ -275,7 +273,6 @@ async get_user(user_id: str): ...
 ```
 
 ### Provide a properties for every endpoint in the route:
-
 
 You might provide default properties when intialize a route,
 

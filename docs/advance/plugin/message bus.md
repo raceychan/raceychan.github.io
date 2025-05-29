@@ -34,7 +34,8 @@ async def listen_twice(created: TodoCreated, ctx):
 
 registry = MessageRegistry(event_base=Event)
 registry.register(listen_create, listen_twice)
-bus_route = Route("/bus", plugins=BusPlugin(BusTerminal(registry)).decorate)
+bus_plugin = BusPlugin(BusTerminal(registry))
+bus_route = Route("/bus", plugins=[bus_plugin])
 
 
 @bus_route.post

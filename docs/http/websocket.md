@@ -3,8 +3,6 @@ sidebar_position: 3
 title: websocket
 ---
 
-> Technically, websocket is not included in http, but parellel to it. we place it here for convenience of reading. 
-
 ### WebSocket
 
 lihil supports the usage of websocket, you might use `WebSocketRoute.ws_handler` to register a function that handles websockets.
@@ -33,6 +31,7 @@ lhl.include_routes(ws_route)
 ```
 
 Testing
+
 ```python
 from lihil.vendors import TestClient # require httpx installed
 

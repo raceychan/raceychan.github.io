@@ -146,6 +146,10 @@ const config: Config = {
           title: 'Community',
           items: [
             {
+              label: 'X',
+              href: 'https://x.com/lihil_cc',
+            },
+            {
               label: 'Stack Overflow',
               href: 'https://stackoverflow.com/questions/tagged/lihil',
             },
@@ -153,10 +157,6 @@ const config: Config = {
               label: 'Discord',
               href: 'https://discordapp.com/invite/lihil',
             },
-            // {
-            //   label: 'X',
-            //   href: 'https://x.com/lihil',
-            // },
           ],
         },
         {
