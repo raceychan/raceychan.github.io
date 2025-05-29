@@ -20,7 +20,7 @@ const codeString = `from lihil import Lihil, Text, Annotated
 lhl = Lihil()
 
 @lhl.get('/hello/{name}')
-def hello(name: str) -> Annotated[Text, 200]:
+def hello(name: str):
     return {"message": f"Hello, {name}!"}
 
 if __name__ == "__main__":

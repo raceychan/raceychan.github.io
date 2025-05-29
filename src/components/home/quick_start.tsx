@@ -9,7 +9,7 @@ import Link from "@docusaurus/Link";
 
 export default function QuickStartSection() {
   const quick_start_code = `
-from lihil import Lihil, HTTPException, Struct, Route
+from lihil import Lihil, HTTPException, Struct, Route, Param, Annotated
 
 class TodoItem(Struct):
     id: int
@@ -19,8 +19,8 @@ class TodoItem(Struct):
 todo = Route("/todos")
 
 @todo.get
-async def get_todos():
-    return todos
+async def get_todos(todo_repo: TodoRepo, n: Annotated[int, Param(lt=100)]):
+    return await todo_repo.list_todos()
 
 @todo.post
 async def create_todo(item: TodoItem, todo_repo: TodoRepo):
