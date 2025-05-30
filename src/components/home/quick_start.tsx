@@ -33,8 +33,8 @@ if __name__ == "__main__":
   return (
     <Box sx={{ bgcolor: "rgba(255, 255, 255, 0.05)", py: 8 }}>
       <Container maxWidth="lg">
-        <Grid container spacing={2} alignItems="center">
-          <Grid size={6}>
+        <Grid container spacing={8} alignItems="center">
+          <Grid size={{ xs: 12, md: 5 }}>
             <InstallSection
               command={'pip install "lihil[standard]"'}
               packageName="lihil"
@@ -57,7 +57,7 @@ if __name__ == "__main__":
             </Box>
           </Grid>
 
-          <Grid size={6}>
+          <Grid size={{ xs: 12, md: 7 }}>
             <Typography
               component="h3"
               variant="h6"

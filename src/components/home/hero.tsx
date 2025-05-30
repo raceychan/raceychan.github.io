@@ -104,16 +104,16 @@ function HeroSection({ title, tagline }: HeroProps) {
         overflow: "hidden",
       }}
     >
-      <Container maxWidth="lg">
+      <Container>
         <Grid container spacing={8} alignItems="center">
-          <Grid size={7}>
+          <Grid size={{ xs: 12, md: 7 }}>
             <Greeting
               title={title}
               tagline={tagline}
               isDarkTheme={isDarkTheme}
             />
           </Grid>
-          <Grid size={5}>
+          <Grid size={{ xs: 12, md: 5 }}>
             <CodeBlock language="python" title="example.py" showLineNumbers>
               {codeString}
             </CodeBlock>
