@@ -15,13 +15,13 @@ type GreetingProps = HeroProps & {
   isDarkTheme: boolean;
 };
 
-const codeString = `from lihil import Lihil, Text, Annotated
+const codeString = `from lihil import Lihil, HTML
 
 lhl = Lihil()
 
 @lhl.get('/hello/{name}')
-def hello(name: str):
-    return {"message": f"Hello, {name}!"}
+def hello(name: str) -> HTML:
+    return "<p> Hello, {name}! </p>"
 
 if __name__ == "__main__":
     lhl.run(__file__)`;

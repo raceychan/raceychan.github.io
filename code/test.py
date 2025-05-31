@@ -1,4 +1,4 @@
-from lihil import Annotated, Empty, Lihil, Route, status
+from lihil import HTML, Annotated, Empty, Lihil, Route, status
 from lihil.interface import Base
 from lihil.problems import HTTPException
 
@@ -33,14 +33,15 @@ class InvalidOrderError(HTTPException[AddressOutOfScopeProblem]):
         }
 
 
-orders = Route("orders")
+root = Route()
 
 
-@orders.post(errors=[InvalidOrderError])
-async def create_orders() -> Annotated[Empty, status.CREATED]: ...
+@root.get
+def hello() -> HTML:
+    return "ok"
 
 
-lhl = Lihil(orders)
+lhl = Lihil(root)
 
 
 if __name__ == "__main__":
