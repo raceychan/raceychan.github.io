@@ -254,7 +254,7 @@ Beyond decorators, Python supports many functional idioms that align with the sa
 3. Built-in Functions
    Python's standard library includes functional tools like map, filter, reduce, any, all, and functools.partial. These utilities operate on data immutably and often use higher-order functions—core values of the functional paradigm.
 
-### Turning a Utility into a Decorator
+### Put them all together
 
 Let's write some functions that illustrate these concepts.
 
@@ -298,6 +298,25 @@ def add(a: int, b: int) -> int:
 assert add(3, 5) == 8
 add(1, 1) # This would fail
 add(4, 3) # This would fail too
-
 ```
 
+
+## Wrapping Up
+
+Decorators in Python are a clear, powerful example of how functional programming concepts can thrive in an imperative language. By understanding decorators as higher-order functions, we unlock a whole world of expressive, reusable, and modular code.
+
+And while the classic decorator pattern is “a function that takes a function and returns a function,” it doesn’t stop there.
+
+In Python, methods can receive and return other methods, and callable objects (like classes with __call__) can decorate other callables. 
+
+These variations still follow the same core idea:
+
+> taking one callable and returning another, often with enhanced behavior.
+
+This flexibility is what makes decorators such a practical bridge to functional programming. Whether you’re enforcing constraints, composing behaviors, caching results, or injecting dependencies, decorators offer a clean, composable, and Pythonic way to do it—all while leveraging first-class functions and closures.
+
+What do you think? Have you used decorators beyond the classic function-to-function pattern?
+
+Would you be interested in exploring the object-oriented side of decorators—like how methods or callable classes can act as decorators too?
+
+Let me know your thoughts or questions—I'd love to hear how you use (or plan to use) decorators in your own projects!

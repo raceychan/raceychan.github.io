@@ -75,7 +75,7 @@ class UserProfile(Struct):
     user_id: str = field(name="sub")
     role: Literal["admin", "user"] = "user"
 
-@me.get(auth_scheme=OAuth2PasswordFlow(token_url="token"), plugins=[jwt_auth_plugin.decode_plugin])
+@me.get(auth_scheme=OAuth2PasswordFlow(token_url="token"), plugins=[jwt_auth_plugin.decode_plugin()])
 async def get_user(profile: Annotated[UserProfile, JWTAuthParam]) -> User:
     assert profile.role == "user"
     return User(name="user", email="user@email.com")
@@ -125,7 +125,7 @@ def is_admin(profile: Annotated[UserProfile, JWTAuthParam]) -> bool:
     if profile.role != "admin":
         raise HTTPException(problem_status=403, detail="Forbidden: Admin access required")
 
-@me.get(auth_scheme=OAuth2PasswordFlow(token_url="token"), plugins=[jwt_auth_plugin.decode_plugin])
+@me.get(auth_scheme=OAuth2PasswordFlow(token_url="token"), plugins=[jwt_auth_plugin.decode_plugin()])
 async def get_admin_user(profile: Annotated[UserProfile, JWTAuthParam], _: Annotated[bool, use(is_admin)]) -> User:
     return User(name="user", email="user@email.com")
 ```

@@ -16,7 +16,7 @@ class TodoItem(Struct):
     title: str
     completed: bool = False
 
-todo = Route("/todos")
+todo = Route("/todos", deps=[TodoRepo])
 
 @todo.get
 async def get_todos(todo_repo: TodoRepo, n: Annotated[int, Param(lt=100)]):

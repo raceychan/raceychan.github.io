@@ -18,7 +18,7 @@ class UserProfile(Struct):
     user_id: str = field(name="sub")
     role: Literal["admin", "user"] = "user"
 
-@me.get(auth_scheme=OAuth2PasswordFlow(token_url="token"), plugins=[jwt_auth_plugin.decode_plugin])
+@me.get(auth_scheme=OAuth2PasswordFlow(token_url="token"), plugins=[jwt_auth_plugin.decode_plugin()])
 async def get_user(profile: Annotated[UserProfile, JWTAuthParam]) -> User:
     assert profile.role == "user"
     return User(name="user", email="user@email.com")
@@ -36,7 +36,7 @@ async def login_get_token(credentials: OAuthLoginForm) -> UserProfile:
 def is_admin(profile: Annotated[UserProfile, JWTAuthParam]) -> bool:
     return profile.role == "admin"
 
-@me.get(auth_scheme=OAuth2PasswordFlow(token_url="token"), plugins=[jwt_auth_plugin.decode_plugin])
+@me.get(auth_scheme=OAuth2PasswordFlow(token_url="token"), plugins=[jwt_auth_plugin.decode_plugin()])
 async def get_admin_user(profile: Annotated[UserProfile, JWTAuthParam], _: Annotated[bool, use(is_admin)]) -> User:
     return User(name="user", email="user@email.com")
 ```

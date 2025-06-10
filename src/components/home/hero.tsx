@@ -3,6 +3,7 @@ import Link from "@docusaurus/Link";
 import { Box, Container, Typography, Button, Grid, Chip } from "@mui/material";
 import { useColorMode } from "@docusaurus/theme-common";
 import CodeBlock from "@site/src/components/code_block";
+import RotatingDisplay from "@site/src/components/rotating_display";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
@@ -15,16 +16,79 @@ type GreetingProps = HeroProps & {
   isDarkTheme: boolean;
 };
 
-const codeString = `from lihil import Lihil, HTML
+const codeExamples = [
+  {
+    title: "Hello World",
+    language: "python",
+    code: `from lihil import Lihil, Route, HTML
 
 lhl = Lihil()
 
-@lhl.get('/hello/{name}')
+@lhl.sub("/hello/{name}").get
 def hello(name: str) -> HTML:
     return "<p> Hello, {name}! </p>"
 
 if __name__ == "__main__":
-    lhl.run(__file__)`;
+    lhl.run(__file__)`
+  },
+  {
+    title: "API with Validation",
+    language: "python",
+    code: `from lihil import Lihil, Route, JSON
+from pydantic import BaseModel
+
+lhl = Lihil()
+
+class User(BaseModel):
+    name: str
+    email: str
+    age: int
+
+@lhl.post("/users")
+def create_user(user: User) -> JSON:
+    # Auto validation & serialization
+    return {"id": 123, "user": user}
+
+lhl.run(__file__)`
+  },
+  {
+    title: "Dependency Injection",
+    language: "python",
+    code: `from lihil import Lihil
+from sqlalchemy.orm import Session
+
+users = Route("/users")
+
+def get_db() -> Session:
+    return session
+
+@users.sub("{user_id}").get(deps=[get_db])
+def get_user(user_id: int, db: Session) -> dict:
+    return db.query(User).filter(
+        User.id == user_id
+    ).first()`
+  },
+  //   {
+  //     title: "Middleware & Auth",
+  //     language: "python",
+  //     code: `from lihil import Lihil, middleware
+  // from lihil.auth import JWTAuth
+
+  // lhl = Lihil()
+  // auth = JWTAuth(secret="secret")
+
+  // @lhl.middleware
+  // async def cors_middleware(request, call_next):
+  //     response = await call_next(request)
+  //     response.headers["Access-Control-Allow-Origin"] = "*"
+  //     return response
+
+  // @lhl.get("/protected")
+  // @auth.require()
+  // def protected_route(user: dict = Depends(auth)):
+  //     return {"message": f"Hello {user['username']}!"}`
+  //   }
+];
 
 function Greeting({ title, tagline, isDarkTheme }: GreetingProps) {
   return (
@@ -106,17 +170,28 @@ function HeroSection({ title, tagline }: HeroProps) {
     >
       <Container>
         <Grid container spacing={8} alignItems="center">
-          <Grid size={{ xs: 12, md: 7 }}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Greeting
               title={title}
               tagline={tagline}
               isDarkTheme={isDarkTheme}
             />
           </Grid>
-          <Grid size={{ xs: 12, md: 5 }}>
-            <CodeBlock language="python" title="example.py" showLineNumbers>
-              {codeString}
-            </CodeBlock>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <RotatingDisplay
+              items={codeExamples.map((example, index) => (
+                <CodeBlock
+                  key={index}
+                  language={example.language}
+                  title={example.title}
+                  showLineNumbers
+                  fixedHeight
+                >
+                  {example.code}
+                </CodeBlock>
+              ))}
+              autoRotateInterval={6000}
+            />
           </Grid>
         </Grid>
       </Container>

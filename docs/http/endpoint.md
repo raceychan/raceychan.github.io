@@ -12,9 +12,11 @@ An `endpoint` is the most atomic ASGI component in `lihil` that defines how clie
 ### Param Parsing
 
 ```python
-from lihil import use, Ignore
+from lihil import Route
+from ididi import NodeConfig
 from typing import Annotated, NewType
 from sqlalchemy.ext.asyncio import AsyncConnection, AsyncEngine
+
 
 async def get_conn(engine: AsyncEngine) -> AsyncConnection:
     async with engine.begin() as conn:
@@ -25,6 +27,9 @@ UserID = NewType("UserID", str)
 def user_id_factory() -> UserID:
     return UserID(str(uuid4()))
 
+user_route = Route("/users", deps=[get_conn, (user_id_factory, NodeConfig(reuse=False))])
+
+@user_route.post
 async def create_user(
     user: UserData, user_id: UserID, conn: AsyncConnection
 ) -> Annotated[UserDB, stauts.Created]:
@@ -32,9 +37,6 @@ async def create_user(
     sql = user_sql(user=user, id_=user_id)
     await conn.execute(sql)
     return UserDB.from_user(user, id=user_id)
-
-users_route.factory(get_conn)
-users_route.factory(user_id_factory, reuse=False)
 ```
 
 Here,
@@ -82,18 +84,17 @@ Example:
 
 ```python
 from typing import Annotated
-from lihil import Route, Payload, use, EventBus
+from lihil import Route, Payload
 
-user_route = Route("/users/{user_id}")
+user_route = Route("/users/{user_id}", deps=[Cache, Engine])
 
 class UserUpdate(Payload): ...
 class Engine: ...
 class Cache: ...
 
-user_route.factory(Cache)
 
 @user_route.put
-async def update_user(user_id: str, engine: Annotated[Engine, use(Engine)], cache: Cache, bus: EventBus):
+async def update_user(user_id: str, engine: Engine, cache: Cache):
     return "ok"
 ```
 
@@ -102,7 +103,6 @@ In this example:
 - `user_id` appears in the route path, so it is a path param
 - `engine` is annotated with the `Use` mark, so it is a dependency
 - `cache` is registered in the user_route, so it is also a dependency
-- `bus` is a lihil-builtin type, it is therefore a dependency as well.
 
 Only `user_id` needs to be provided by the client request, rest will be resolved by lihil.
 
@@ -212,17 +212,20 @@ async def create_user() -> User | TemporaryUser: ...
 #### Custom Encoder/Decoder
 
 You can also use your own customized encoder/decoder for request params and function return.
-To use them, annotate your param type with `CustomDecoder` and your return type with `CustomEncoder`
 
 ```python
-from lihil.di import CustomEncoder, CustomDecoder
+def encoder_user_id(user_id: UUID) -> bytes:
+    return str(user_id)
 
-user_route = Route(/users/{user_id})
+def decoder_user_id(user_id: str) -> UUID:
+    return UUID(user_id)
 
-@user_route
+user_route = Route("/users/{user_id}")
+
+@user_route(encoder=encode_user_id)
 async def get_user(
-    user_id: Annotated[str, CustomDecoder(decode_user_id)]
-) -> Annotated[str, CustomEncoder(encode_user_id)]:
+    user_id: Annotated[UUID, Param(decoder=decode_user_id)]
+) -> str:
     return user_id
 ```
 
@@ -259,6 +262,8 @@ class IEndpointProps(TypedDict, total=False):
     "OAS tag, endpoints with the same tag will be grouped together, default to route tag"
     plugins: list[IPlugin]
     "Decorators to decorate the endpoint function"
+    deps: list[DepNode] | None
+    "Dependencies that might be used in "
 ```
 
     - `scoped`: if an endpoint requires any dependency that is an async context manager, or its factory returns an async generator, the endpoint would be scoped, and setting scoped to None won't change that, however, for an endpoint that is not scoped, setting `scoped=True` would make it scoped.

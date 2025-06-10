@@ -4,6 +4,8 @@
 # Production
 /build
 
+*/__pycache__/*
+
 # Generated files
 .docusaurus
 .cache-loader

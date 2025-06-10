@@ -12,6 +12,7 @@ interface CodeBlockProps {
   language?: string;
   title?: string;
   showLineNumbers?: boolean;
+  fixedHeight?: boolean;
 }
 
 const CodeBlock: React.FC<CodeBlockProps> = ({
@@ -20,6 +21,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   language = "python", // Default language is Python
   title,
   showLineNumbers = false,
+  fixedHeight = false,
 }) => {
   // Extract language from className if provided
   let extractedLanguage = language;
@@ -48,36 +50,73 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           ? "1px solid rgba(100, 100, 100, 0.3)"
           : "1px solid rgba(171, 210, 255, 0.6)", // More visible border
         boxShadow: isDarkTheme ? "none" : "0 2px 6px rgba(0, 0, 0, 0.08)", // Light shadow in light mode for depth
+        ...(fixedHeight && {
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }),
       }}
     >
-      <div className={styles.codeBlockContainer}>
+      <div 
+        className={styles.codeBlockContainer}
+        style={{
+          ...(fixedHeight && {
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+          }),
+        }}
+      >
         {title && <div className={styles.codeBlockTitle}>{title}</div>}
-        <Highlight
-          theme={nordTheme}
-          code={code}
-          language={extractedLanguage as Language}
+        <div
+          style={{
+            ...(fixedHeight && {
+              flex: 1,
+              overflow: "hidden",
+              display: "flex",
+              flexDirection: "column",
+            }),
+          }}
         >
-          {({ className, style, tokens, getLineProps, getTokenProps }) => (
-            <pre className={clsx(className, styles.codeBlock)} style={style}>
-              {tokens.map((line, i) => (
-                <div
-                  key={i}
-                  {...getLineProps({ line, key: i })}
-                  className={styles.codeLine}
-                >
-                  {showLineNumbers && (
-                    <span className={styles.lineNumber}>{i + 1}</span>
-                  )}
-                  <span className={styles.lineContent}>
-                    {line.map((token, key) => (
-                      <span key={key} {...getTokenProps({ token, key })} />
-                    ))}
-                  </span>
-                </div>
-              ))}
-            </pre>
-          )}
-        </Highlight>
+          <Highlight
+            theme={nordTheme}
+            code={code}
+            language={extractedLanguage as Language}
+          >
+            {({ className, style, tokens, getLineProps, getTokenProps }) => (
+              <pre 
+                className={clsx(className, styles.codeBlock)} 
+                style={{
+                  ...style,
+                  ...(fixedHeight && {
+                    flex: 1,
+                    overflow: "auto",
+                    margin: 0,
+                    maxHeight: "100%",
+                  }),
+                }}
+              >
+                {tokens.map((line, i) => (
+                  <div
+                    key={i}
+                    {...getLineProps({ line, key: i })}
+                    className={styles.codeLine}
+                  >
+                    {showLineNumbers && (
+                      <span className={styles.lineNumber}>{i + 1}</span>
+                    )}
+                    <span className={styles.lineContent}>
+                      {line.map((token, key) => (
+                        <span key={key} {...getTokenProps({ token, key })} />
+                      ))}
+                    </span>
+                  </div>
+                ))}
+              </pre>
+            )}
+          </Highlight>
+        </div>
       </div>
     </Paper>
   );
