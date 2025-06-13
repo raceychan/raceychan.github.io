@@ -16,79 +16,88 @@ type GreetingProps = HeroProps & {
   isDarkTheme: boolean;
 };
 
-const codeExamples = [
-  {
-    title: "Hello World",
-    language: "python",
-    code: `from lihil import Lihil, Route, HTML
+const openai_example =
+{
+  title: "openai",
+  language: "python",
+  code: `from lihil import Lihil, Route, Stream
+from openai import OpenAI
+from openai.types.chat import ChatCompletionChunk as Chunk
+from openai.types.chat import ChatCompletionUserMessageParam as MessageIn
 
-lhl = Lihil()
+gpt = Route("/gpt", deps=[OpenAPI])
 
-@lhl.sub("/hello/{name}").get
-def hello(name: str) -> HTML:
-    return "<p> Hello, {name}! </p>"
+def message_encoder(chunk: Any) -> bytes:
+    if not chunk.choices:
+        return b""
+    return chunk.choices[0].delta.content.encode() or b""
 
-if __name__ == "__main__":
-    lhl.run(__file__)`
-  },
-  {
-    title: "API with Validation",
-    language: "python",
-    code: `from lihil import Lihil, Route, JSON
-from pydantic import BaseModel
+@gpt.sub("/messages").post(encoder=message_encoder)
+async def add_new_message(
+    client: OpenAPI, question: MessageIn, model: str
+) -> Stream[Chunk]:
+    async for chunk in client.responses.create(
+      messages=[question], model=model, stream=True
+    ):
+        yield chunk
+  `
+}
 
-lhl = Lihil()
 
-class User(BaseModel):
-    name: str
-    email: str
-    age: int
 
-@lhl.post("/users")
-def create_user(user: User) -> JSON:
-    # Auto validation & serialization
-    return {"id": 123, "user": user}
+// const codeExamples = [
+//   {
+//     title: "Hello World",
+//     language: "python",
+//     code: `from lihil import Lihil, Route, HTML
 
-lhl.run(__file__)`
-  },
-  {
-    title: "Dependency Injection",
-    language: "python",
-    code: `from lihil import Lihil
-from sqlalchemy.orm import Session
+// lhl = Lihil()
 
-users = Route("/users")
+// @lhl.sub("/hello/{name}").get
+// def hello(name: str) -> HTML:
+//     return "<p> Hello, {name}! </p>"
 
-def get_db() -> Session:
-    return session
+// if __name__ == "__main__":
+//     lhl.run(__file__)`
+//   },
+//   {
+//     title: "API with Validation",
+//     language: "python",
+//     code: `from lihil import Lihil, Route, JSON
+// from pydantic import BaseModel
 
-@users.sub("{user_id}").get(deps=[get_db])
-def get_user(user_id: int, db: Session) -> dict:
-    return db.query(User).filter(
-        User.id == user_id
-    ).first()`
-  },
-  //   {
-  //     title: "Middleware & Auth",
-  //     language: "python",
-  //     code: `from lihil import Lihil, middleware
-  // from lihil.auth import JWTAuth
+// lhl = Lihil()
 
-  // lhl = Lihil()
-  // auth = JWTAuth(secret="secret")
+// class User(BaseModel):
+//     name: str
+//     email: str
+//     age: int
 
-  // @lhl.middleware
-  // async def cors_middleware(request, call_next):
-  //     response = await call_next(request)
-  //     response.headers["Access-Control-Allow-Origin"] = "*"
-  //     return response
+// @lhl.post("/users")
+// def create_user(user: User) -> JSON:
+//     # Auto validation & serialization
+//     return {"id": 123, "user": user}
 
-  // @lhl.get("/protected")
-  // @auth.require()
-  // def protected_route(user: dict = Depends(auth)):
-  //     return {"message": f"Hello {user['username']}!"}`
-  //   }
-];
+// lhl.run(__file__)`
+//   },
+//   {
+//     title: "Dependency Injection",
+//     language: "python",
+//     code: `from lihil import Lihil
+// from sqlalchemy.orm import Session
+
+// users = Route("/users")
+
+// def get_db() -> Session:
+//     return session
+
+// @users.sub("{user_id}").get(deps=[get_db])
+// def get_user(user_id: int, db: Session) -> dict:
+//     return db.query(User).filter(
+//         User.id == user_id
+//     ).first()`
+//   },
+// ];
 
 function Greeting({ title, tagline, isDarkTheme }: GreetingProps) {
   return (
@@ -170,15 +179,17 @@ function HeroSection({ title, tagline }: HeroProps) {
     >
       <Container>
         <Grid container spacing={8} alignItems="center">
-          <Grid size={{ xs: 12, md: 6 }}>
+          <Grid size={{ xs: 12, md: 5 }}>
             <Greeting
               title={title}
               tagline={tagline}
               isDarkTheme={isDarkTheme}
             />
           </Grid>
-          <Grid size={{ xs: 12, md: 6 }}>
-            <RotatingDisplay
+          <Grid size={{ xs: 12, md: 7 }}>
+            <CodeBlock title={"openai"}>{openai_example.code}</CodeBlock>
+            {/* <CodeBlock language/> */}
+            {/* <RotatingDisplay
               items={codeExamples.map((example, index) => (
                 <CodeBlock
                   key={index}
@@ -191,7 +202,7 @@ function HeroSection({ title, tagline }: HeroProps) {
                 </CodeBlock>
               ))}
               autoRotateInterval={6000}
-            />
+            /> */}
           </Grid>
         </Grid>
       </Container>

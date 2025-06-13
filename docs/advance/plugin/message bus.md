@@ -39,7 +39,9 @@ bus_route = Route("/bus", plugins=[bus_plugin])
 
 
 @bus_route.post
-async def create_todo(name: str, content: str, bus: PEventBus) -> Annotated[Empty, status.OK]:
+async def create_todo(
+    name: str, content: str, bus: PEventBus
+) -> Annotated[Empty, status.OK]:
     await bus.publish(TodoCreated(name, content))
 ```
 
