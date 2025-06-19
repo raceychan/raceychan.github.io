@@ -153,7 +153,6 @@ def _settings():
     settings: Settings = Settings()
 
     def get_settings() -> Settings:
-        nonlocal _settings
         return settings
 
     def set_settings(value: Settings) -> None:
@@ -162,7 +161,7 @@ def _settings():
 
     return get_settings, set_settings
 
-get_settings, set_settings = settings()
+get_settings, set_settings = _settings()
 ```
 
 [Example of this pattern from github](https://github.com/raceychan/lihil/blob/master/lihil/config/__init__.py)
