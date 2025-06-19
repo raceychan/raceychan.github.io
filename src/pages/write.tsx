@@ -24,6 +24,8 @@ export default function WritePage(): React.ReactElement {
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successDetails, setSuccessDetails] = useState<any>(null);
+  const [showImageSuccessModal, setShowImageSuccessModal] = useState(false);
+  const [imageSuccessDetails, setImageSuccessDetails] = useState<string>('');
 
   // Load authors and tags from YAML files
   useEffect(() => {
@@ -108,21 +110,26 @@ ${formData.content}
     if (!imageUrl.trim()) return;
 
     try {
-      // In a real implementation, you would download the image
-      // For now, we'll just add it to the list
-      const imageName = `image-${images.length + 1}.${imageUrl.split('.').pop() || 'jpg'}`;
+      // Extract filename from URL or generate one
+      const urlParts = imageUrl.split('/');
+      const originalName = urlParts[urlParts.length - 1];
+      const extension = originalName.includes('.') ? originalName.split('.').pop() : 'jpg';
+      const imageName = originalName.includes('.') ? originalName : `image-${images.length + 1}.${extension}`;
+
       setImages(prev => [...prev, imageName]);
       setImageUrl('');
       setShowImageModal(false);
 
       // Add image to content
-      const imageMarkdown = `\n\n![${imageName}](${imageName})\n\n`;
+      const imageMarkdown = `\n\n![${imageName}](${imageUrl})\n\n`;
       setFormData(prev => ({
         ...prev,
         content: prev.content + imageMarkdown
       }));
 
-      alert(`Image "${imageName}" added to post. You'll need to manually download and place the image in your blog post folder.`);
+      // Show success modal instead of alert
+      setImageSuccessDetails(imageName);
+      setShowImageSuccessModal(true);
     } catch (error) {
       alert('Failed to process image. Please check the URL.');
     }
@@ -285,14 +292,6 @@ ${formData.content}
     // Add content.md file
     folder?.file('content.md', content);
 
-    // Add image placeholder files
-    if (details.images.length > 0) {
-      details.images.forEach((imageName: string) => {
-        const placeholder = `# Image Placeholder\n\nThis is a placeholder for: ${imageName}\n\nPlease replace this file with the actual image.`;
-        folder?.file(`${imageName}.placeholder.txt`, placeholder);
-      });
-    }
-
 
     // Generate and download the zip
     const zipBlob = await zip.generateAsync({ type: 'blob' });
@@ -307,7 +306,7 @@ ${formData.content}
 
     return {
       folderName,
-      filesCreated: ['content.md', ...details.images.map((img: string) => `${img}.placeholder.txt`)]
+      filesCreated: ['content.md']
     };
   };
 
@@ -333,6 +332,78 @@ ${formData.content}
       // You could create an error modal here too, but for now just throw
       throw new Error('Failed to download blog post files. Please try again.');
     }
+  };
+
+  const renderImageSuccessModal = () => {
+    if (!showImageSuccessModal || !imageSuccessDetails) return null;
+
+    return (
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 10000,
+          backdropFilter: 'blur(4px)',
+        }}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            setShowImageSuccessModal(false);
+          }
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: '#ffffff',
+            color: '#000000',
+            padding: '2rem',
+            borderRadius: '12px',
+            width: '90%',
+            maxWidth: '500px',
+            border: '2px solid #25c2a0',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+            position: 'relative',
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <h3 style={{ color: '#25c2a0', marginBottom: '1.5rem' }}>✅ Image Added Successfully!</h3>
+
+          <div style={{ marginBottom: '1rem' }}>
+            <strong>Image Name:</strong> <code>{imageSuccessDetails}</code>
+          </div>
+
+          <div style={{
+            padding: '1rem',
+            backgroundColor: '#e8f5e8',
+            borderRadius: '6px',
+            marginBottom: '1.5rem',
+            border: '1px solid #25c2a0'
+          }}>
+            <small style={{ color: '#000000' }}>
+              <strong>📷 Next Steps:</strong><br />
+              1. The image markdown has been added to your post content<br />
+              2. When you create the blog post, place <code>{imageSuccessDetails}</code> in the blog post folder<br />
+              3. The image will be referenced as: <code>![{imageSuccessDetails}]({imageSuccessDetails})</code>
+            </small>
+          </div>
+
+          <div>
+            <button
+              className="button button--primary button--lg"
+              onClick={() => setShowImageSuccessModal(false)}
+            >
+              Continue Writing
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   const renderSuccessModal = () => {
@@ -461,7 +532,7 @@ ${formData.content}
       <div className="container margin-vert--lg">
         <div className="row">
           <div className="col col--8 col--offset-2">
-            <h1>✍️ Write New Blog Post</h1>
+            <h1> New Blog Post</h1>
 
             <div className="margin-bottom--lg">
               <label className="margin-bottom--sm" style={{ display: 'block', fontWeight: 'bold' }}>
@@ -658,15 +729,58 @@ ${formData.content}
               <label className="margin-bottom--sm" style={{ display: 'block', fontWeight: 'bold' }}>
                 Content
               </label>
-              <div style={{ marginBottom: '0.5rem' }}>
+              <div style={{ marginBottom: '1rem' }}>
                 <button
                   type="button"
-                  className="button button--outline button--secondary button--sm"
+                  className="button button--primary button--lg"
                   onClick={() => setShowImageModal(true)}
+                  style={{
+                    backgroundColor: '#25c2a0',
+                    borderColor: '#25c2a0',
+                    fontWeight: 'bold',
+                    padding: '0.75rem 1.5rem',
+                    fontSize: '1.1rem'
+                  }}
                 >
-                  📷 Add Image
+                  📷 Add Image to Post
                 </button>
               </div>
+
+              {/* Show added images */}
+              {images.length > 0 && (
+                <div style={{
+                  marginBottom: '1rem',
+                  padding: '1rem',
+                  backgroundColor: '#f8f9fa',
+                  border: '1px solid #e0e0e0',
+                  borderRadius: '6px'
+                }}>
+                  <strong style={{ display: 'block', marginBottom: '0.5rem', color: '#25c2a0' }}>
+                    📷 Images Added ({images.length}):
+                  </strong>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    {images.map((image, index) => (
+                      <span
+                        key={index}
+                        style={{
+                          backgroundColor: '#25c2a0',
+                          color: 'white',
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: '4px',
+                          fontSize: '0.875rem',
+                          fontFamily: 'monospace'
+                        }}
+                      >
+                        {image}
+                      </span>
+                    ))}
+                  </div>
+                  <small style={{ display: 'block', marginTop: '0.5rem', color: '#666' }}>
+                    These images will be included in your blog post folder when created.
+                  </small>
+                </div>
+              )}
+
               <textarea
                 className="form-control"
                 style={{
@@ -706,29 +820,44 @@ ${formData.content}
 
             {/* Image Modal */}
             {showImageModal && (
-              <div style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(0,0,0,0.5)',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                zIndex: 1000,
-              }}>
-                <div style={{
-                  backgroundColor: 'var(--ifm-background-color)',
-                  padding: '2rem',
-                  borderRadius: '8px',
-                  width: '90%',
-                  maxWidth: '500px',
-                  border: '1px solid var(--ifm-color-emphasis-300)',
-                }}>
-                  <h3>Add Image</h3>
+              <div
+                style={{
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  zIndex: 10000,
+                  backdropFilter: 'blur(4px)',
+                }}
+                onClick={(e) => {
+                  if (e.target === e.currentTarget) {
+                    setShowImageModal(false);
+                    setImageUrl('');
+                  }
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: '#ffffff',
+                    color: '#000000',
+                    padding: '2rem',
+                    borderRadius: '12px',
+                    width: '90%',
+                    maxWidth: '500px',
+                    border: '2px solid #e0e0e0',
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+                    position: 'relative',
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <h3 style={{ color: '#000000', marginBottom: '1.5rem' }}>Add Image to Post</h3>
                   <div className="margin-bottom--md">
-                    <label className="margin-bottom--sm" style={{ display: 'block', fontWeight: 'bold' }}>
+                    <label className="margin-bottom--sm" style={{ display: 'block', fontWeight: 'bold', color: '#000000' }}>
                       Image URL
                     </label>
                     <input
@@ -736,9 +865,11 @@ ${formData.content}
                       style={{
                         width: '100%',
                         padding: '0.75rem',
-                        border: '1px solid var(--ifm-color-emphasis-300)',
+                        border: '1px solid #e0e0e0',
                         borderRadius: '6px',
-                        fontSize: '1rem'
+                        fontSize: '1rem',
+                        color: '#000000',
+                        backgroundColor: '#ffffff'
                       }}
                       value={imageUrl}
                       onChange={(e) => setImageUrl(e.target.value)}
@@ -750,6 +881,7 @@ ${formData.content}
                       className="button button--primary margin-right--sm"
                       onClick={addImage}
                       disabled={!imageUrl.trim()}
+                      style={{ marginRight: '1rem' }}
                     >
                       Add Image
                     </button>
@@ -769,6 +901,9 @@ ${formData.content}
 
             {/* Preview Modal */}
             {renderPreviewModal()}
+
+            {/* Image Success Modal */}
+            {renderImageSuccessModal()}
 
             {/* Success Modal */}
             {renderSuccessModal()}
