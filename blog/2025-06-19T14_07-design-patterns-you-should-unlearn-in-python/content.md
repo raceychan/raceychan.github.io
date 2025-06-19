@@ -73,9 +73,6 @@ conn1 = MySqlConnection()
 conn2 = PostGresConnection()
 ```
 
-[example from github](https://github.com/raceychan/lihil/blob/master/lihil/config/__init__.py)
-
-
 You might expect two separate objects, one for each subclass. But nope — both `conn1` and `conn2` are the same instance. That’s because `_instance` lives on the base class, not per subclass. So congratulations: **you’ve now built the ultimate surprise box.** `PostGresConnection()` might return a `MySqlConnection`, and `MySqlConnection()` might give you a `PostGresConnection`. It all depends on which one you happened to instantiate first.
 
 Hope your app enjoys the roulette.
@@ -167,6 +164,10 @@ def _settings():
 
 get_settings, set_settings = settings()
 ```
+
+[Example of this pattern from github](https://github.com/raceychan/lihil/blob/master/lihil/config/__init__.py)
+
+
 
 This approach is especially useful when your settings object depends on values only available at runtime — for example, the path to an environment file (`env_file: Path`). With lazy initialization via closure, you can defer creating the `Settings` instance until you have all the necessary information, instead of forcing it at import time.
 
