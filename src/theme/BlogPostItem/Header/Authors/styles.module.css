@@ -5,6 +5,8 @@
 .imageOnlyAuthorRow {
   display: flex;
   flex-flow: row wrap;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
 .imageOnlyAuthorCol {

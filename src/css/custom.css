@@ -4,17 +4,12 @@
  * work well for content-centric websites.
  */
 
+/* Import blog enhancements */
+@import './blog-enhancements.css';
+
 /* You can override the default Infima variables here. */
 
-/* Reduce title size in blog list */
-.blog-list-page h2[class*="title"] {
-  font-size: 2rem;
-}
-
-/* Reduce title size in blog page */
-.blog-post-page h1[class*="title"] {
-  font-size: 2rem;
-}
+/* Blog title sizes are now handled by blog-enhancements.css */
 
 :root {
   --ifm-color-primary: rgb(80, 159, 255); /* Nord Frost lighter blue */

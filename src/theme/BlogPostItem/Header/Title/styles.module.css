@@ -1,12 +1,34 @@
 .title {
-  font-size: 3rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: var(--ifm-heading-color);
+  letter-spacing: -0.025em;
+}
+
+.title a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.title a:hover {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
 }
 
 /**
   Blog post title should be smaller on smaller devices
 **/
-@media (max-width: 576px) {
+@media (max-width: 996px) {
   .title {
     font-size: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .title {
+    font-size: 1.75rem;
   }
 }

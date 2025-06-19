@@ -27,7 +27,7 @@ from openai.types.chat import ChatCompletionUserMessageParam as MessageIn
 
 gpt = Route("/gpt", deps=[OpenAPI])
 
-def message_encoder(chunk: Any) -> bytes:
+def message_encoder(chunk: Chunk) -> bytes:
     if not chunk.choices:
         return b""
     return chunk.choices[0].delta.content.encode() or b""
