@@ -1,5 +1,6 @@
-## Error Hanlding
 
+
+## Error Hanlding
 - use `route.get(errors=VioletsAreBlue)` to declare a endpoint response
 
 ```python
