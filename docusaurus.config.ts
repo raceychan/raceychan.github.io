@@ -112,7 +112,7 @@ const config: Config = {
 
         },
         gtag: {
-          trackingID: ' G-3D1PTMXEH0',
+          trackingID: 'G-3D1PTMXEH0',
           anonymizeIP: true,
         },
 
