@@ -69,6 +69,14 @@ const config: Config = {
         language: ['en'],
       } satisfies PluginOptions,
     ],
+    [
+      '@docusaurus/plugin-google-gtag',
+      {
+        trackingID: 'G-3D1PTMXEH0',
+        anonymizeIP: true,
+      },
+    ],
+
   ],
 
   presets: [
@@ -141,10 +149,10 @@ const config: Config = {
           label: 'GitHub',
           position: 'right',
         },
-      {
-        type: 'localeDropdown',
-        position: 'right',
-      },
+        {
+          type: 'localeDropdown',
+          position: 'right',
+        },
 
       ],
     },
