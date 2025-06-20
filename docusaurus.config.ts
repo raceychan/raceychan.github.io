@@ -109,17 +109,16 @@ const config: Config = {
           rehypePlugins: [],
           beforeDefaultRemarkPlugins: [],
           beforeDefaultRehypePlugins: [],
+
         },
-      } satisfies Preset.Options,
-      '@docusaurus/preset-classic',
-      {
         gtag: {
-          trackingID: 'G-999X9XX9XX',
+          trackingID: ' G-3D1PTMXEH0',
           anonymizeIP: true,
         },
-      },
-    ],
 
+      } satisfies Preset.Options,
+
+    ],
   ],
 
 
