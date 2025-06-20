@@ -75,7 +75,6 @@ const config: Config = {
 
   presets: [
     [
-
       'classic',
       {
         docs: {
@@ -112,8 +111,6 @@ const config: Config = {
           beforeDefaultRehypePlugins: [],
         },
       } satisfies Preset.Options,
-    ],
-    [
       '@docusaurus/preset-classic',
       {
         gtag: {
@@ -122,6 +119,7 @@ const config: Config = {
         },
       },
     ],
+
   ],
 
 
