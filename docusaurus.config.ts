@@ -1,4 +1,3 @@
-import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 import { PluginOptions } from '@easyops-cn/docusaurus-search-local';
@@ -37,7 +36,7 @@ const config: Config = {
 
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'zh'],
+    locales: ['en', 'zh', `ja`, 'ru'],
     localeConfigs: {
       en: {
         label: 'English',
@@ -45,6 +44,12 @@ const config: Config = {
       zh: {
         label: '中文',
       },
+      ja: {
+        label: '日本語',
+      },
+      ru: {
+        label: 'Русский',
+      }
     },
   },
 
