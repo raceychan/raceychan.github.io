@@ -75,13 +75,7 @@ const config: Config = {
 
   presets: [
     [
-      '@docusaurus/preset-classic',
-      {
-        gtag: {
-          trackingID: 'G-3D1PTMXEH0',
-          anonymizeIP: true,
-        },
-      },
+
       'classic',
       {
         docs: {
@@ -118,7 +112,15 @@ const config: Config = {
           beforeDefaultRehypePlugins: [],
         },
       } satisfies Preset.Options,
-
+    ],
+    [
+      '@docusaurus/preset-classic',
+      {
+        gtag: {
+          trackingID: 'G-999X9XX9XX',
+          anonymizeIP: true,
+        },
+      },
     ],
   ],
 
