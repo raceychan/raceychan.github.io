@@ -69,18 +69,19 @@ const config: Config = {
         language: ['en'],
       } satisfies PluginOptions,
     ],
-    [
-      '@docusaurus/plugin-google-gtag',
-      {
-        trackingID: 'G-3D1PTMXEH0',
-        anonymizeIP: true,
-      },
-    ],
+
 
   ],
 
   presets: [
     [
+      '@docusaurus/preset-classic',
+      {
+        gtag: {
+          trackingID: 'G-3D1PTMXEH0',
+          anonymizeIP: true,
+        },
+      },
       'classic',
       {
         docs: {
@@ -117,6 +118,7 @@ const config: Config = {
           beforeDefaultRehypePlugins: [],
         },
       } satisfies Preset.Options,
+
     ],
   ],
 
