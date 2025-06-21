@@ -25,6 +25,8 @@ In Part 1, we took apart the Builder and Singleton patterns, showing how Pythonâ
 
 Now, letâ€™s move on to two more patterns: **Flyweight** and **Prototype**. Both solve real problems. But as you'll see, Python gives us simpler, more natural ways to solve them.
 
+<!-- truncate -->
+
 ---
 
 ## Flyweight Pattern: Sharing to Save Memory
