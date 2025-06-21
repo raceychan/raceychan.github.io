@@ -1,0 +1,88 @@
+.rollingAd {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none; /* Allow clicks to pass through container */
+}
+
+/* Common styles for both text and image ads */
+.adText,
+.adImage {
+  transition: opacity 0.3s ease-in-out, color 0.2s ease;
+  opacity: 1;
+  pointer-events: auto; /* Enable interactions on the content itself */
+  border-radius: 4px;
+  user-select: none;
+}
+
+/* Text-specific styles */
+.adText {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ifm-navbar-link-color);
+  text-align: center;
+  white-space: nowrap;
+  padding: 0.5rem 1rem;
+}
+
+/* Image-specific styles */
+.adImage {
+  max-height: 80%; /* Ensure image fits within navbar height */
+  object-fit: contain;
+  padding: 0.25rem;
+}
+
+/* Clickable styles */
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background-color: var(--ifm-navbar-link-hover-background-color, rgba(0, 0, 0, 0.05));
+}
+
+[data-theme='dark'] .clickable:hover {
+  background-color: var(--ifm-navbar-link-hover-background-color, rgba(255, 255, 255, 0.1));
+}
+
+.adText.clickable:hover {
+  color: var(--ifm-navbar-link-hover-color);
+}
+
+/* Non-clickable styles */
+.nonClickable {
+  cursor: default;
+}
+
+/* Visibility states */
+.hidden {
+  opacity: 0;
+}
+
+.visible {
+  opacity: 1;
+}
+
+/* Responsive behavior */
+@media (max-width: 996px) {
+  .rollingAd {
+    display: none;
+  }
+}
+
+/* Dark mode compatibility */
+[data-theme='dark'] .adText {
+  color: var(--ifm-navbar-link-color);
+}
+
+/* Focus styles for accessibility */
+.clickable:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}

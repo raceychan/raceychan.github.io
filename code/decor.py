@@ -5,6 +5,8 @@ P = ParamSpec("P")
 T = TypeVar("T")
 
 
+# from sqlalchemy import Integer
+
 def is_even(x: int) -> bool:
     return (x % 2) == 0
 
