@@ -15,7 +15,7 @@ Ever since the *Gang of Four* released their legendary *Design Patterns* book in
 - The **intent** behind the pattern: the problem it's trying to solve.
 - The **implementation**: the exact class structure or code to achieve it.
 
-When we talk about “design patterns you should unlearn in Python,” we’re talking about the first kind: the intent. These patterns still solve real problems. But in Python, the way you solve them often looks nothing like the solutions shown in C++ or Java.
+When we talk about “design patterns you should unlearn in Python,” we’re talking about the second kind: the implementation. These patterns still solve real problems. But in Python, the way you solve them often looks nothing like the solutions shown in C++ or Java.
 
 That’s the key idea behind this series. The moral is simple:
 
@@ -129,18 +129,13 @@ def _compile(pattern, flags):
         pass
     if isinstance(pattern, Pattern):
         if flags:
-            raise ValueError(
-                "cannot process flags argument with a compiled pattern")
+            raise ValueError(...)
         return pattern
     if not _compiler.isstring(pattern):
-        raise TypeError("first argument must be string or compiled pattern")
+        raise TypeError(...)
     if flags & T:
         import warnings
-        warnings.warn("The re.TEMPLATE/re.T flag is deprecated "
-                  "as it is an undocumented flag "
-                  "without an obvious purpose. "
-                  "Don't use it.",
-                  DeprecationWarning)
+        warnings.warn(...)
     p = _compiler.compile(pattern, flags)
     if not (flags & DEBUG):
         if len(_cache) >= _MAXCACHE:
@@ -164,12 +159,13 @@ Imagine you're building a music editor using a GUI framework. There's a `Graphic
 
 ```python
 class GraphicTool:
-    def click(self) -> Graphic: ... 
+    def click(self) -> Graphics: ... 
     
 # when users click the GraphicTool it would return a graph object that would be rendered on the screen.
 ```
 
 You define your own classes like `MusicalNote`, which inherit from the base `Graphics` type:
+
 ```python
 from gui import Graphics
 
