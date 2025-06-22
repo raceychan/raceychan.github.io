@@ -95,6 +95,24 @@
   .markdown > p {
     font-size: 1rem;
   }
+  
+  /* Hide entire sidebar columns on mobile to prevent duplicate components */
+  .col--2,
+  .col--3 {
+    display: none !important;
+  }
+  
+  /* Show mobile subscription widget only on mobile */
+  .mobile-subscription {
+    display: block !important;
+  }
+}
+
+/* Hide mobile subscription widget on desktop */
+@media (min-width: 997px) {
+  .mobile-subscription {
+    display: none !important;
+  }
 }
 
 /* Dark mode enhancements */

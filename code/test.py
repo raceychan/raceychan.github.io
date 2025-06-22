@@ -2,6 +2,7 @@ from lihil import HTML, Annotated, Empty, Lihil, Route, status
 from lihil.interface import Base
 from lihil.problems import HTTPException
 
+from sqlalchemy import select
 
 class AddressOutOfScopeProblem(Base):
     current_address: str
