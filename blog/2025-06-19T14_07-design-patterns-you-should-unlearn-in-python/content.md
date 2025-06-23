@@ -2,7 +2,7 @@
 slug: design-patterns-you-should-unlearn-in-python-part1
 title: Design Patterns You Should Unlearn in Python-Part1
 authors: [raceychan]
-tags: [python]
+tags: [python, design patterns, oop]
 toc_min_heading_level: 2
 toc_max_heading_level: 5
 ---

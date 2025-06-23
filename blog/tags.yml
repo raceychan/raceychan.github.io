@@ -12,3 +12,13 @@ python:
   label: python
   permalink: /python
   description: general dicussion about programming in python
+
+design-patterns:
+  label: design patterns
+  permalink: /design-patterns
+  description: Software design patterns and architectural solutions
+
+oop:
+  label: OOP
+  permalink: /oop
+  description: Object-oriented programming principles and practices

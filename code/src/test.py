@@ -2,7 +2,6 @@ from lihil import HTML, Annotated, Empty, Lihil, Route, status
 from lihil.interface import Base
 from lihil.problems import HTTPException
 
-from sqlalchemy import select
 
 class AddressOutOfScopeProblem(Base):
     current_address: str
@@ -47,4 +46,3 @@ lhl = Lihil(root)
 
 if __name__ == "__main__":
     lhl.run(__file__)
-
