@@ -111,6 +111,8 @@
             <uri>https://github.com/raceychan</uri>
         </author>
         <category label="python" term="python"/>
+        <category label="design patterns" term="design patterns"/>
+        <category label="OOP" term="OOP"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[Design Patterns You Should Unlearn in Python-Part1]]></title>
@@ -180,6 +182,8 @@
             <uri>https://github.com/raceychan</uri>
         </author>
         <category label="python" term="python"/>
+        <category label="design patterns" term="design patterns"/>
+        <category label="OOP" term="OOP"/>
     </entry>
     <entry>
         <title type="html"><![CDATA[Decorators and Functional programming]]></title>
