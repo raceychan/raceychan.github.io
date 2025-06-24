@@ -270,3 +270,15 @@ Links:
 
 
 [Random flyweight implementation in python I found online](https://github.com/gennad/Design-Patterns-in-Python/blob/master/flyweight.py)
+
+
+
+--- Thank list
+
+- Thanks u/commy2 for fixing the flyweight user code example
+
+- Thanks u/camel_hopper for fixing typo "Graphic" -> "Graphics"
+
+- Thanks u/tomysshadow for fixing typo "GrpahicTool" -> "GraphicTool"
+
+
