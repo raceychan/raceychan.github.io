@@ -3,13 +3,13 @@
 
 ## Break 1:
 
-class UserRepo:
-    def __init__(self, engine: Engine | None = None) -> None:
-        self._engine = engine
 
-    
+class DBConnection: ...
 
 
+class OrderRepo:
+    def __init__(self, conn: DBConnection | None = None) -> None:
+        self._conn = conn
 
 
 ## Break 2
@@ -32,3 +32,13 @@ service._user_repository
 
 
 # =========== Case of
+
+
+class A:
+    def get(self, name: str) -> str:
+        return "a"
+
+
+class B(A):
+    def get(self, b: int) -> int:
+        return 5

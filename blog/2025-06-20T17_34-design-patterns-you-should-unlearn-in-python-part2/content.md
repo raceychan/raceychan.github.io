@@ -62,13 +62,13 @@ from dataclasses import dataclass
 
 
 class User:
-    _users: ClassVar[dict[tuple[str, int], User]] = {}
+    _users: ClassVar[dict[tuple[str, int], "User"]] = {}
 
-    def __new__(self, name: str, age: int) -> User:
-        if not (u := self._users.get((name, age))):
-            self._users[(name, age)] = u = User(name, age)
+    def __new__(cls, name: str, age: int) -> "User":
+        if not (u := cls._users.get((name, age))):
+            cls._users[(name, age)] = u = super().__new__(cls)
         return u
-    
+
     def __init__(self, name: str, age: int):
        self.name = name
        self.age = age
@@ -86,7 +86,21 @@ u = User("user", 20)
 assert type(u) is User
 ```
 
-if you're working in a larger codebase or using third-party tools that instantiate a sbuclass of `User` without knowing about your custom `__new__`, these surprises turn into hard-to-debug runtime errors. Once you start rewriting object creation logic with __new__ and shared caches, you're on shaky ground. It’s fragile, implicit, and rarely worth it in Python.
+Imaging someone inherit your class:
+
+```python
+class Admin(User):
+    ...
+
+
+In [6]: Admin("user",20)
+Out[6]: <__main__.Admin at 0x7c123e18b650>
+
+In [7]: User("user",20)
+Out[7]: <__main__.Admin at 0x7c123e18b650>
+```
+
+If you're working in a larger codebase or using third-party tools that instantiate a sbuclass of `User` without knowing about your custom `__new__`, these surprises turn into hard-to-debug runtime errors. Once you start rewriting object creation logic with __new__ and shared caches, you're on shaky ground. It’s fragile, implicit, and rarely worth it in Python.
 
 ### Better approach: A factory function with cache:
 
@@ -198,7 +212,7 @@ class GraphicTool:
 ```
 From the client code, you might do:
 ```python
-g = GrpahicTool(proto=MusicalNote())
+g = GraphicTool(proto=MusicalNote())
 ```
 This works because you implement a `clone()` method on your custom class, and the tool just calls that to get a new object.
 
