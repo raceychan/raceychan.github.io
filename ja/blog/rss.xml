@@ -108,7 +108,19 @@
 <p>Links:</p>
 <p><a href="https://www.cs.unc.edu/~stotts/GOF/hires/pat4ffso.htm" target="_blank" rel="noopener noreferrer">GOF flyweight pattern</a></p>
 <p><a href="https://github.com/python/cpython/blob/main/InternalDocs/string_interning.md" target="_blank" rel="noopener noreferrer">string interning from cpython github repo</a></p>
-<p><a href="https://github.com/gennad/Design-Patterns-in-Python/blob/master/flyweight.py" target="_blank" rel="noopener noreferrer">Random flyweight implementation in python I found online</a></p>]]></content:encoded>
+<p><a href="https://github.com/gennad/Design-Patterns-in-Python/blob/master/flyweight.py" target="_blank" rel="noopener noreferrer">Random flyweight implementation in python I found online</a></p>
+<p>--- Thank list</p>
+<ul>
+<li>
+<p>Thanks u/commy2 for fixing the flyweight user code example</p>
+</li>
+<li>
+<p>Thanks u/camel_hopper for fixing typo "Graphic" -&gt; "Graphics"</p>
+</li>
+<li>
+<p>Thanks u/tomysshadow for fixing typo "GrpahicTool" -&gt; "GraphicTool"</p>
+</li>
+</ul>]]></content:encoded>
             <category>python</category>
             <category>design patterns</category>
             <category>OOP</category>
