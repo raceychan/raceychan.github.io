@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "@docusaurus/Link";
+import Translate from "@docusaurus/Translate";
 import { Box, Container, Typography, Button, Grid, Chip } from "@mui/material";
 import { useColorMode } from "@docusaurus/theme-common";
 import CodeBlock from "@site/src/components/code_block";
@@ -25,7 +26,7 @@ from openai import OpenAI
 from openai.types.chat import ChatCompletionChunk as Chunk
 from openai.types.chat import ChatCompletionUserMessageParam as MessageIn
 
-gpt = Route("/gpt", deps=[OpenAPI])
+gpt = Route("/gpt", deps=[OpenAI])
 
 def message_encoder(chunk: Chunk) -> bytes:
     if not chunk.choices:
@@ -103,7 +104,11 @@ function Greeting({ title, tagline, isDarkTheme }: GreetingProps) {
   return (
     <Box sx={{ mb: 4 }}>
       <Chip
-        label="Performant. Productive. Professional."
+        label={
+          <Translate id="homepage.hero.tagline">
+            Performant. Productive. Professional.
+          </Translate>
+        }
         size="small"
         sx={{
           bgcolor: isDarkTheme
@@ -141,7 +146,9 @@ function Greeting({ title, tagline, isDarkTheme }: GreetingProps) {
             },
           }}
         >
-          Get Started
+          <Translate id="homepage.hero.getStarted">
+            Get Started
+          </Translate>
         </Button>
         <Button
           component={Link}
@@ -156,7 +163,9 @@ function Greeting({ title, tagline, isDarkTheme }: GreetingProps) {
             px: 4,
           }}
         >
-          GitHub
+          <Translate id="homepage.hero.github">
+            GitHub
+          </Translate>
         </Button>
       </Box>
     </Box>

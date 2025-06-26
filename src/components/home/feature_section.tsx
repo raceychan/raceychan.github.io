@@ -7,6 +7,7 @@ import {
   Typography,
   Container,
 } from "@mui/material";
+import Translate from "@docusaurus/Translate";
 
 import RuleIcon from "@mui/icons-material/Rule";
 import SettingsEthernetIcon from "@mui/icons-material/SettingsEthernet";
@@ -20,58 +21,49 @@ import SmartToyIcon from "@mui/icons-material/SmartToy";
 
 const features = [
   {
-    title: "Param Parsing & Validation",
-    icon: <RuleIcon fontSize="large" color="primary" />, // import RuleIcon from @mui/icons-material
-    description:
-      "Automatically parse & validate request data from path, query, headers, and body with msgspec – 12x faster and 25x more memory efficient than Pydantic.",
+    title: <Translate id="homepage.features.paramParsing.title">Param Parsing & Validation</Translate>,
+    icon: <RuleIcon fontSize="large" color="primary" />,
+    description: <Translate id="homepage.features.paramParsing.description">Automatically parse & validate request data from path, query, headers, and body with msgspec – 12x faster and 25x more memory efficient than Pydantic.</Translate>,
   },
   {
-    title: "Powerful Dependency Injection",
-    icon: <SettingsEthernetIcon fontSize="large" color="primary" />, // import SettingsEthernetIcon
-    description:
-      "Inject dependencies based on type hints. Supports factories, async, scopes, and singletons – all lightning fast.",
+    title: <Translate id="homepage.features.dependencyInjection.title">Powerful Dependency Injection</Translate>,
+    icon: <SettingsEthernetIcon fontSize="large" color="primary" />,
+    description: <Translate id="homepage.features.dependencyInjection.description">Inject dependencies based on type hints. Supports factories, async, scopes, and singletons – all lightning fast.</Translate>,
   },
   {
-    title: "WebSocket",
-    icon: <WifiIcon fontSize="large" color="primary" />, // import WifiIcon
-    description:
-      "Handle WebSocket connections with clean, type-safe APIs. Easily test using the built-in WebSocket test client.",
+    title: <Translate id="homepage.features.webSocket.title">WebSocket</Translate>,
+    icon: <WifiIcon fontSize="large" color="primary" />,
+    description: <Translate id="homepage.features.webSocket.description">Handle WebSocket connections with clean, type-safe APIs. Easily test using the built-in WebSocket test client.</Translate>,
   },
   {
-    title: "OpenAPI & Error Docs",
-    icon: <DescriptionIcon fontSize="large" color="primary" />, // import DescriptionIcon
-    description:
-      "Auto-generate OpenAPI docs and problem details. Custom exceptions are turned into clear API responses.",
+    title: <Translate id="homepage.features.openAPI.title">OpenAPI & Error Docs</Translate>,
+    icon: <DescriptionIcon fontSize="large" color="primary" />,
+    description: <Translate id="homepage.features.openAPI.description">Auto-generate OpenAPI docs and problem details. Custom exceptions are turned into clear API responses.</Translate>,
   },
   {
-    title: "Authentication & Authorization",
-    icon: <LockPersonIcon fontSize="large" color="primary" />, // import LockPersonIcon
-    description:
-      "Built-in support for JWT and OAuth2. Auth objects are type-safe and serializable.",
+    title: <Translate id="homepage.features.auth.title">Authentication & Authorization</Translate>,
+    icon: <LockPersonIcon fontSize="large" color="primary" />,
+    description: <Translate id="homepage.features.auth.description">Built-in support for JWT and OAuth2. Auth objects are type-safe and serializable.</Translate>,
   },
   {
-    title: "Message System",
-    icon: <SendIcon fontSize="large" color="primary" />, // import SendIcon
-    description:
-      "Built-in event system to publish and handle events, both in-process and out-of-process, efficiently.",
+    title: <Translate id="homepage.features.messageSystem.title">Message System</Translate>,
+    icon: <SendIcon fontSize="large" color="primary" />,
+    description: <Translate id="homepage.features.messageSystem.description">Built-in event system to publish and handle events, both in-process and out-of-process, efficiently.</Translate>,
   },
   {
-    title: "Great Testability",
-    icon: <ScienceIcon fontSize="large" color="primary" />, // import ScienceIcon
-    description:
-      "Built-in test client for endpoints, routes, and middlewares – no extra setup required.",
+    title: <Translate id="homepage.features.testability.title">Great Testability</Translate>,
+    icon: <ScienceIcon fontSize="large" color="primary" />,
+    description: <Translate id="homepage.features.testability.description">Built-in test client for endpoints, routes, and middlewares – no extra setup required.</Translate>,
   },
   {
-    title: "Memory efficient",
-    icon: <MemoryIcon fontSize="large" color="primary" />, // import MemoryIcon
-    description:
-      "Optimized for minimal memory usage. GC overhead is reduced, making services more stable under load.",
+    title: <Translate id="homepage.features.memoryEfficient.title">Memory efficient</Translate>,
+    icon: <MemoryIcon fontSize="large" color="primary" />,
+    description: <Translate id="homepage.features.memoryEfficient.description">Optimized for minimal memory usage. GC overhead is reduced, making services more stable under load.</Translate>,
   },
   {
-    title: "AI-Ready",
-    icon: <SmartToyIcon fontSize="large" color="primary" />, // import SmartToyIcon
-    description:
-      "Designed with AI in mind. Built-in support for SSE, MCP, and remote handlers coming soon.",
+    title: <Translate id="homepage.features.aiReady.title">AI-Ready</Translate>,
+    icon: <SmartToyIcon fontSize="large" color="primary" />,
+    description: <Translate id="homepage.features.aiReady.description">Designed with AI in mind. Built-in support for SSE, MCP, and remote handlers coming soon.</Translate>,
   },
 ];
 
@@ -81,10 +73,14 @@ export default function FeatureSection() {
       <Container maxWidth="lg">
         <Box sx={{ maxWidth: 960, mx: "auto", textAlign: "center", mb: 6 }}>
           <Typography variant="h3" component="h2" gutterBottom>
-            Why Choose <strong>lihil</strong>?
+            <Translate id="homepage.features.title">
+              Why Choose lihil?
+            </Translate>
           </Typography>
           <Typography variant="h6" color="textSecondary">
-            A clean, powerful Python web framework built for modern apps.
+            <Translate id="homepage.features.subtitle">
+              A clean, powerful Python web framework built for modern apps.
+            </Translate>
           </Typography>
         </Box>
 

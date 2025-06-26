@@ -10,7 +10,7 @@ import { nordTheme } from './src/theme/Prism/NordTheme';
 
 
 const config: Config = {
-  title: 'Lihil Official',
+  title: 'Lihil',
   tagline: 'The Official website of python webframework lihil',
   favicon: 'img/favicon/favicon.ico',
 
@@ -66,7 +66,7 @@ const config: Config = {
         indexDocs: true,
         indexBlog: true,
         indexPages: true,
-        language: ['en'],
+        language: ['en', 'zh', 'ja', 'ru'],
       } satisfies PluginOptions,
     ],
 

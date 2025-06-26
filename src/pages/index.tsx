@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "@theme/Layout";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import Link from "@docusaurus/Link";
+import Translate from "@docusaurus/Translate";
 import {
   Box,
   Container,
@@ -28,9 +29,13 @@ function MetricsSection() {
               </Typography>
 
               <Typography variant="body1" color="text.secondary">
-                Faster than other ASGI frameworks, more for larger app.
+                <Translate id="homepage.metrics.performance.description">
+                  Faster than other ASGI frameworks, more for larger app.
+                </Translate>{" "}
                 <Link href="https://github.com/raceychan/lhl_bench">
-                  {"benchmarks"}
+                  <Translate id="homepage.metrics.performance.benchmarks">
+                    benchmarks
+                  </Translate>
                 </Link>
               </Typography>
             </Box>
@@ -41,7 +46,9 @@ function MetricsSection() {
                 100%
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                Test Covered and strictly typed
+                <Translate id="homepage.metrics.testCoverage.description">
+                  Test Covered and strictly typed
+                </Translate>
               </Typography>
             </Box>
           </Grid>
@@ -51,7 +58,9 @@ function MetricsSection() {
                 &gt; 45K
               </Typography>
               <Typography variant="body1" color="text.secondary">
-                RPS(per CPU thread)
+                <Translate id="homepage.metrics.rps.description">
+                  RPS(per CPU thread)
+                </Translate>
               </Typography>
             </Box>
           </Grid>
@@ -72,14 +81,18 @@ function InviteSection() {
     >
       <Container maxWidth="md">
         <Typography variant="h4" fontWeight="bold" gutterBottom>
-          Ready to build something amazing?
+          <Translate id="homepage.invite.title">
+            Ready to build something amazing?
+          </Translate>
         </Typography>
         <Typography
           variant="body1"
           sx={{ mb: 4, maxWidth: "600px", mx: "auto" }}
         >
-          Join the growing community of developers using Lihil to build fast,
-          robust, and scalable web applications.
+          <Translate id="homepage.invite.description">
+            Join the growing community of developers using Lihil to build fast,
+            robust, and scalable web applications.
+          </Translate>
         </Typography>
         <Button
           component={Link}
@@ -95,7 +108,9 @@ function InviteSection() {
             },
           }}
         >
-          Get Started Now
+          <Translate id="homepage.invite.button">
+            Get Started Now
+          </Translate>
         </Button>
       </Container>
     </Box>

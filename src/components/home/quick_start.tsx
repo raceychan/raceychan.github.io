@@ -6,6 +6,7 @@ import React from "react";
 import InstallSection from "@site/src/components/installation";
 import InventoryIcon from "@mui/icons-material/Inventory2";
 import Link from "@docusaurus/Link";
+import Translate from "@docusaurus/Translate";
 
 export default function QuickStartSection() {
   const quick_start_code = `
@@ -51,7 +52,9 @@ if __name__ == "__main__":
                   textTransform: "none",
                 }}
               >
-                Install
+                <Translate id="homepage.quickStart.install">
+                  Install
+                </Translate>
               </Button>
             </Box>
           </Grid>
@@ -63,7 +66,9 @@ if __name__ == "__main__":
               fontWeight="bold"
               gutterBottom
             >
-              Create a REST API in minutes
+              <Translate id="homepage.quickStart.title">
+                Create a REST API in minutes
+              </Translate>
             </Typography>
             <CodeBlock title={"app.py"}>{quick_start_code}</CodeBlock>
           </Grid>
