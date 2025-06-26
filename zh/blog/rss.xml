@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="rss.xsl"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
     <channel>
-        <title>Lihil Official Blog</title>
+        <title>Lihil Blog</title>
         <link>https://lihil.cc/zh/blog</link>
-        <description>Lihil Official Blog</description>
+        <description>Lihil Blog</description>
         <lastBuildDate>Fri, 20 Jun 2025 00:00:00 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
@@ -109,7 +109,8 @@
 <p><a href="https://www.cs.unc.edu/~stotts/GOF/hires/pat4ffso.htm" target="_blank" rel="noopener noreferrer">GOF flyweight pattern</a></p>
 <p><a href="https://github.com/python/cpython/blob/main/InternalDocs/string_interning.md" target="_blank" rel="noopener noreferrer">string interning from cpython github repo</a></p>
 <p><a href="https://github.com/gennad/Design-Patterns-in-Python/blob/master/flyweight.py" target="_blank" rel="noopener noreferrer">Random flyweight implementation in python I found online</a></p>
-<p>--- Thank list</p>
+<hr>
+<p>Thank list</p>
 <ul>
 <li>
 <p>Thanks u/commy2 for fixing the flyweight user code example</p>

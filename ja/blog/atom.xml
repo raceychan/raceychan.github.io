@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="atom.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://lihil.cc/ja/blog</id>
-    <title>Lihil Official Blog</title>
+    <title>Lihil Blog</title>
     <updated>2025-06-20T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://lihil.cc/ja/blog"/>
-    <subtitle>Lihil Official Blog</subtitle>
+    <subtitle>Lihil Blog</subtitle>
     <icon>https://lihil.cc/ja/img/favicon/favicon.ico</icon>
     <entry>
         <title type="html"><![CDATA[Design Patterns You Should Unlearn in Python-Part2]]></title>
@@ -108,7 +108,8 @@
 <p><a href="https://www.cs.unc.edu/~stotts/GOF/hires/pat4ffso.htm" target="_blank" rel="noopener noreferrer">GOF flyweight pattern</a></p>
 <p><a href="https://github.com/python/cpython/blob/main/InternalDocs/string_interning.md" target="_blank" rel="noopener noreferrer">string interning from cpython github repo</a></p>
 <p><a href="https://github.com/gennad/Design-Patterns-in-Python/blob/master/flyweight.py" target="_blank" rel="noopener noreferrer">Random flyweight implementation in python I found online</a></p>
-<p>--- Thank list</p>
+<hr>
+<p>Thank list</p>
 <ul>
 <li>
 <p>Thanks u/commy2 for fixing the flyweight user code example</p>
