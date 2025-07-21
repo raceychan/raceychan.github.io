@@ -49,7 +49,7 @@ export default function CommunitySection() {
               <Button
                 component={Link}
                 startIcon={<ForumIcon />}
-                to="https://discordapp.com/invite/lihil"
+                to="https://discord.gg/3JQxSKnZ"
                 variant="outlined"
                 sx={{
                   borderColor: "#0066cc",

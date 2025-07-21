@@ -182,7 +182,7 @@ const config: Config = {
             },
             {
               label: 'Discord',
-              href: 'https://discordapp.com/invite/lihil',
+              href: '3JQxSKnZ',
             },
           ],
         },
