@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkblogs=self.webpackChunkblogs||[]).push([[7484],{98650:a=>{a.exports=JSON.parse('{"authors":[{"name":"raceychan","title":"author of lihil, a developer.","url":"https://github.com/raceychan","page":{"permalink":"/ja/blog/authors/raceychan"},"imageURL":"https://github.com/raceychan.png","key":"raceychan","count":5}]}')}}]);
