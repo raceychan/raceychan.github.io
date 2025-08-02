@@ -45,19 +45,18 @@ const ads: AdItem[] = [
 
 const RollingAd: React.FC = () => {
   const [currentAdIndex, setCurrentAdIndex] = useState<number>(0);
-  const [isVisible, setIsVisible] = useState<boolean>(true);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setIsVisible(false);
-      setTimeout(() => {
-        setCurrentAdIndex((prevIndex) => (prevIndex + 1) % ads.length);
-        setIsVisible(true);
-      }, 300); // fade out time
-    }, 4000); // change every 4 seconds
+    const handleAnimationEnd = () => {
+      setCurrentAdIndex((prevIndex) => (prevIndex + 1) % ads.length);
+    };
 
-    return () => clearInterval(interval);
-  }, []);
+    const textElement = document.querySelector(`.${styles.adText}`);
+    if (textElement) {
+      textElement.addEventListener('animationiteration', handleAnimationEnd);
+      return () => textElement.removeEventListener('animationiteration', handleAnimationEnd);
+    }
+  }, [currentAdIndex]);
 
   const currentAd = ads[currentAdIndex];
 
@@ -71,7 +70,7 @@ const RollingAd: React.FC = () => {
     if (currentAd.type === 'text') {
       return (
         <span
-          className={`${styles.adText} ${isVisible ? styles.visible : styles.hidden} ${currentAd.link ? styles.clickable : styles.nonClickable
+          className={`${styles.adText} ${currentAd.link ? styles.clickable : styles.nonClickable
             }`}
           onClick={currentAd.link ? handleAdClick : undefined}
           role={currentAd.link ? "button" : undefined}
@@ -93,7 +92,7 @@ const RollingAd: React.FC = () => {
           alt={currentAd.alt}
           width={currentAd.width}
           height={currentAd.height}
-          className={`${styles.adImage} ${isVisible ? styles.visible : styles.hidden} ${currentAd.link ? styles.clickable : styles.nonClickable
+          className={`${styles.adImage} ${currentAd.link ? styles.clickable : styles.nonClickable
             }`}
           onClick={currentAd.link ? handleAdClick : undefined}
           role={currentAd.link ? "button" : undefined}

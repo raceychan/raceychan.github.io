@@ -33,19 +33,19 @@ export default function BlogLayout(props: Props): ReactNode {
             marginTop: '2rem',
           }} 
           className="mobile-subscription">
-            <SubscriptionWidget isMobile={true} />
+            <SubscriptionWidget isMobile={true} isFixed={false} />
           </div>
         </main>
         {toc ? (
           <div className="col col--2" style={{ fontSize: '0.875rem', position: 'relative' }}>
             <WriteButton />
+            <SubscriptionWidget isFixed={true} />
             {toc}
-            <SubscriptionWidget />
           </div>
         ) : (
           <div className="col col--3" style={{ position: 'relative' }}>
             <WriteButton />
-            <SubscriptionWidget />
+            <SubscriptionWidget isFixed={true} />
           </div>
         )}
       </div>
