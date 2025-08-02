@@ -5,6 +5,7 @@ authors: [raceychan]
 tags: [python, design patterns, oop]
 toc_min_heading_level: 2
 toc_max_heading_level: 5
+draft: true
 ---
 
 # Most Design Patterns Are Just Dependency Injection in Disguise  
