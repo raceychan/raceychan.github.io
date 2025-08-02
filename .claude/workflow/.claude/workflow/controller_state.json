@@ -1,0 +1,8 @@
+{
+  "fsm_state_file": ".claude/workflow/state.json",
+  "controller_version": "1.0.0",
+  "available_agents": [
+    "technical-writer",
+    "blog-editor"
+  ]
+}

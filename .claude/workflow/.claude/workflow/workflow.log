@@ -1,0 +1,103 @@
+2025-08-03 03:23:37,158 - ERROR - Failed to load state: [Errno 2] No such file or directory: '.claude/workflow/state.json'
+2025-08-03 03:23:43,451 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,451 - INFO - Transition: writing -> writer_completes_draft -> reviewing
+2025-08-03 03:23:43,451 - INFO - Transition: reviewing -> editor_provides_feedback -> pending_user
+2025-08-03 03:23:43,451 - INFO - Transition: pending_user -> user_approves_changes -> revising
+2025-08-03 03:23:43,451 - INFO - Transition: revising -> writer_completes_revisions -> pending_user
+2025-08-03 03:23:43,451 - INFO - Transition: pending_user -> user_rejects_changes -> complete
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - ERROR - Invalid transition: idle -> user_approves_changes
+2025-08-03 03:23:43,452 - ERROR - Invalid transition: idle -> user_approves_changes
+2025-08-03 03:23:43,452 - ERROR - Invalid transition: idle -> user_approves_changes
+2025-08-03 03:23:43,452 - ERROR - Invalid transition: idle -> user_approves_changes
+2025-08-03 03:23:43,452 - ERROR - Invalid transition: idle -> user_approves_changes
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: idle -> user_request_blog -> writing
+2025-08-03 03:23:43,452 - INFO - Transition: writing -> writer_completes_draft -> reviewing
+2025-08-03 03:23:43,452 - INFO - Transition: writing -> writer_completes_draft -> reviewing
+2025-08-03 03:23:43,452 - INFO - Transition: writing -> writer_completes_draft -> reviewing
+2025-08-03 03:23:43,452 - INFO - Transition: writing -> writer_completes_draft -> reviewing
+2025-08-03 03:23:43,452 - INFO - Transition: writing -> writer_completes_draft -> reviewing
+2025-08-03 03:23:43,452 - INFO - Transition: writing -> writer_completes_draft -> reviewing
+2025-08-03 03:23:43,452 - INFO - Transition: reviewing -> editor_provides_feedback -> pending_user
+2025-08-03 03:23:43,452 - INFO - Transition: reviewing -> editor_provides_feedback -> pending_user
+2025-08-03 03:23:43,452 - INFO - Transition: reviewing -> editor_provides_feedback -> pending_user
+2025-08-03 03:23:43,452 - INFO - Transition: reviewing -> editor_provides_feedback -> pending_user
+2025-08-03 03:23:43,452 - INFO - Transition: reviewing -> editor_provides_feedback -> pending_user
+2025-08-03 03:23:43,452 - INFO - Transition: reviewing -> editor_provides_feedback -> pending_user
+2025-08-03 03:23:43,453 - INFO - Transition: pending_user -> user_approves_changes -> revising
+2025-08-03 03:23:43,453 - INFO - Transition: pending_user -> user_approves_changes -> revising
+2025-08-03 03:23:43,453 - INFO - Transition: pending_user -> user_approves_changes -> revising
+2025-08-03 03:23:43,453 - INFO - Transition: pending_user -> user_approves_changes -> revising
+2025-08-03 03:23:43,453 - INFO - Transition: pending_user -> user_approves_changes -> revising
+2025-08-03 03:23:43,453 - INFO - Transition: pending_user -> user_approves_changes -> revising
+2025-08-03 03:23:43,453 - INFO - Transition: revising -> writer_completes_revisions -> pending_user
+2025-08-03 03:23:43,453 - INFO - Transition: revising -> writer_completes_revisions -> pending_user
+2025-08-03 03:23:43,453 - INFO - Transition: revising -> writer_completes_revisions -> pending_user
+2025-08-03 03:23:43,453 - INFO - Transition: revising -> writer_completes_revisions -> pending_user
+2025-08-03 03:23:43,453 - INFO - Transition: revising -> writer_completes_revisions -> pending_user
+2025-08-03 03:23:43,453 - INFO - Transition: revising -> writer_completes_revisions -> pending_user
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: pending_user -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: pending_user -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: pending_user -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: pending_user -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: pending_user -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: pending_user -> editor_provides_feedback
+2025-08-03 03:23:43,453 - INFO - Transition: pending_user -> user_approves_changes -> revising
+2025-08-03 03:23:43,453 - INFO - Transition: pending_user -> user_approves_changes -> revising
+2025-08-03 03:23:43,453 - INFO - Transition: pending_user -> user_approves_changes -> revising
+2025-08-03 03:23:43,453 - INFO - Transition: pending_user -> user_approves_changes -> revising
+2025-08-03 03:23:43,453 - INFO - Transition: pending_user -> user_approves_changes -> revising
+2025-08-03 03:23:43,453 - INFO - Transition: pending_user -> user_approves_changes -> revising
+2025-08-03 03:23:43,453 - WARNING - Hit iteration limit: 2
+2025-08-03 03:23:43,453 - WARNING - Hit iteration limit: 2
+2025-08-03 03:23:43,453 - WARNING - Hit iteration limit: 2
+2025-08-03 03:23:43,453 - WARNING - Hit iteration limit: 2
+2025-08-03 03:23:43,453 - WARNING - Hit iteration limit: 2
+2025-08-03 03:23:43,453 - WARNING - Hit iteration limit: 2
+2025-08-03 03:23:43,453 - INFO - Transition: revising -> writer_completes_revisions -> complete
+2025-08-03 03:23:43,453 - INFO - Transition: revising -> writer_completes_revisions -> complete
+2025-08-03 03:23:43,453 - INFO - Transition: revising -> writer_completes_revisions -> complete
+2025-08-03 03:23:43,453 - INFO - Transition: revising -> writer_completes_revisions -> complete
+2025-08-03 03:23:43,453 - INFO - Transition: revising -> writer_completes_revisions -> complete
+2025-08-03 03:23:43,453 - INFO - Transition: revising -> writer_completes_revisions -> complete
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> user_approves_changes
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> user_approves_changes
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> user_approves_changes
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> user_approves_changes
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> user_approves_changes
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> user_approves_changes
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> editor_provides_feedback
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> user_approves_changes
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> user_approves_changes
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> user_approves_changes
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> user_approves_changes
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> user_approves_changes
+2025-08-03 03:23:43,453 - ERROR - Invalid transition: complete -> user_approves_changes
+2025-08-03 03:34:35,007 - ERROR - Invalid transition: writing -> reset_workflow
+2025-08-03 03:34:45,900 - INFO - Transition: writing -> writer_completes_draft -> reviewing
+2025-08-03 03:34:48,927 - ERROR - Invalid transition: writing -> editor_provides_feedback
