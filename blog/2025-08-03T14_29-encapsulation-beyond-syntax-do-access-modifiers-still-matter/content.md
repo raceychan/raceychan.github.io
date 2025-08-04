@@ -103,11 +103,6 @@ Public members are the official interface of your class. Anyone can read or modi
 
 That’s especially true with dataclasses.
 
-Why? Because dataclass is built for one very specific job: representing simple, stable data. The fields in a dataclass are just values, python builtin types, or other dataclasses, not resources, not services, not open sockets.  There's no side effect when you read or write to them. That simplicity makes it safe (and sensible) for those fields to be public by default.
-
-Also, dataclasses tend to be defined once and left alone. They describe data structures, not behavior. You’re not changing the internal logic of a User object every other sprint. So it makes sense to let other parts of your code access the fields directly: fewer barriers, less ceremony.
-
-
 ```python
 from dataclasses import dataclass
 
@@ -116,6 +111,12 @@ class User:
     email: str
     is_active: bool
 ```
+> here every member of `User` is made public
+
+Why? Because dataclass is built for one very specific job: representing data. The fields in a dataclass are just values(python builtin types, or other dataclasses), not resources, not services, not open sockets.  There's no side effect when you read or write to them. That simplicity makes it safe (and sensible) for those fields to be public by default.
+
+In practice, dataclasses are usually fully exposed (as value objects). The use case where you’d expose some fields but guard others, the kind that might warrant access modifiers, is not what dataclasses are meant for. That kind of partial encapsulation calls for a regular class, not a dataclass.
+
 
 #### Protected
 
@@ -187,7 +188,13 @@ This isn’t about locking things down. It’s about discouraging accidents, esp
 
 So yes, it’s obscurity, not security, and it’s doing exactly what it was designed to do.
 
-## The Open-Closed Principle
+* Protected vs Private
+
+    Many people get confused by the difference between protected vs private, some would call both of them "private".
+
+    the difference is indeed subtle, it is mainly for who are you hiding from? protected hiding information from outside of the class(where subclasses are still considered insider), where as private hiding information from everyone execept the class itself.
+
+## The "Closed" part in Open-Closed Principle
 
 The Open-Closed Principle (OCP) says that software entities should be open for extension, but closed for modification. It sounds fancy, but here's the practical translation: you should be able to add new behavior without rewriting old code.
 
@@ -234,7 +241,6 @@ That’s what “closed for modification” is really about: being able to chang
 
 Let’s rewrite that UserService example ,but this time, with some actual boundaries.
 
-
 ```python
 class UserRepository:
     def add_user(self, user: UserProfile) -> None:
@@ -261,17 +267,15 @@ This pattern maintains a clean separation between what the outside world should 
 
 ## Why Access Modifiers Become Less Popular
 
-
 Access modifiers continue to serve an important role in defining clear boundaries within code, but their practical usage has shifted alongside modern software design practices. As the industry has moved toward modular architectures and composition-based design, the need for strict access control has diminished in many scenarios.
 
 ###  Composition Over Inheritance
 
-Historically, access modifiers were often used to safeguard internals from misuse by subclasses. But as composition has become the preferred alternative to inheritance, particularly in languages like Python and Go, this concern has become less relevant. Go, for example, lacks inheritance entirely and does not include traditional access modifiers beyond public/private naming conventions. Yet it remains highly capable of building well-encapsulated, maintainable systems.
+Historically, access modifiers(private, specifically) were often used to safeguard internals from misuse by subclasses. But as composition has become the preferred alternative to inheritance, particularly in languages like Rust and Go, this concern has become less relevant. Go, for example, lacks inheritance entirely and does not include traditional access modifiers beyond public/private naming conventions. Yet it remains highly capable of building well-encapsulated, maintainable systems.
 
 ### Separation of Data and Behavior
 
-Another factor is the growing tendency to decouple data structures from business logic. In Python, for instance, dataclass objects are typically used to represent immutable data without embedded behavior. Since they don’t carry logic that needs to be guarded, fine-grained access control becomes less critical. Instead, we rely on conventions and well-defined interfaces to guide correct usage.
-
+Another factor is the growing tendency to decouple data structures from business logic. In Python, for instance, dataclass objects are typically used to represent data without complex behavior. Since they don’t carry logic that needs to be guarded, fine-grained access control becomes less critical. Instead, we rely on conventions and well-defined interfaces to guide correct usage.
 
 ## Encapsulation beyond syntax
 
@@ -300,13 +304,11 @@ export class TokenService {}       // public
 class InternalCache {}             // not exported = private to module
 ```
 
-
 These languages all use different syntactic mechanisms, but they’re solving the same problem: hide what’s internal, and make what’s public explicit.
 
 Whether it's a leading underscore in Python, capitalization in Go, or an export keyword in TypeScript, you're doing the same thing: protecting the shape of your interface, and making your codebase safer to evolve.
 
 This is why access modifiers like protected and private are valuable, but not essential. Encapsulation is a mindset, not a keyword.
-
 
 ## Encapsulation beyond code
 
@@ -320,7 +322,7 @@ This is encapsulation at the system level:
 - Internal components like DAOs, caches, feature flags, or job queues are entirely hidden.
 - Breaking changes can be avoided because external consumers never depend on internal details.
 
-A good example would be an **API Gateway**. To the caller, it looks like a single entry point, simple, stable, and flat. But behind the scenes, the gateway might route the request to multiple services, apply authentication, logging, retries, or circuit-breaking logic. None of that is exposed. The caller doesn't know, and doesn't need to.
+A good example would be an **API Gateway**. To the caller, it stays transparent. But behind the scenes, the gateway might route the request to multiple services, apply authentication, logging, retries, or circuit-breaking logic. None of that is exposed. The caller doesn't know, and doesn't need to.
 
 It’s the same idea as `private` or `protected`, just scaled out over a network.
 
