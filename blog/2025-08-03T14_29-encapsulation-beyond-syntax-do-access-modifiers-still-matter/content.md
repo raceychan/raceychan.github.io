@@ -116,9 +116,9 @@ Encapsulation reduces that cognitive load. It tells you what you can change free
 
 So why hasn’t this been a bigger issue in Python until now?
 
-Because for a long time, Python wasn’t used to build large systems with lots of contributors. It was a scripting language,  great for small utilities, automation, scientific experiments, or one-off data analyses. In those cases, it didn’t matter if you exposed your internals. You were often the only one touching the code anyway.
+For a long time, many people use Python for small-scale projects, things like automation scripts, scientific prototypes, academic experiments, or exploratory data work. In those contexts, it didn’t really matter if internals were exposed, because the same person was writing, reading, and maintaining the entire codebase.
 
-But that’s changed. Python is now powering **production-grade systems**, especially in AI, web services, and data infrastructure. With more teams, more contributors, and more complexity, the lack of boundaries starts to hurt.
+However, over the past decade, Python has steadily grown into a first-class language for building AI, data heavy systems. The rise of web frameworks like Django and FastAPI, the explosion of machine learning libraries like TensorFlow and PyTorch, and the growth of async tooling and cloud-native workflows have all made Python a serious player in enterprise software development.
 
 Also, before Python 3.6, we simply didn’t have the tools to enforce encapsulation effectively. Without type hints and the ecosystem around them, it was hard to even notice violations of protected members, let alone prevent them. Now, with tools like pyright, mypy, and IDEs like VSCode, we can catch those violations early.
 
@@ -318,7 +318,7 @@ Encapsulation isn’t about following rules,  it’s about creating **boundaries
 
 In Python, we don’t have enforced access modifiers,  and that’s fine. We have conventions, type checkers, and design discipline. What matters is that you _use them deliberately_.
 
-Don’t add encapsulation for its own sake. But don’t dismiss it just because you’re writing Python. If anything, Python’s flexibility makes it _more_ important to clearly mark your boundaries.
+Don’t add encapsulation for its it-tooown sake. But don’t dismiss it just because you’re writing Python. If anything, Python’s flexibility makes it _more_ important to clearly mark your boundaries.
 
 Start by separating your data classes from your service classes. Use underscores to guide intention. Avoid meaningless setters. Prefer real methods with real names. And think in terms of public interfaces,  whether you're building a class or an entire API.
 
