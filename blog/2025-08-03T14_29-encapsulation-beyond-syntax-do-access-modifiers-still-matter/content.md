@@ -39,7 +39,7 @@ Here, `protected` means no one outside the class(and its subclasses) can touch `
 
 > `protected` is less strict in java, other classes **in the same package** can access protected member as well.
 
-Python, on the other hand, doesn’t have strict access modifiers. Instead, it relies on naming conventions:
+Python takes a different approach, instead of forcing strict access modifiers at interpreter level, it relies on naming conventions:
 
 ```python
 class UserService:
