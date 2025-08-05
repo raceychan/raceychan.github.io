@@ -1,6 +1,6 @@
 ---
-slug: encapsulation-beyond-syntax-do-access-modifiers-still-matter
-title: "Encapsulation Beyond Syntax: Do Access Modifiers Still Matter?"
+slug: encapsulation-isnt-javas-fault-and-python-needs-it-too
+title: "Encapsulation Isn’t Java’s Fault (And Python Needs It Too)"
 authors: [raceychan]
 tags: [python, oop]
 ---
