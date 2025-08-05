@@ -7,222 +7,95 @@ tags: [python, oop]
 
 ![gears](https://unsplash.com/photos/JBZvYieOmCQ/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8N3x8bWVjaGFuaWNzfGVufDB8fHx8MTc1NDI0NjQ1OXww&force=true&w=1920)
 
-Access modifiers are ubiquitous across programming languages, yet they've become increasingly controversial in modern development. Through my experience with software development and technical discussions, I've observed a troubling pattern: many developers either treat access modifiers as meaningless ceremony or dismiss them entirely as outdated relics.
+Encapsulation in Python is one of those topics that often gets brushed off,  either as unnecessary boilerplate or as baggage from statically typed languages like Java and C++. In many Python teams, it’s treated as optional, or worse, irrelevant.
 
-This dismissive attitude stems from a fundamental misunderstanding of their purpose. Access modifiers aren't just syntactic decorations: they're essential tools for implementing encapsulation, one of object-oriented programming's core principles. When used properly, they significantly enhance code maintainability and enable effective team collaboration. Conversely, their absence or misuse leads to fragile, tightly coupled systems that become maintenance nightmares.
+But this casual attitude has a cost.
 
-Consider the typical enterprise codebase that has grown unwieldy over time. While poor encapsulation isn't the only culprit, it's often a primary factor in creating systems where simple changes ripple unpredictably throughout the application. This problem is particularly evident in Python projects, where the language's flexibility can mask structural issues until they become critical.
+As Python takes on a bigger role in enterprise software, especially with the rise of AI, more teams are building larger, more complex systems together. Without proper encapsulation, internal changes in one part of the codebase can leak out and break things for everyone else. It becomes harder to reason about code boundaries, harder to collaborate, and harder to move fast without stepping on each other’s toes.
 
-Rather than contributing to the abundance of tutorials on *how* to use access modifiers, this article explores the deeper question: *why* should we use them? We'll examine their role in creating maintainable software from multiple perspectives, from individual classes to entire system architectures.
+In this post, we’ll talk about **why encapsulation still matters in Python**, why it’s becoming increasingly important, and how to approach it in a way that actually fits the language and its philosophy.
 
+And just in case you’re wondering: **no, this won’t be one of those "here’s how to mimic Java’s access modifiers in Python" posts.** We're going deeper than that.
 
 <!--truncate-->
 
-## What Are Access Modifiers?
+## **Access Modifiers: What They Are, and What They Look Like**
 
-Access modifiers are those little gatekeepers in your code that decide who gets to touch what. They're language constructs that control the visibility of class members: properties, methods, inner secrets, and they’re a cornerstone of something much bigger: encapsulation.
+When people think of encapsulation, they often jump straight to **access modifiers**, and it’s easy to see why. In many languages, access modifiers are the main way to draw boundaries between internal and external code.
 
-Encapsulation is about drawing clean lines between what your code offers to the outside world, and what it hides for internal use only. And access modifiers? They’re how we draw those lines.
+In Java, for example, you have explicit keywords:
+```java
 
-Think of them as your API’s “do not enter” signs, or lack thereof.
+public class UserService {
+    protected UserRepository repository;
 
-
-### Common Access Modifiers Across Languages
-
-| Language | Public | Protected | Private |
-|----------|---------|-----------|---------|
-| C++ | `public:` | `protected:` | `private:` |
-| Python | `name` | `_name` | `__name` |
-
-**C++:**
-```cpp
-  class UserRepository {
-  public:
-      UserRepository(std::shared_ptr<DatabaseEngine> engine) : _engine(engine) {}
-
-      bool add_user(const UserProfile& user) {
-          _validate_email(user.email);
-          // do insert query here
-          return true;
-      }
-
-  protected:
-      std::shared_ptr<DatabaseEngine> _engine;  // Protected member (underscore prefix)
-
-      void _validate_email(const std::string& email) {  // Protected method (underscore prefix)
-          if (email.find('@') == std::string::npos) {
-              throw std::invalid_argument("Not a valid email");
-          }
-      }
-  };
+    public void register(User user) {
+        // ...
+    }
+}
 ```
 
-**Python:**
-```python
-from sqlalchemy.ext.asyncio import AsyncEngine
-from typing import Optional
-from .model import UserProfile
+Here, `protected` means no one outside the class(and its subclasses) can touch `repository`, and `public` means anyone can call `register`.
 
-class UserRepository:
-    def __init__(self, engine: AsyncEngine):
-        self._engine = engine           # Protected
-    
-    def add_user(self, user: UserProfile) -> bool:          # Public
-        self._validate_email(user.email)
+> `protected` is less strict in java, other classes **in the same package** can access protected member as well.
 
-        stmt = # insert user query ...
-        async with self._engine.begin() as conn:
-            await self.conn.execute(stmt)
-    
-    def _validate_email(self, email: str):
-        if not "@" in email:
-            raise ValueError("Not a valid email")
-```
-
-### Python's Convention-Based Approach
-
-You might notice that, there is no `protected`, `public` keyword like our cpp example and that's right,
-unlike C++ or Java, Python doesn’t really enforce access control. It just politely asks you not to touch certain things and hopes you’re mature enough to listen. This approach, known as “consenting adults”, relies on naming conventions rather than hard rules.
-
-So in Python:
-
-`name` = public
-
-`_name` = protected (but really just a hint)
-
-`__name` = private (with name mangling)
-
-
-### How it works
-
-Let’s walk through each level of access with proper Python examples.
-
-#### Public
-
-Public members are the official interface of your class. Anyone can read or modify them. 
-
-That’s especially true with dataclasses.
+Python, on the other hand, doesn’t have strict access modifiers. Instead, it relies on naming conventions:
 
 ```python
-from dataclasses import dataclass
-
-@dataclass
-class User:
-    email: str
-    is_active: bool
-```
-> here every member of `User` is made public
-
-Why? Because dataclass is built for one very specific job: representing data. The fields in a dataclass are just values(python builtin types, or other dataclasses), not resources, not services, not open sockets.  There's no side effect when you read or write to them. That simplicity makes it safe (and sensible) for those fields to be public by default.
-
-In practice, dataclasses are usually fully exposed (as value objects). The use case where you’d expose some fields but guard others, the kind that might warrant access modifiers, is not what dataclasses are meant for. That kind of partial encapsulation calls for a regular class, not a dataclass.
-
-
-#### Protected
-
-Protected members are for “internal use” by the class itself and its subclasses. In Python, a single underscore (_name) signals this. It’s not enforced by the interpreter, but it’s a strong hint: “this is not part of the public API.”
-
-```python
-class UserService:
-    def __init__(self, user_repo: UserRepository):
-        self._user_repo = user_repo
-```
-
-Can another module access `_user_repo`? Yes. Should it? Probably not.
-
-Python won’t slap your wrist for accessing `_user_repo`, but if you later break your app by depending on internals you weren’t supposed to touch, well, that’s on you.
-
-Wouldn't it be nice if someone warned you when you accidentally stepped over the line?
-
-That’s where Python’s type-checking ecosystem comes in. Before Python 3.6, this kind of static checking wasn’t realistic. But now, with tools like pyright or mypy, you can actually get warnings when you misuse protected members.
-
-To enable this, add the following to your pyproject.toml:
-
-```toml
-[tool.pyright]
-exclude = ["tests"]
-include = ["lihil/*.py"]
-python_version = "3.10"
-typeCheckingMode = "strict"
-```
-
-
-If you're using an editor like VSCode, it’ll now helpfully highlight any inappropriate access to protected fields: either with a squiggly underline or a firm tooltip telling you to back off.
-
-
-Here is an example of how vscode would complain if you access protected attribute from outside of the class
-
-![protected attr](./protected_attr.png)
-
-It’s not bulletproof, but it’s enough to catch most accidental misuse, and that alone can save you a debugging session or three.
-
-#### Private
-
-Double underscore time. When you prefix a name with __, Python uses name mangling to make it harder to access from outside the class.
-
-```python
-class TokenManager:
-    def __init__(self):
-        self.__secret_key = "super-secret"
-
-    def validate(self, token: str) -> bool:
-        return token.endswith(self.__secret_key)
-```
-
-
-Now if you try to access `manager.__secret_key`c, you’ll get an AttributeError. Looks private, right?
-
-But try just a little harder:
-```python
->>> manager._TokenManager__secret_key
->>> "super-secret"
-```
-
-That’s all name mangling is, nothing fancy, no real security. It’s basically just renaming a key in a dictionary:
-
-```python
-cls_dict[attr_name] = f"_{cls.__name__}{attr_name}"
-```
-
-This isn’t about locking things down. It’s about discouraging accidents, especially the kind caused by autocomplete or careless refactors. It prevents casual misuse, not determined inspection.
-
-So yes, it’s obscurity, not security, and it’s doing exactly what it was designed to do.
-
-* Protected vs Private
-
-    Many people get confused by the difference between protected vs private, some would call both of them "private".
-
-    the difference is indeed subtle, it is mainly for who are you hiding from? protected hiding information from outside of the class(where subclasses are still considered insider), where as private hiding information from everyone execept the class itself.
-
-## The "Closed" part in Open-Closed Principle
-
-The Open-Closed Principle (OCP) says that software entities should be open for extension, but closed for modification. It sounds fancy, but here's the practical translation: you should be able to add new behavior without rewriting old code.
-
-That second part, closed for modification, is where access modifiers come in. It's about protecting existing code from unintentional breakage. If your module exposes all of its internals to the outside world, then any change, even a harmless-looking one, risks breaking someone else’s code.
-
-Let’s walk through a real-world-ish example.
-
-### The Problem Without Access Modifiers
-
-Suppose we’re building a UserService that provides the read/writer of `UserProfile` to other world. 
-
-
-```python
-class UserRepository:
-    def add_user(self, user: UserProfile) -> None:
-        ...
-
 class UserService:
     def __init__(self, repo: UserRepository):
-        self.repository = repo
+        self._repository = repo
 
-    def register(self, email: str, name: str) -> UserProfile:
-        user = UserProfile(email=email, name=name)
-        self.repository.add_user(user)
-        return user
+    def register(self, user: UserInfo):
+        ...
 ```
 
-Everything works fine... until another service comes along and decides it’s faster to just skip UserService entirely:
+In this example, the leading underscore in `_repository` is Python’s way of saying “hey, this is internal,  don’t mess with it.” But it’s just a convention. You _can_ still access it from the outside. If your type checker is configured correctly, it might warn you, but nothing at the interpreter level will stop you. No exceptions will be raised.
+
+
+### **Why Do We Need Encapsulation?**
+
+The primary reason is simple: **to draw a line between what's internal and what's public**. That line lets other developers,  or even future-you,  know what’s safe to rely on and what isn’t. When a method or attribute is marked internal (e.g. with a leading underscore), you're saying: _this is part of the implementation, not the interface._
+
+Why does that matter? Because once other parts of the codebase,  or worse, external systems,  start depending on your internal details, **you lose the freedom to change them**. If you need to refactor, simplify, or remove something, you risk breaking unknown callers.
+
+This is not a new problem. Software engineering has wrestled with this for decades, and the solution has been expressed through principles like the **Open/Closed Principle (OCP)**:
+
+> _Software entities should be open for extension but closed for modification._
+
+Encapsulation supports this by letting you change how things work internally, **without changing the parts others depend on**. When we design a class with a clear public interface and hidden internals, we make it easier to evolve the code over time without introducing regressions.
+
+When we _do_ need to expose something, we can still preserve encapsulation using tools like `@property`. This lets us provide a stable public interface, while keeping the flexibility to change how things work behind the scenes,  coercing types, adding guards, lazy-loading data, etc.
+
+In general, when a class represents business logic, it’s often a good idea to **default to making members protected** and **only expose public methods that represent meaningful, validated operations**.
+
+Take this example:
+
+```python
+@dataclass
+class UserInfo:
+    email: str
+    name: str
+    role: str = "user"
+
+class UserService:
+    def __init__(self, user_repo: UserRepository):
+        self._repo = user_repo
+
+    def register(self, user: UserInfo):
+        self._validate_email(user.email)
+        self._validate_role(user.role)
+        self._repo.add_user(user)
+
+    def _validate_email(self, email: str): ...
+    def _validate_role(self, role: str): ...
+```
+
+Here, we don't want other services to call `_validate_email` or `_repo.add_user()` directly. Those are internal details that can change. What we _do_ want them to use is the stable `register()` interface.
+
+### **What Happens Without It?**
+
+Now let’s imagine we didn’t bother with any of this,  we just exposed everything.
 
 ```python
 # Somewhere else in the codebase
@@ -231,84 +104,191 @@ user = UserProfile(email="a@example.com", name="Alice")
 service.repository.add_user(user)  # Uh-oh
 ```
 
-That might seem harmless, but now your internal behavior is part of someone else's dependency. You can't refactor add_user() without checking who else might be calling it. You can’t change validation rules, logging, or caching logic in register() because someone has bypassed it completely.
+Other parts of the system might start calling `user_repo.add_user()` directly, bypassing all the validation logic in `UserService.register()`. That could lead to subtle, inconsistent behavior, or worse,  bad data getting into your system.
 
-So now you're stuck. You want to improve your implementation, but you can't, because you're afraid to break downstream code that was never supposed to depend on this stuff in the first place.
+Or maybe someone starts reusing `_validate_email()` from somewhere else. But since it was never meant to be used externally, one day we remove it during a refactor,  and now their code breaks. Whose fault is it? Technically not yours, but it sure won't feel that way when you’re on the hook for fixing it.
 
-That’s what “closed for modification” is really about: being able to change your code without changing its consumers. And that only works if you give them a stable, public interface, and hide the rest.
+When everything is public, **every change becomes dangerous**. Before touching anything, you have to check who’s using it. Modify a method? Now you’re spelunking through half the codebase, updating every dependent. It’s a maintenance nightmare.
 
-### The Solution With Proper Encapsulation
+Encapsulation reduces that cognitive load. It tells you what you can change freely and what you need to be careful with. It gives your code **safe zones**.
 
-Let’s rewrite that UserService example ,but this time, with some actual boundaries.
+### **Why We Didn’t Need It as Much Before**
+
+So why hasn’t this been a bigger issue in Python until now?
+
+Because for a long time, Python wasn’t used to build large systems with lots of contributors. It was a scripting language,  great for small utilities, automation, scientific experiments, or one-off data analyses. In those cases, it didn’t matter if you exposed your internals. You were often the only one touching the code anyway.
+
+But that’s changed. Python is now powering **production-grade systems**, especially in AI, web services, and data infrastructure. With more teams, more contributors, and more complexity, the lack of boundaries starts to hurt.
+
+Also, before Python 3.6, we simply didn’t have the tools to enforce encapsulation effectively. Without type hints and the ecosystem around them, it was hard to even notice violations of protected members, let alone prevent them. Now, with tools like pyright, mypy, and IDEs like VSCode, we can catch those violations early.
+
+![procted_attr](./protected_attr.png)
+
+- Example vscode config from lihil
+
+    ```toml
+    [tool.pyright]
+    exclude = ["tests"]
+    include = ["lihil/*.py"]
+    python_version = "3.10"
+    typeCheckingMode = "strict"
+    ```
+
+## when to use access modifier and when not to
+
+Not all classes are created equal. Their purpose affects how much encapsulation you really need,  and what kind.
+
+Let’s take two common categories: **data classes** and **service classes**.
+
+Data classes are meant to carry state. But sometimes we start stuffing behavior and dependencies into them,  and that’s when things get messy. Consider this example:
 
 ```python
-class UserRepository:
-    def add_user(self, user: UserProfile) -> None:
+@dataclass
+class UserManager:
+    users: list[UserInfo]
+    engine: AsyncEngine  # external dependency
+
+    def add_user(self, user_info: UserInfo):
         ...
-
-    def find_by_email(self, email: str) -> UserProfile | None:
-        ...
-
-class UserService:
-    def __init__(self, repository: UserRepository):
-        self._repository = repository                # protected
-
-    def register(self, email: str, name: str) -> UserProfile:
-        user = UserProfile(email=email, name=name)
-        self._repository.add_user(user)
-        return user
 ```
 
-This version actually respects encapsulation. The UserService offers one clear, well-defined public method: register(). That’s the official way to create a user, and it’s the only thing external code should be calling.
+At first glance, this looks fine. But `engine` is not really just data,  it’s a dependency. It probably shouldn't be public, but because this is a dataclass, _everything is public by default_. You don’t get any real control over what’s exposed, which can lead to tight coupling and leaky abstractions.
 
-Everything else, like the repository, is considered internal. It's still accessible in Python if someone really wants to go spelunking, but we've marked it as protected `_repository` to signal our intent: this is not part of the public contract. If you reach in and touch it, you’re on your own.
-
-This pattern maintains a clean separation between what the outside world should use and what it shouldn’t touch. It keeps your service focused, predictable, and safe to refactor, without the risk of breaking someone else's code just because you renamed a helper or swapped out your persistence layer.
-
-## Why Access Modifiers Become Less Popular
-
-Access modifiers continue to serve an important role in defining clear boundaries within code, but their practical usage has shifted alongside modern software design practices. As the industry has moved toward modular architectures and composition-based design, the need for strict access control has diminished in many scenarios.
-
-###  Composition Over Inheritance
-
-Historically, access modifiers(private, specifically) were often used to safeguard internals from misuse by subclasses. But as composition has become the preferred alternative to inheritance, particularly in languages like Rust and Go, this concern has become less relevant. Go, for example, lacks inheritance entirely and does not include traditional access modifiers beyond public/private naming conventions. Yet it remains highly capable of building well-encapsulated, maintainable systems.
-
-### Separation of Data and Behavior
-
-Another factor is the growing tendency to decouple data structures from business logic. In Python, for instance, dataclass objects are typically used to represent data without complex behavior. Since they don’t carry logic that needs to be guarded, fine-grained access control becomes less critical. Instead, we rely on conventions and well-defined interfaces to guide correct usage.
-
-## Encapsulation beyond syntax
-
-Access modifiers are one way to draw boundaries, but they’re not the only way. Many languages embrace encapsulation by convention, tooling, or structure, even if they don’t have formal protected or private keywords.
-
-Let’s look at a few quick examples:
-
-### Python
+Now let’s flip the problem: a service class with too many internal configuration values.
 
 ```python
-# token_serivce/__init__.py
-from .service import TokenService
+class FileDownloader:
+    def __init__(self, session: ClientSession):
+        self._session = session
+        self._max_concurrent = 3
+        self._max_file_size = 100 * 1024 * 1024
+        self._timeout = 10
+        self._retries = 2
+        self._allow_redirect = True
+        # and the list goes on...
 
+    def download(self, url: str):
+        ...
+```
+
+Each of these config values might need to be accessed from outside the class, but none of them are really _business logic_. So now you're stuck adding five `@property` methods just to make them selectively public. That's tedious and clutters the class with boilerplate.
+
+A better approach? Extract the config into a separate dataclass:
+
+```python
+@dataclass
+class DownloadConfig:
+    max_concurrent: int = 3
+    max_file_size: int = 100 * 1024 * 1024
+    timeout: int = 10
+    retries: int = 2
+    allow_redirect: bool = True
+
+class FileDownloader:
+    def __init__(self, session: ClientSession, config: DownloadConfig):
+        self._session = session
+        self._config = config
+
+    @property
+    def config(self) -> DownloadConfig:
+        return self._config
+```
+
+Now the `FileDownloader` focuses on behavior, and the data lives in a plain, easy-to-inspect structure. No clutter. No second-guessing access modifiers.
+
+If you mix state and behavior carelessly, encapsulation decisions get exhausting,  you’ll find yourself manually evaluating every attribute and method. But when the design is clear, the modifiers fall into place naturally.
+
+### Anti-patterns
+
+
+The worst-case scenario is blindly adding getters and setters for everything,  especially when they don’t do anything useful. If you’re not doing validation, type coercion, or state transformation, a setter is just noise.
+
+Let’s look at an example:
+
+```python
+class Project:
+    def __init__(self, status: str):
+        self._status = status
+
+	@property
+    def status(self) -> str: return self._status
+
+	@status.setter
+    def status(self, status: str): self._status = status
+```
+
+What value does this add? The methods don’t protect anything. They don’t clarify intent. They just waste space and give a false sense of encapsulation.
+
+Now compare that to this alternative:
+
+```python
+class Project:
+    def __init__(self, status: str):
+        self._status = status
+
+    def mark_as_completed(self, reason: str | None = None):
+        """Mark the project as completed, with an optional reason for tracking."""
+        if self._status == "comleted":
+	        return
+		if self._status not in ("started", "running"):
+		    raise InvalidStatusError(self._status)
+
+        self._status = "completed"
+        if reason:
+            self._log_reason(reason)
+```
+
+This version is doing real work. You can pass multiple arguments. The method names express intent. The docstrings help the reader understand context. It’s much more maintainable and far less dogmatic.
+
+And while we’re at it: don’t abuse **inheritance** either. You can spend all day trying to protect internals from subclasses,  or you can just stop subclassing altogether.
+
+Sometimes the simpler answer is to design your class as effectively **final**, and let other classes **depend on it via composition**. You avoid the pitfalls of fragile base classes, and you make encapsulation easier to reason about.
+
+Yes, _composition over inheritance_. Not always. But definitely more often than some legacy tutorials would have you believe.
+
+
+### **Encapsulation Beyond Classes**
+
+Encapsulation isn’t just about hiding attributes inside a class. The same principle applies at higher levels,  **modules**, **packages**, and even **entire applications**. It's all about controlling what gets exposed and what stays internal.
+
+Let’s look at a few examples.
+
+### Python (Module-Level)
+
+```python
+# token_service/__init__.py 
+
+from .service import TokenService  
 __all__ = ["TokenService"]  # Everything else stays internal
 ```
 
+You can also use leading underscores for private helpers:
 
-> or just name other top level members with "_" prefix.
-
-### Typescript
-
-```ts
-// token_serivce.ts
-
-export class TokenService {}       // public
-class InternalCache {}             // not exported = private to module
+```python
+# token_service/utils.py 
+def _sign_payload(...): ...
 ```
 
-These languages all use different syntactic mechanisms, but they’re solving the same problem: hide what’s internal, and make what’s public explicit.
 
-Whether it's a leading underscore in Python, capitalization in Go, or an export keyword in TypeScript, you're doing the same thing: protecting the shape of your interface, and making your codebase safer to evolve.
+This tells both humans and tools: "this isn’t part of the public interface."
 
-This is why access modifiers like protected and private are valuable, but not essential. Encapsulation is a mindset, not a keyword.
+### TypeScript (File/Module-Level)
+
+```ts
+// token_service.ts
+
+export class TokenService {}       // public
+class InternalCache {}             // not exported = internal to the module
+```
+If it’s not exported, it’s not part of the API. That’s module-level encapsulation.
+
+---
+
+And you can scale this even further.
+
+- At the **package level**, you decide which modules to expose in `__init__.py` or in your `pyproject.toml`.
+- At the **application level**, you expose only selected routes in your web API or specific commands in your CLI. Everything else stays behind the scenes.
+
 
 ## Encapsulation beyond code
 
@@ -330,25 +310,15 @@ Whether you’re defining a Python method, a Go module, or a service boundary in
 
 > **Hide internal details. Expose a clean, intentional interface. Decouple everything else.**
 
-That’s encapsulation, even without the keyword.
 
-## Wrap it up
 
-We started with a question: **Do access modifiers still matter?** And the answer is yes, but not because of the syntax. They matter because they support a much bigger principle: **encapsulation**.
+### **Wrapping Up**
 
-Throughout this article, we’ve explored how access modifiers like `private`, `protected`, and even Python’s humble underscore help draw boundaries between what’s internal and what’s public. But we’ve also seen that encapsulation goes far beyond these keywords. It lives in:
+Encapsulation isn’t about following rules,  it’s about creating **boundaries that protect your code**. Whether you’re building a Python library, designing a class, organizing a module, or architecting an entire system, the goal is the same: **make the interface clear, keep the internals private, and give yourself room to evolve**.
 
-- **Class design**, through naming and structure  
-- **Module and package organization**, via `__all__`, leading underscores, and folder layout  
-- **Language conventions**, like capitalization in Go or `export` in TypeScript  
-- **System architecture**, where APIs and service boundaries define what’s accessible  
+In Python, we don’t have enforced access modifiers,  and that’s fine. We have conventions, type checkers, and design discipline. What matters is that you _use them deliberately_.
 
-So no. access modifiers aren’t meaningless ceremony, and they’re not relics either. They’re part of a larger toolkit we use to manage complexity, reduce coupling, and protect ourselves (and our teammates) from the chaos of accidental dependencies.
+Don’t add encapsulation for its own sake. But don’t dismiss it just because you’re writing Python. If anything, Python’s flexibility makes it _more_ important to clearly mark your boundaries.
 
-Even in a language like Python, where access control is convention-driven and technically unenforced, **encapsulation still matters**. In fact, it might matter *more*, because we rely on discipline, design, and clarity rather than compiler enforcement.
+Start by separating your data classes from your service classes. Use underscores to guide intention. Avoid meaningless setters. Prefer real methods with real names. And think in terms of public interfaces,  whether you're building a class or an entire API.
 
-If there’s one idea to walk away with, it’s this:
-
-> **Encapsulation isn’t about what the language allows, it’s about what the design intends.**
-
-Use access modifiers when they help. Use structure, convention, and documentation when they don’t. Just make sure your interfaces are clear, your boundaries are meaningful, and your internals stay safely tucked away where they belong.
