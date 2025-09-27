@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1.1
+sidebar_position: 1.25
 title: endpoint
 ---
 
@@ -63,22 +63,26 @@ async def login(cred: Annotated[str, Param("header", alias="User-Credentials")],
 
 If a param is not declared with any param mark, the following rule would apply to parse it:
 
-- If the param name appears in route path, it is interpreted as a path param.
-- If the param type is a subclass of `msgspec.Struct`, it is interpreted as a body param.
-- If the param type is registered in the route graph, or is a lihil-primitive type, it will be interpered as a dependency and will be resolved by lihil
-
+- If the param name appears in the route path, it is interpreted as a path param.
+- If the param type is a Lihil primitive (e.g., `Request`, `WebSocket`, `Resolver`), it is treated as a framework-provided dependency.
+- If the param type is registered in the dependency graph (e.g., provided via `Route(..., deps=[...])`), it is resolved via dependency injection.
+- If the param type is a structured type (e.g., `msgspec.Struct`, `pydantic.BaseModel`, `lihil.Payload`, `dataclass`), it is interpreted as a body param.
 - Otherise, it is interpreted as a query param.
 
 ```mermaid
 flowchart TD
     A[Param without param mark] --> B[Is param name in route path?]
-    B -- Yes --> P[Interpret as Path param]
-    B -- No --> C[Is type a subclass of Struct?]
-    C -- Yes --> R[Interpret as Body param]
-    C -- No --> D[Is type registered in route graph or lihil-primitive type?]
-    D -- Yes --> S[Interpret as Dependency]
-    D -- No --> Q[Interpret as Query param]
+    B -- Yes --> P[Path param]
+    B -- No --> C[Is type a Lihil primitive?]
+    C -- Yes --> S[Dependency]
+    C -- No --> D[Is type registered in dependency graph?]
+    D -- Yes --> S[Dependency]
+    D -- No --> E[Is type a structured type?]
+    E -- Yes --> R[Body param]
+    E -- No --> Q[Query param]
 ```
+
+Note: "structured type" includes subclasses of `abc.Mapping` (dict-like), `msgspec.Struct`, Pydantic models, `TypedDict`, and `dataclass` types.
 
 Example:
 
@@ -154,92 +158,9 @@ Here `create_user` expects a body param `user`, a structual data where each fiel
 
 Checkout [msgspec constraints](https://jcristharif.com/msgspec/constraints.html) for more details on specific constraints that you can set on different types.
 
-### Return Marks
+### Response
 
-Often you would like to change the status code, or content type of your endpoint, to do so, you can use one or a combination of several `return marks`. for example, to change stauts code:
-
-```python
-from lihil import Annotated, status
-
-async def create_user(user: UserData, engine: Engine) -> Annotated[UserDB, status.Created]:
-    ...
-```
-
-Now `create_user` would return a status code `201`, instead of the default `200`.
-
-There are several return marks you might want to use:
-
-| Return Mark | Purpose                                                  | Type Argument(s)        | Notes                                | Example           |
-| ----------- | -------------------------------------------------------- | ----------------------- | ------------------------------------ | ----------------- |
-| `Json[T]`   | Response with `application/json` content type            | `T`: response body type | Default return type if not specified | `Json[list[int]]` |
-| `Stream[T]` | Server-sent events with `text/event-stream` content type | `T`: event data type    | For event streaming                  | `Stream[str]`     |
-| `Text`      | Plain text response with `text/plain` content type       | None                    | Use for simple text responses        | `Text`            |
-| `HTML`      | HTML response with `text/html` content type              | None                    | Use for HTML content                 | `HTML`            |
-| `Empty`     | Empty response (no body)                                 | None                    | Indicates no content to return       | `Empty`           |
-
-**Example**:
-
-```python
-from lihil import Json
-
-async def demo() -> Json[list[int]]: ...
-```
-
-return marks have no runtime/typing effect outside of lihil, your type checker would treat `Json[T]` as `T`.
-
-#### Response with status code
-
-- `Annotated[T, status.OK]` for response with status code `200`. where `T` can be anything json serializable, or another return mark.
-
-For instance, in the `create_user` example, we use `Annotated[UserDB, status.Created]` to declare our return type, here `T` is `UserDB`.
-
-- By default, the return convert is json-serialized, so that it is equiavlent to `Annotated[Json[UserDB], status.Created]`.
-- If you would like to return a response with content type `text/html`, you might use `HTML`
-
-```python
-async def hello() -> HTML:
-    return "<p>hello, world!</p>"
-```
-
-#### Return Union
-
-it is valid to return union of multiple types, they will be shown as `anyOf` schemas in the open api specification.
-
-```python
-async def create_user() -> User | TemporaryUser: ...
-```
-
-#### Custom Encoder/Decoder
-
-You can also use your own customized encoder/decoder for request params and function return.
-
-```python
-def encoder_user_id(user_id: UUID) -> bytes:
-    return str(user_id)
-
-def decoder_user_id(user_id: str) -> UUID:
-    return UUID(user_id)
-
-user_route = Route("/users/{user_id}")
-
-@user_route(encoder=encode_user_id)
-async def get_user(
-    user_id: Annotated[UUID, Param(decoder=decode_user_id)]
-) -> str:
-    return user_id
-```
-
-```python
-def decoder[T](param: str | bytes) -> T: ...
-```
-
-- `decoder` should expect a single param with type either `str`, for non-body param, or `bytes`, for body param, and returns required param type, in the `decode_user_id` case, it is `str`.
-
-```python
-def encoder[T](param: T) -> bytes: ...
-```
-
-- `encoder` should expect a single param with any type that the endpoint function returns, in the `encode_user_id` case, it is `str`, and returns bytes.
+For return types, status codes, return marks, unions, and custom encoders/decoders, see [Response](./response.md).
 
 ### Properties
 

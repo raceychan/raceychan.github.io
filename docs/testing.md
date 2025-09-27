@@ -1,6 +1,6 @@
 ---
 title: Testing
-sidebar_position: 3
+sidebar_position: 3.5
 ---
 
 # Testing
@@ -14,6 +14,55 @@ Lihil provide you two techniques for testing, `TestClient` and `LocalClient`
 For integration testing where each request should go through every part of your application, `TestClient` keep your test close to user behavior.
 
 Note that to use `TestClient`, you would need to install `httpx`.
+
+### Test SSE endpoints with `TestClient`
+
+For endpoints that stream Server‑Sent Events (SSE), iterate the streamed body line‑by‑line and assert on the assembled message.
+
+```python
+from lihil import Lihil, Route, SSE, EventStream
+from lihil.vendors import TestClient
+
+
+def test_endpoint_with_sse():
+    async def sse_endpoint() -> EventStream:
+        yield SSE(data={"message": "Hello, SSE!"}, event="start")
+        for i in range(3):
+            yield SSE(data={"count": i}, event="update", id=str(i))
+        yield SSE(data={"message": "Goodbye!"}, event="close", id="final")
+
+    sse_route = Route("/sse")
+    sse_route.get(sse_endpoint)
+    lhl = Lihil(sse_route)
+
+    client = TestClient(lhl)
+    response = client.get("/sse")
+    assert response.status_code == 200
+    assert response.headers["content-type"].startswith("text/event-stream")
+
+    # Read the streamed response line by line
+    lines: list[str] = []
+    for line in response.iter_lines():
+        if line:  # skip empty lines
+            lines.append(line)
+
+    # Join lines back into a single message for validation
+    message = "\n".join(lines) + "\n\n"  # add final blank line
+
+    # Check that expected events are present
+    assert "event: start" in message
+    assert 'data: {"message":"Hello, SSE!"}' in message
+    for i in range(3):
+        assert "event: update" in message
+        assert f"id: {i}" in message
+        assert f'data: {{"count":{i}}}' in message
+    assert "event: close" in message
+    assert 'data: {"message":"Goodbye!"}' in message
+
+    # Optional: if you have a helper
+    # from tests.helpers import is_valid_sse
+    # assert is_valid_sse(message)
+```
 
 
 ## `LocalClient`
