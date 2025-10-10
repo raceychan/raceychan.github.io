@@ -16,6 +16,7 @@ import FeatureSection from "../components/home/feature_section";
 import HeroSection from "../components/home/hero";
 import QuickStartSection from "@site/src/components/home/quick_start";
 import CommunitySection from "../components/home/community";
+import SSEPrinter from "@site/src/components/home/SSEPrinter";
 
 function MetricsSection() {
   return (
@@ -123,6 +124,11 @@ export default function Home(): React.ReactNode {
   return (
     <Layout title={siteConfig.title} description={siteConfig.tagline}>
       <HeroSection title={siteConfig.title} tagline={siteConfig.tagline} />
+      <Box sx={{ py: 2, bgcolor: "transparent" }}>
+        <Container maxWidth="lg">
+          <SSEPrinter />
+        </Container>
+      </Box>
       <Divider />
       <MetricsSection />
       <Divider />

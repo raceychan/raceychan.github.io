@@ -19,12 +19,17 @@ class TodoItem(Struct):
 
 todo = Route("/todos", deps=[TodoRepo])
 
+PosInt = Annotated[int, Param(gt=0)]
+Todos = list[TodoItem]
+
 @todo.get
-async def get_todos(todo_repo: TodoRepo, n: Annotated[int, Param(lt=100)]):
+async def get_todos(todo_repo: TodoRepo, n: PosInt) -> Todos:
     return await todo_repo.list_todos()
 
+CREATED = Annotated[Empty, 201]
+
 @todo.post
-async def create_todo(item: TodoItem, todo_repo: TodoRepo) -> Annotated[Empty, 201]:
+async def create_todo(item: TodoItem, todo_repo: TodoRepo) -> CREATED:
     await todo_repo.add(item)
 
 if __name__ == "__main__":

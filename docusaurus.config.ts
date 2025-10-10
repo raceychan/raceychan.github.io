@@ -70,6 +70,33 @@ const config: Config = {
       } satisfies PluginOptions,
     ],
 
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'wiki',
+        path: 'wiki',
+        routeBasePath: 'wiki',
+        sidebarPath: './sidebars.wiki.ts',
+        editCurrentVersion: true,
+      },
+    ],
+
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        createRedirects(existingPath) {
+          if (existingPath === '/wiki/how-do-i') {
+            return ['/docs/how-do-i'];
+          }
+          if (existingPath.startsWith('/wiki/how-do-i/')) {
+            const tail = existingPath.replace('/wiki/how-do-i/', '');
+            return [`/docs/how-do-i/${tail}`];
+          }
+          return undefined;
+        },
+      },
+    ],
+
 
   ],
 
@@ -121,6 +148,8 @@ const config: Config = {
     ],
   ],
 
+  // No additional headTag overrides
+
 
   themeConfig: {
 
@@ -143,8 +172,15 @@ const config: Config = {
           position: 'left',
           label: 'Tutorial',
         },
-        // { to: '/features', label: 'Features', position: 'left' },
+        {
+          type: 'docSidebar',
+          docsPluginId: 'wiki',
+          sidebarId: 'wikiSidebar',
+          position: 'left',
+          label: 'Wiki',
+        },
         { to: '/blog', label: 'Blog', position: 'left' },
+
         {
           href: 'https://github.com/raceychan/lihil',
           label: 'GitHub',

@@ -4,7 +4,6 @@ import Translate from "@docusaurus/Translate";
 import { Box, Container, Typography, Button, Grid, Chip } from "@mui/material";
 import { useColorMode } from "@docusaurus/theme-common";
 import CodeBlock from "@site/src/components/code_block";
-import RotatingDisplay from "@site/src/components/rotating_display";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
@@ -19,28 +18,29 @@ type GreetingProps = HeroProps & {
 
 const openai_example =
 {
-  title: "openai",
+  title: "api/v1/agent.py",
   language: "python",
-  code: `from lihil import Lihil, Route, Stream
-from openai import OpenAI
-from openai.types.chat import ChatCompletionChunk as Chunk
-from openai.types.chat import ChatCompletionUserMessageParam as MessageIn
+  code: `from lihil import Lihil, Route, EventStream, SSE, Param
+from .api.param import UUID_PATTERN
 
-gpt = Route("/gpt", deps=[OpenAI])
+UUIDStr = Annotated[str, Param(min_length=36, pattern=UUID_PATTERN)]
 
-def message_encoder(chunk: Chunk) -> bytes:
-    if not chunk.choices:
-        return b""
-    return chunk.choices[0].delta.content.encode() or b""
+@messages.post
+async def send_message_v1(
+    session_id: UUIDStr,
+    request: AgentRequest,
+    agent: Annotated[IAgent, use(get_agent)],
+) -> EventStream:
+    async_gen = agent.handle(
+        request.content, user_id=request.user, session_id=session_id
+    )
 
-@gpt.sub("/messages").post(encoder=message_encoder)
-async def add_new_message(
-    client: OpenAPI, question: MessageIn, model: str
-) -> Stream[Chunk]:
-    async for chunk in client.responses.create(
-      messages=[question], model=model, stream=True
-    ):
-        yield chunk
+    yield SSE(event="open", data=await anext(async_gen))
+
+    async for ans in async_gen:
+        yield SSE(event="token", data=ans)
+
+    yield SSE(event="done", data="")
   `
 }
 
@@ -196,7 +196,9 @@ function HeroSection({ title, tagline }: HeroProps) {
             />
           </Grid>
           <Grid size={{ xs: 12, md: 7 }}>
-            <CodeBlock title={"openai"}>{openai_example.code}</CodeBlock>
+            <CodeBlock title={"api/v1/agent.py"}>
+              {openai_example.code}
+            </CodeBlock>
             {/* <CodeBlock language/> */}
             {/* <RotatingDisplay
               items={codeExamples.map((example, index) => (

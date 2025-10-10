@@ -53,7 +53,7 @@ const features = [
   {
     title: <Translate id="homepage.features.testability.title">Great Testability</Translate>,
     icon: <ScienceIcon fontSize="large" color="primary" />,
-    description: <Translate id="homepage.features.testability.description">Built-in test client for endpoints, routes, and middlewares – no extra setup required.</Translate>,
+    description: <Translate id="homepage.features.testability.description">Built-in test client `LocalClient` for endpoints, routes, and middlewares solely without building the whole App</Translate>,
   },
   {
     title: <Translate id="homepage.features.memoryEfficient.title">Memory efficient</Translate>,
